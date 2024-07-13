@@ -50,7 +50,7 @@ const Signup = () => {
                         /></View>
                     <Text
                         style={{
-                            fontFamily: "montserrat-medium",
+                            fontFamily: "montserrat-semibold",
                             fontSize: 15,
                             textAlign: "center",
                             marginBottom: 10
@@ -68,7 +68,7 @@ const Signup = () => {
                         <Text style={{
                             lineHeight:35,
                             textAlign: "center",
-                            fontFamily: "montserrat-medium",
+                            fontFamily: "montserrat-semibold",
                             fontSize: 18
                         }}>General</Text>
                     </View>

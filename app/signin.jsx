@@ -2,9 +2,11 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 const Signin = () => {
+
+    const router = useRouter()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -15,6 +17,8 @@ const Signin = () => {
         console.log(signindata)
         setEmail("")
         setPassword("")
+
+        router.push("/home")
     }
 
     return (
@@ -44,7 +48,7 @@ const Signin = () => {
                         /></View>
                     <Text
                         style={{
-                            fontFamily: "montserrat-medium",
+                            fontFamily: "montserrat-semibold",
                             fontSize: 16,
                             textAlign: "center",
                             marginBottom: 10
@@ -52,7 +56,7 @@ const Signin = () => {
                     >Welcome To Iqueue Barbers</Text>
                     <Text
                         style={{
-                            fontFamily: "montserrat-medium",
+                            fontFamily: "montserrat-semibold",
                             fontSize: 15,
                             textAlign: "center",
                             marginBottom: 10

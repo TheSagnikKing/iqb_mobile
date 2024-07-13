@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, CheckBox } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, CheckBox, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
@@ -26,7 +26,7 @@ const Signup = () => {
 
     return (
         <SafeAreaView style={styles.signup_container}>
-            <View style={styles.signup_content_container}>
+            <ScrollView style={styles.signup_content_container}>
                 <View style={styles.signup_content_top}>
                     <View
                         style={{
@@ -167,7 +167,7 @@ const Signup = () => {
                         style={{ color: Colors.PRIMARY }}
                     >Sign in</Link></Text>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -187,7 +187,8 @@ const styles = StyleSheet.create({
         height: "auto",
         borderRadius: 10,
         paddingHorizontal: 10,
-        paddingVertical: 10
+        paddingVertical: 10,
+        marginTop: 40
     },
     signup_content_top: {
         // backgroundColor: "red"

@@ -1,9 +1,13 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const Header = () => {
+
+  const router = useRouter()
+
   return (
     <View style={styles.header_container}>
       <View
@@ -30,19 +34,21 @@ const Header = () => {
         >John Doe</Text>
       </View>
       <View
-      style={{
-        display:"flex",
-        flexDirection:"row",
-        alignItems:"center",
-        gap: 10
-      }}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 10
+        }}
       >
-        <View>
+        <TouchableOpacity>
           <Ionicons name="information-circle-outline" size={24} color="black" />
-        </View>
-        <View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.push("/signin")}
+        >
           <MaterialCommunityIcons name="power" size={24} color="black" />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
   header_container: {
     height: 50,
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",

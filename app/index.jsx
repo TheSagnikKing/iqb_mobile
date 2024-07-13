@@ -2,16 +2,16 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Colors } from '../constants/Colors'
 import { Link } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const index = () => {
   return (
-    <View
+    <SafeAreaView
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
-        height: "100%",
+        flex: 1,
         backgroundColor: Colors.light.background
       }}
     >
@@ -39,7 +39,7 @@ const index = () => {
           }}
         >Go to Signin</Link>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 

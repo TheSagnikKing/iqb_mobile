@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors'
 import { Text, View } from 'react-native';
 
-const TabItem = ({icon, title}) => {
+const TabItem = ({icon, title, focused}) => {
     return (
         <View style={{
             flex:1,
@@ -20,7 +20,8 @@ const TabItem = ({icon, title}) => {
             <View>{icon}</View>
             <Text style={{
                 fontSize: 11,
-                fontFamily: "montserrat-semibold"
+                fontFamily: focused ? "montserrat-bold" : "montserrat-semibold",
+                color: focused && Colors.PRIMARY
             }}>{title}</Text>
         </View>
     )
@@ -48,10 +49,11 @@ const TabLayout = () => {
                 name="home"
                 options={{
                     tabBarLabel: "Home",
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <TabItem
-                            icon={<FontAwesome5 name="home" size={24} color={color} />}
+                            icon={<FontAwesome5 name="home" size={24} color={focused ? color : "#000"} />}
                             title={"Home"}
+                            focused={focused}
                         />
                     ),
                 }}
@@ -60,10 +62,11 @@ const TabLayout = () => {
                 name="settings"
                 options={{
                     tabBarLabel: "Settings",
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <TabItem
-                            icon={<SimpleLineIcons name="settings" size={24} color={color} />}
+                            icon={<SimpleLineIcons name="settings" size={24} color={focused ? color : "#000"} />}
                             title={"Settings"}
+                            focused={focused}
                         />
                     ),
                 }}
@@ -72,10 +75,11 @@ const TabLayout = () => {
                 name="qlist"
                 options={{
                     tabBarLabel: "Q List",
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <TabItem
-                            icon={<Ionicons name="people-sharp" size={24} color={color} />}
+                            icon={<Ionicons name="people-sharp" size={24} color={focused ? color : "#000"} />}
                             title={"QList"}
+                            focused={focused}
                         />
                     ),
                 }}
@@ -84,10 +88,11 @@ const TabLayout = () => {
                 name="appointments"
                 options={{
                     tabBarLabel: "Appointments",
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <TabItem
-                            icon={<AntDesign name="calendar" size={24} color={color} />}
+                            icon={<AntDesign name="calendar" size={24} color={focused ? color : "#000"} />}
                             title={"Appointments"}
+                            focused={focused}
                         />
                     ),
                 }}

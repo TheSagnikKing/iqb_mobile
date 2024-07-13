@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Signin = () => {
 
@@ -22,7 +23,7 @@ const Signin = () => {
     }
 
     return (
-        <View style={styles.signin_container}>
+        <SafeAreaView style={styles.signin_container}>
             <View style={styles.signin_content_container}>
                 <View style={styles.signin_content_top}>
                     <View
@@ -164,7 +165,7 @@ const Signin = () => {
                     >Sign up</Link></Text>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -181,8 +182,6 @@ const styles = StyleSheet.create({
     signin_content_container: {
         width: "95%",
         height: "auto",
-        // borderColor: "#000",
-        // borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
         paddingVertical: 10

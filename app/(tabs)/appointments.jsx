@@ -1,17 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Profile = () => {
+const Appointments = () => {
   return (
     <View>
-      <Text style={{
-        fontSize: 40,
-        fontFamily: "montserrat-bold"
-      }}>Profile</Text>
+      <Text>Appointments</Text>
     </View>
   )
 }
 
-export default Profile
+export default Appointments
 
 const styles = StyleSheet.create({})

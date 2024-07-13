@@ -1,17 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Explore = () => {
+const Settings = () => {
   return (
     <View>
-      <Text style={{
-        fontSize: 40,
-        fontFamily: "montserrat-medium"
-      }}>Explore</Text>
+      <Text>Settings</Text>
     </View>
   )
 }
 
-export default Explore
+export default Settings
 
 const styles = StyleSheet.create({})

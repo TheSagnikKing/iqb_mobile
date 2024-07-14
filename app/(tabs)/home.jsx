@@ -17,18 +17,21 @@ const Home = () => {
       name: "Select Barber",
       icon: <Fontisto name="person" size={18} color={"#000"} />,
       url: "/selectbarber",
+      animationdelay: 300
     },
     {
       _id: 2,
       name: "Auto Join",
       icon: <Fontisto name="persons" size={18} color={"#000"} />,
       url: "/selectautojoin",
+      animationdelay: 400
     },
     {
       _id: 3,
       name: "Join Group",
       icon: <FontAwesome6 name="person-walking-arrow-right" size={18} color={"#000"} />,
       url: "/selectjoingroup",
+      animationdelay: 500
     }
   ]
 
@@ -167,7 +170,8 @@ const Home = () => {
                 alignItems: "center",
                 justifyContent: "flex-end",
                 gap: 10,
-                marginBottom: 6
+                marginBottom: 6,
+                animationdelay: 300
               }}>
                 <Text style={{
                   lineHeight: 30,

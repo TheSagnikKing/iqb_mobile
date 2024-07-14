@@ -6,27 +6,32 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 import { Feather } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 
 const settingsMenu = [
   {
     _id: 1,
     title: "App info",
-    icon: <MaterialIcons name="mobile-friendly" size={24} color="#fff" />
+    icon: <MaterialIcons name="mobile-friendly" size={24} color="#fff" />,
+    url: "/appinfo"
   },
   {
     _id: 2,
     title: "Delete Account",
-    icon: <MaterialCommunityIcons name="delete-sweep" size={24} color="#fff" />
+    icon: <MaterialCommunityIcons name="delete-sweep" size={24} color="#fff" />,
+    url: "/deleteaccount"
   },
   {
     _id: 3,
     title: "Change Location",
-    icon: <MaterialIcons name="share-location" size={24} color="#fff" />
+    icon: <MaterialIcons name="share-location" size={24} color="#fff" />,
+    url: "/changelocation"
   },
   {
     _id: 4,
     title: "Salon Info",
-    icon: <MaterialCommunityIcons name="hair-dryer" size={24} color="#fff" />
+    icon: <MaterialCommunityIcons name="hair-dryer" size={24} color="#fff" />,
+    url: "/saloninfo"
   }
 ]
 
@@ -62,7 +67,7 @@ const Settings = () => {
             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.title}</Text>
           </View>
 
-          <TouchableOpacity><Feather name="arrow-right-circle" size={26} color="black" /></TouchableOpacity>
+          <Link href={item.url}><Feather name="arrow-right-circle" size={26} color="black" /></Link>
         </View>}
           keyExtractor={item => item._id}
         />

@@ -39,6 +39,16 @@ const _layout = () => {
           headerTitle: "Select Service"
         }}
       />
+      <Stack.Screen name="saloninfo"
+        options={{
+          headerTitle: "Salon Info"
+        }}
+      />
+      <Stack.Screen name="help"
+        options={{
+          headerTitle: "Help"
+        }}
+      />
     </Stack>
   )
 }

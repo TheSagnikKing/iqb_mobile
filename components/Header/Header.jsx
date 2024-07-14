@@ -38,10 +38,10 @@ const Header = () => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          gap: 10
+          gap: 20
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/help")}>
           <Ionicons name="information-circle-outline" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity

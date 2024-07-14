@@ -1,15 +1,37 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native'
+import React, { useState } from 'react'
 import Header from '../../components/Header/Header'
-import { Fontisto } from '@expo/vector-icons';
+import { Fontisto, MaterialIcons, Entypo, Ionicons, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialIcons } from '@expo/vector-icons';
+import { router, useRouter } from 'expo-router';
 
 const Home = () => {
+
+  const router = useRouter()
+  const [join, setJoin] = useState(false)
+
+  const menulistdata = [
+    {
+      _id: 1,
+      name: "Select Barber",
+      icon: <Fontisto name="person" size={18} color={"#000"} />,
+      url: "/selectbarber",
+    },
+    {
+      _id: 2,
+      name: "Auto Join",
+      icon: <Fontisto name="persons" size={18} color={"#000"} />,
+      url: "/selectautojoin",
+    },
+    {
+      _id: 3,
+      name: "Join Group",
+      icon: <FontAwesome6 name="person-walking-arrow-right" size={18} color={"#000"} />,
+      url: "/selectjoingroup",
+    }
+  ]
+
   return (
     <SafeAreaView style={{ flex: 1, position: "relative" }}>
       <Header />
@@ -120,7 +142,67 @@ const Home = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        ><MaterialIcons name="person-add-alt-1" size={24} color="#fff" /></TouchableOpacity>
+          onPress={() => setJoin((prev) => !prev)}
+        >{
+            join ? <Entypo name="cross" size={24} color="#fff" /> : <MaterialIcons name="person-add-alt-1" size={24} color="#fff" />
+          }
+        </TouchableOpacity>
+
+        {
+          join && <View
+            style={{
+              height: 140,
+              width: 185,
+              position: "absolute",
+              top: -140,
+              right: 3,
+            }}
+          >
+
+            <FlatList
+              data={menulistdata}
+              renderItem={({ item }) => <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: 10,
+                marginBottom: 6
+              }}>
+                <Text style={{
+                  lineHeight: 30,
+                  backgroundColor: "#efefef",
+                  paddingHorizontal: 15,
+                  borderRadius: 15,
+                  fontFamily: "montserrat-semibold",
+                  fontSize: 14,
+                  borderColor: Colors.PRIMARY,
+                  borderWidth: 1
+                }}>{item.name}</Text>
+                <TouchableOpacity 
+                  onPress={() => {
+                    router.push(item.url)
+                    setJoin(false)
+                  }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: "#efefef",
+                    borderColor: Colors.PRIMARY,
+                    borderWidth: 1,
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >{item.icon}</TouchableOpacity>
+              </View>
+              }
+              keyExtractor={item => item._id}
+            />
+
+          </View>
+        }
       </View>
     </SafeAreaView>
   )

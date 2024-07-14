@@ -27,6 +27,18 @@ const _layout = () => {
           headerShown: false
         }}
       />
+
+      <Stack.Screen name="selectbarber"
+        options={{
+          headerTitle: "Barber List"
+        }}
+      />
+
+      <Stack.Screen name="selectservices"
+        options={{
+          headerTitle: "Select Service"
+        }}
+      />
     </Stack>
   )
 }

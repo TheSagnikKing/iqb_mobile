@@ -84,19 +84,6 @@ const TabLayout = () => {
                     ),
                 }}
             />
-            <Tabs.Screen
-                name="appointments"
-                options={{
-                    tabBarLabel: "Appointments",
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabItem
-                            icon={<AntDesign name="calendar" size={24} color={focused ? color : "#000"} />}
-                            title={"Appointments"}
-                            focused={focused}
-                        />
-                    ),
-                }}
-            />
         </Tabs>
     )
 }

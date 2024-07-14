@@ -18,14 +18,16 @@ const Header = () => {
           gap: 10
         }}
       >
-        <Image
-          source={require("../../assets/images/profile.webp")}
-          style={{
-            width: 35,
-            height: 35,
-            borderRadius: "50%"
-          }}
-        />
+        <TouchableOpacity onPress={() => router.push("/home")}>
+          <Image
+            source={require("../../assets/images/profile.webp")}
+            style={{
+              width: 35,
+              height: 35,
+              borderRadius: "50%"
+            }}
+          />
+        </TouchableOpacity>
         <Text
           style={{
             fontFamily: "montserrat-semibold",

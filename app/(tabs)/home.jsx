@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/Header/Header'
 import { Fontisto, MaterialIcons, Entypo, Ionicons, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -36,7 +36,7 @@ const Home = () => {
   ]
 
   return (
-    <SafeAreaView style={{ flex: 1, position: "relative" }}>
+    <SafeAreaView style={{ flex: 1, position: "relative", backgroundColor: "#fff" }}>
       <Header />
       <ScrollView style={styles.home_container}>
 
@@ -131,16 +131,17 @@ const Home = () => {
         right: 15,
         bottom: 15
       }}>
-        <TouchableOpacity
+        <Pressable
           style={{
             width: 45,
             height: 45,
             backgroundColor: Colors.PRIMARY,
-            borderRadius: "50%",
+            borderRadius: 50,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.4,
             shadowRadius: 12,
+            elevation: 12,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -149,7 +150,7 @@ const Home = () => {
         >{
             join ? <Entypo name="cross" size={24} color="#fff" /> : <MaterialIcons name="person-add-alt-1" size={24} color="#fff" />
           }
-        </TouchableOpacity>
+        </Pressable>
 
         {
           join && <View
@@ -183,7 +184,7 @@ const Home = () => {
                   borderColor: Colors.PRIMARY,
                   borderWidth: 1
                 }}>{item.name}</Text>
-                <TouchableOpacity 
+                <Pressable
                   onPress={() => {
                     router.push(item.url)
                     setJoin(false)
@@ -194,12 +195,12 @@ const Home = () => {
                     backgroundColor: "#efefef",
                     borderColor: Colors.PRIMARY,
                     borderWidth: 1,
-                    borderRadius: "50%",
+                    borderRadius: 50,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
-                >{item.icon}</TouchableOpacity>
+                >{item.icon}</Pressable>
               </View>
               }
               keyExtractor={item => item._id}
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   queue_status_item_icon: {
     width: 65,
     height: 65,
-    borderRadius: 32.5,
+    borderRadius: 32,
     backgroundColor: Colors.PRIMARY,
     display: "flex",
     justifyContent: "center",
@@ -248,6 +249,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
+    elevation:12,
     position: "relative"
   },
   statusonline: {
@@ -257,7 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: "limegreen",
     height: 17,
     width: 17,
-    borderRadius: 8.5,
+    borderRadius: 9,
     borderColor: "#fff",
     borderWidth: 2
   }

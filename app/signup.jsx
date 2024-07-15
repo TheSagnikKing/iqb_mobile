@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, CheckBox, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CheckBox from 'expo-checkbox';
 
 const Signup = () => {
 
@@ -22,7 +23,7 @@ const Signup = () => {
         setEmail("")
         setPassword("")
     }
-    
+
 
     return (
         <SafeAreaView style={styles.signup_container}>
@@ -33,7 +34,7 @@ const Signup = () => {
                             width: 55,
                             height: 55,
                             backgroundColor: Colors.PRIMARY,
-                            borderRadius: "50%",
+                            borderRadius: 50,
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -41,6 +42,7 @@ const Signup = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
+                            elevation:12,
                             marginHorizontal: "auto",
                             marginBottom: 20
                         }}
@@ -59,15 +61,15 @@ const Signup = () => {
                     >Register Now</Text>
                 </View>
                 <View style={styles.signup_content_medium}>
-                    <View 
-                    style={{
-                        borderBottomColor: Colors.PRIMARY,
-                        borderBottomWidth: 2,
-                        marginBottom: 15
-                    }}
+                    <View
+                        style={{
+                            borderBottomColor: Colors.PRIMARY,
+                            borderBottomWidth: 2,
+                            marginBottom: 15
+                        }}
                     >
                         <Text style={{
-                            lineHeight:35,
+                            lineHeight: 35,
                             textAlign: "center",
                             fontFamily: "montserrat-semibold",
                             fontSize: 18
@@ -105,31 +107,32 @@ const Signup = () => {
                     />
 
                     <View
-                    style={{
-                        display:"flex",
-                        flexDirection:"row",
-                        gap: 12,
-                        alignItems: "center"
-                    }}
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: 12,
+                            alignItems: "center"
+                        }}
                     >
                         <CheckBox
+                            disabled={false}
                             value={isSelected}
-                            onValueChange={setSelection}
+                            onValueChange={(newValue) => setSelection(newValue)}
                             style={{
-                                width: 18,
-                                height: 18,
+                                width: 22,
+                                height: 22,
                             }}
                         />
                         <Text
-                        style={{
-                            fontFamily: "montserrat-medium",
-                            fontSize: 14
-                        }}
+                            style={{
+                                fontFamily: "montserrat-medium",
+                                fontSize: 14
+                            }}
                         >I am also a barber</Text>
                     </View>
                 </View>
                 <View style={styles.signup_content_bottom}>
-                    <TouchableOpacity
+                    <Pressable
                         style={{
                             backgroundColor: Colors.PRIMARY,
                             paddingHorizontal: 25,
@@ -139,6 +142,7 @@ const Signup = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
+                            elevation: 5,
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -153,7 +157,7 @@ const Signup = () => {
                                 fontFamily: "montserrat-medium"
                             }}
                         >Sign up</Text>
-                    </TouchableOpacity>
+                    </Pressable>
 
                     <Text
                         style={{

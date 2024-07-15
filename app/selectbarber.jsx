@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -26,10 +26,10 @@ const SelectBarber = () => {
     }
   ]
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{
-        backgroundColor: "#fff",
-        paddingHorizontal: 15
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{
+        flex:1,
+        paddingHorizontal: 15,
       }}>
         <Text
           style={{
@@ -70,7 +70,7 @@ const SelectBarber = () => {
                     style={{
                       width: 50,
                       height: 50,
-                      borderRadius: "50%",
+                      borderRadius: 50,
                       borderColor: "rgba(0,0,0,0.4)",
                       borderWidth: 1
                     }}
@@ -109,7 +109,7 @@ const SelectBarber = () => {
                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Next Available Position: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}> 6 </Text></Text>
               </View>
 
-              <TouchableOpacity
+              <Pressable
                 style={{
                   backgroundColor: Colors.PRIMARY,
                   width: 60,
@@ -120,7 +120,8 @@ const SelectBarber = () => {
                   shadowColor: '#000',
                   shadowOffset: { width: 0, height: 6 },
                   shadowOpacity: 0.4,
-                  shadowRadius: 8,
+                  shadowRadius: 12,
+                  elevation:12,
                 }}
                 onPress={() => router.push({ pathname: "/selectservices", params: { _id: item._id } })}
               >
@@ -128,14 +129,14 @@ const SelectBarber = () => {
                   fontFamily: "montserrat-medium", fontSize: 14,
                   color: Colors.PRIMARYTEXT,
                 }}>Join</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>}
           keyExtractor={item => item._id}
         />
 
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </View>
   )
 }
 

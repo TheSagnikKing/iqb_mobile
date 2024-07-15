@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList, Pressable } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '../../components/Header/Header'
@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 import { Feather } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 const settingsMenu = [
   {
@@ -36,42 +36,48 @@ const settingsMenu = [
 ]
 
 const Settings = () => {
+
+  const router = useRouter()
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header />
-      <ScrollView style={styles.settings_container}>    
+      <View style={styles.settings_container}>
         <FlatList
           data={settingsMenu}
-          renderItem={({ item }) => <View style={styles.settings_item}>
-          <View style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row",
-            gap: 20
-          }}>
-            <View
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: "50%",
-                backgroundColor: Colors.PRIMARY,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.4,
-                shadowRadius: 12,
-              }}
-            >{item.icon}</View>
-            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.title}</Text>
-          </View>
+          renderItem={({ item }) => <Pressable
+            onPress={() => router.push(item.url)}
+            style={styles.settings_item}>
+            <View style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+              gap: 20
+            }}>
+              <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 50,
+                  backgroundColor: Colors.PRIMARY,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 6 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 12,
+                  elevation: 12,
+                }}
+              >{item.icon}</View>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.title}</Text>
+            </View>
 
-          <Link href={item.url}><Feather name="arrow-right-circle" size={26} color="black" /></Link>
-        </View>}
+            <View><Feather name="arrow-right-circle" size={26} color="black" /></View>
+          </Pressable>}
           keyExtractor={item => item._id}
         />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "100%",
     flex: 1,
-    paddingVertical: 20,
+    // paddingVertical: 20,
   },
 
   settings_item: {

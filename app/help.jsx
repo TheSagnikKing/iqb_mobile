@@ -7,7 +7,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const help = () => {
     return (
-        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView style={{
                 backgroundColor: "#fff",
                 paddingVertical: 10,
@@ -28,14 +27,15 @@ const help = () => {
                             width: 50,
                             height: 50,
                             backgroundColor: Colors.PRIMARY,
-                            borderRadius: "50%",
+                            borderRadius: 50,
                             justifyContent: "center",
                             alignItems: "center",
                             marginBottom: 10,
                             shadowColor: '#000',
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
-                            shadowRadius: 12
+                            shadowRadius: 12,
+                            elevation: 12
                         }}><Feather name="phone-call" size={24} color="#fff" /></View>
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>01473845472</Text>
                     </View>
@@ -50,20 +50,16 @@ const help = () => {
                             width: 50,
                             height: 50,
                             backgroundColor: Colors.PRIMARY,
-                            borderRadius: "50%",
+                            borderRadius: 50,
                             justifyContent: "center",
                             alignItems: "center",
                             marginBottom: 10,
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 6 },
-                            shadowOpacity: 0.4,
-                            shadowRadius: 12
+                            boxShadow: "0px 6px 12px rgba(0,0,0,0.4)"
                         }}><MaterialIcons name="quick-contacts-mail" size={24} color="#fff" /></View>
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Get in Touch</Text>
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
     )
 }
 

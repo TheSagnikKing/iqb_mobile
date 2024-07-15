@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, Pressable } from 'react-native'
 import React from 'react'
 import { Colors } from '../constants/Colors'
 import { Link } from 'expo-router'
@@ -20,7 +20,7 @@ const index = () => {
         fontFamily: "montserrat-medium",
         marginBottom: 15
       }}>Welcome to iqueue barbers</Text>
-      <TouchableOpacity
+      <Pressable
         style={{
           backgroundColor: Colors.PRIMARY,
           paddingHorizontal: 25,
@@ -30,6 +30,7 @@ const index = () => {
           shadowOffset: { width: 0, height: 6 },
           shadowOpacity: 0.4,
           shadowRadius: 12,
+          elevation: 12,
         }}
       >
         <Link href={"/signin"}
@@ -38,7 +39,7 @@ const index = () => {
             fontFamily: "montserrat-medium",
           }}
         >Go to Signin</Link>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   )
 }

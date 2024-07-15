@@ -1,12 +1,10 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-
-{/* <MaterialIcons name="delete" size={24} color="black" /> */ }
 
 const selectservices = () => {
 
@@ -52,9 +50,10 @@ const selectservices = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{
         backgroundColor: "#fff",
+        flex: 1,
         paddingVertical: 10,
         paddingHorizontal: 15
       }}>
@@ -73,7 +72,7 @@ const selectservices = () => {
               style={{
                 width: 70,
                 height: 70,
-                borderRadius: "50%",
+                borderRadius: 50,
                 borderColor: "rgba(0,0,0,0.4)",
                 borderWidth: 1
               }}
@@ -90,7 +89,7 @@ const selectservices = () => {
           marginTop: 5,
           paddingHorizontal: 10,
           justifyContent: "center",
-          borderRadius: 5
+          borderRadius: 5,
         }}>
           <Text style={{ fontFamily: "montserrat-semibold", fontSize: 18, color: Colors.PRIMARYTEXT }}>Select Service</Text>
           <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
@@ -113,37 +112,39 @@ const selectservices = () => {
 
               {
                 selectedServices.find((ser) => ser._id == item._id) ?
-                  <TouchableOpacity
+                  <Pressable
                     style={{
                       width: 30,
                       height: 30,
                       backgroundColor: "red",
-                      borderRadius: "50%",
+                      borderRadius: 50,
                       justifyContent: "center",
                       alignItems: "center",
                       shadowColor: '#000',
                       shadowOffset: { width: 0, height: 6 },
                       shadowOpacity: 0.4,
                       shadowRadius: 12,
+                      elevation:12,
                     }}
                     onPress={() => deleteServiceClicked(item)}
-                  ><MaterialIcons name="delete" size={20} color="#fff" /></TouchableOpacity> :
-                  <TouchableOpacity
+                  ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
+                  <Pressable
                     style={{
                       width: 30,
                       height: 30,
                       backgroundColor: Colors.PRIMARY,
-                      borderRadius: "50%",
+                      borderRadius: 50,
                       justifyContent: "center",
                       alignItems: "center",
                       shadowColor: '#000',
                       shadowOffset: { width: 0, height: 6 },
                       shadowOpacity: 0.4,
                       shadowRadius: 12,
+                      elevation:12,
                     }}
                     onPress={() => addServiceClicked(item)}
-                  ><AntDesign name="plus" size={18} color="#fff" /></TouchableOpacity>
-                
+                  ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
+
               }
             </View>
 
@@ -156,19 +157,19 @@ const selectservices = () => {
           keyExtractor={item => item._id}
         />
 
-      </ScrollView>
-      <TouchableOpacity 
-      style={{
-        height: 50,
-        backgroundColor: Colors.PRIMARY,
-        justifyContent:"center",
-        alignItems:"center"
-      }}
-      onPress={() => alert("Are you Sure ?")}
+      </View>
+      <Pressable
+        style={{
+          height: 50,
+          backgroundColor: Colors.PRIMARY,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+        onPress={() => alert("Are you Sure ?")}
       >
-        <Text style={{fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT}}>+JOIN QUEUE</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
+      </Pressable>
+    </View>
   )
 }
 

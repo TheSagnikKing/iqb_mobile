@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
@@ -31,7 +31,7 @@ const Signin = () => {
                             width: 55,
                             height: 55,
                             backgroundColor: Colors.PRIMARY,
-                            borderRadius: "50%",
+                            borderRadius: 50,
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -39,6 +39,7 @@ const Signin = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
+                            elevation:12,
                             marginHorizontal: "auto",
                             marginBottom: 20
                         }}
@@ -96,7 +97,7 @@ const Signin = () => {
                     </View>
                 </View>
                 <View style={styles.signin_content_bottom}>
-                    <TouchableOpacity
+                    <Pressable
                         style={{
                             backgroundColor: Colors.PRIMARY,
                             paddingHorizontal: 25,
@@ -106,6 +107,7 @@ const Signin = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
+                            elevation: 5,
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -120,7 +122,7 @@ const Signin = () => {
                                 fontFamily: "montserrat-medium"
                             }}
                         >Sign in</Text>
-                    </TouchableOpacity>
+                    </Pressable>
 
                     <View
                         style={{
@@ -153,15 +155,15 @@ const Signin = () => {
                     </View>
 
                     <Text
-                    style={{
-                        marginTop: 60,
-                        textAlign: "center",
-                        fontFamily: 'montserrat-medium',
-                        fontSize: 16
-                    }}
-                    >Don't have an account ? <Link 
-                    href="/signup"
-                    style={{color: Colors.PRIMARY}}
+                        style={{
+                            marginTop: 60,
+                            textAlign: "center",
+                            fontFamily: 'montserrat-medium',
+                            fontSize: 16
+                        }}
+                    >Don't have an account ? <Link
+                        href="/signup"
+                        style={{ color: Colors.PRIMARY }}
                     >Sign up</Link></Text>
                 </View>
             </ScrollView>

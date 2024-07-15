@@ -154,6 +154,7 @@ const QList = () => {
             </View>
           )}
           keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </SafeAreaView>

@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
-    elevation:12,
+    elevation: 12,
     position: "relative"
   },
   statusonline: {

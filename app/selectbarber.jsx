@@ -133,6 +133,7 @@ const SelectBarber = () => {
             </View>
           </View>}
           keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
         />
 
       </View>

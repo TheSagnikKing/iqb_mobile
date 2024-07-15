@@ -154,6 +154,7 @@ const selectservices = () => {
             </View>
 
           </View>}
+          showsVerticalScrollIndicator={false}
           keyExtractor={item => item._id}
         />
 

@@ -4,8 +4,11 @@ import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from "react-redux"
 
 const Signin = () => {
+
+    const demo = useSelector(state => state.demo)
 
     const router = useRouter()
 

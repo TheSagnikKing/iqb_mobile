@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux'
+import store from '../redux/store'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,44 +27,46 @@ const _layout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index"
-        options={{
-          headerShown: false
-        }}
-      />
-      <Stack.Screen name="signin"
-      />
-      <Stack.Screen name="signup"
-      />
-      <Stack.Screen name="(tabs)"
-        options={{
-          headerShown: false
-        }}
-      />
+    <Provider store={store}>
+      <Stack>
+        <Stack.Screen name="index"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen name="signin"
+        />
+        <Stack.Screen name="signup"
+        />
+        <Stack.Screen name="(tabs)"
+          options={{
+            headerShown: false
+          }}
+        />
 
-      <Stack.Screen name="selectbarber"
-        options={{
-          headerTitle: "Barber List"
-        }}
-      />
+        <Stack.Screen name="selectbarber"
+          options={{
+            headerTitle: "Barber List"
+          }}
+        />
 
-      <Stack.Screen name="selectservices"
-        options={{
-          headerTitle: "Select Service"
-        }}
-      />
-      <Stack.Screen name="saloninfo"
-        options={{
-          headerTitle: "Salon Info"
-        }}
-      />
-      <Stack.Screen name="help"
-        options={{
-          headerTitle: "Help"
-        }}
-      />
-    </Stack>
+        <Stack.Screen name="selectservices"
+          options={{
+            headerTitle: "Select Service"
+          }}
+        />
+        <Stack.Screen name="saloninfo"
+          options={{
+            headerTitle: "Salon Info"
+          }}
+        />
+        <Stack.Screen name="help"
+          options={{
+            headerTitle: "Help"
+          }}
+        />
+      </Stack>
+    </Provider>
   )
 }
 

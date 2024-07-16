@@ -23,14 +23,14 @@ const Home = () => {
       _id: 2,
       name: "Auto Join",
       icon: <Fontisto name="persons" size={18} color={"#000"} />,
-      url: "/selectautojoin",
+      url: "/autojoin",
       animationdelay: 400
     },
     {
       _id: 3,
       name: "Join Group",
       icon: <FontAwesome6 name="person-walking-arrow-right" size={18} color={"#000"} />,
-      url: "/selectjoingroup",
+      url: "/joingroup",
       animationdelay: 500
     }
   ]

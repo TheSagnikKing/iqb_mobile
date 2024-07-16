@@ -18,7 +18,7 @@ const Header = () => {
           gap: 10
         }}
       >
-        <Pressable onPress={() => router.push("/home")}>
+        <Pressable onPress={() => router.push("/profile")}>
           <Image
             source={require("../../assets/images/profile.webp")}
             style={{

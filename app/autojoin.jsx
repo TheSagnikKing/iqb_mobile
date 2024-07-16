@@ -6,7 +6,7 @@ import { Colors } from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const selectservices = () => {
+const Autojoin = () => {
 
   const params = useLocalSearchParams();
 
@@ -19,24 +19,24 @@ const selectservices = () => {
     {
       _id: 2,
     },
-    // {
-    //   _id: 3,
-    // },
-    // {
-    //   _id: 4
-    // },
-    // {
-    //   _id: 5
-    // },
-    // {
-    //   _id: 6,
-    // },
-    // {
-    //   _id: 7,
-    // },
-    // {
-    //   _id: 8
-    // }
+    {
+      _id: 3,
+    },
+    {
+      _id: 4
+    },
+    {
+      _id: 5
+    },
+    {
+      _id: 6,
+    },
+    {
+      _id: 7,
+    },
+    {
+      _id: 8
+    }
   ]
 
   const [selectedServices, setSelectedServices] = useState([])
@@ -174,6 +174,6 @@ const selectservices = () => {
   )
 }
 
-export default selectservices
+export default Autojoin
 
 const styles = StyleSheet.create({})

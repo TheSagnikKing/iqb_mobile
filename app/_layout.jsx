@@ -35,8 +35,14 @@ const _layout = () => {
           }}
         />
         <Stack.Screen name="signin"
+          options={{
+            headerShown: false
+          }}
         />
         <Stack.Screen name="signup"
+          options={{
+            headerShown: false
+          }}
         />
         <Stack.Screen name="(tabs)"
           options={{
@@ -55,14 +61,49 @@ const _layout = () => {
             headerTitle: "Select Service"
           }}
         />
+
+        <Stack.Screen name="autojoin"
+          options={{
+            headerTitle: "Auto Join"
+          }}
+        />
+
+        <Stack.Screen name="joingroup"
+          options={{
+            headerTitle: "Group Join"
+          }}
+        />
+
+        <Stack.Screen name="joingroupbarbers"
+          options={{
+            headerTitle: "Select Baber"
+          }}
+        />
+
+        <Stack.Screen name="joingroupservices"
+          options={{
+            headerTitle: "Select Services"
+          }}
+        />
+
         <Stack.Screen name="saloninfo"
           options={{
             headerTitle: "Salon Info"
           }}
         />
+        <Stack.Screen name="changelocation"
+          options={{
+            headerTitle: "Location"
+          }}
+        />
         <Stack.Screen name="help"
           options={{
             headerTitle: "Help"
+          }}
+        />
+        <Stack.Screen name="profile"
+          options={{
+            headerTitle: "Profile"
           }}
         />
       </Stack>

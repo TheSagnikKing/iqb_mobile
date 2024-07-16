@@ -1,8 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { demoReducer } from "./Reducers/demoReducer";
+import { groupjoinReducer,customerGroupJoinReducer } from "./Reducers/groupjoinReducer";
 
 const rootReducer = combineReducers({
-    demo: demoReducer
+    groupjoin: groupjoinReducer,
+    customerGroupJoin:customerGroupJoinReducer
 })
 
 const initialState = {};

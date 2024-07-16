@@ -42,7 +42,7 @@ const Signin = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
-                            elevation:12,
+                            elevation: 12,
                             marginHorizontal: "auto",
                             marginBottom: 20
                         }}
@@ -135,7 +135,7 @@ const Signin = () => {
                             alignItems: "center",
                         }}
                     >
-                        <Text
+                        <Pressable onPress={() => router.push("/changelocation")}><Text
                             style={{
                                 fontFamily: "montserrat-medium",
                                 fontSize: 14,
@@ -146,7 +146,10 @@ const Signin = () => {
                                 lineHeight: 15
                             }}
                         >Change Location</Text>
-                        <Text
+                        </Pressable>
+                        <Pressable
+                            onPress={() => router.push("/help")}
+                        ><Text
                             style={{
                                 fontFamily: "montserrat-medium",
                                 fontSize: 14,
@@ -154,7 +157,7 @@ const Signin = () => {
                                 paddingLeft: 8,
                                 lineHeight: 15
                             }}
-                        >Help</Text>
+                        >Help</Text></Pressable>
                     </View>
 
                     <Text

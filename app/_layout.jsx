@@ -88,12 +88,22 @@ const _layout = () => {
 
         <Stack.Screen name="saloninfo"
           options={{
-            headerTitle: "Salon Info"
+            headerShown: false
           }}
         />
         <Stack.Screen name="changelocation"
           options={{
-            headerTitle: "Location"
+            headerShown: false
+          }}
+        />
+        <Stack.Screen name="locationsalonlist"
+          options={{
+            headerTitle: "Select Salon"
+          }}
+        />
+        <Stack.Screen name="connectsalon"
+          options={{
+            headerShown: false
           }}
         />
         <Stack.Screen name="help"
@@ -103,7 +113,13 @@ const _layout = () => {
         />
         <Stack.Screen name="profile"
           options={{
-            headerTitle: "Profile"
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="editprofile"
+          options={{
+            headerShown: false
           }}
         />
       </Stack>

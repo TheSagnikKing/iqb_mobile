@@ -43,7 +43,7 @@ const Header = () => {
           gap: 20
         }}
       >
-        <Pressable onPress={() => router.push("/help")}>
+        <Pressable onPress={() => router.push("/saloninfo")}>
           <Ionicons name="information-circle-outline" size={24} color="black" />
         </Pressable>
         <Pressable

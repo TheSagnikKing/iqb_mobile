@@ -1,18 +1,20 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
 import { AntDesign, FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { iqbSalonsAction } from '../redux/Actions/LocationAction';
 
 const SalonInfo = () => {
 
-  const router = useRouter()
+
 
   return (
-    <SafeAreaView style={{ flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{
         backgroundColor: "#fff",
         paddingHorizontal: 15
@@ -49,7 +51,17 @@ const SalonInfo = () => {
               shadowOffset: { width: 0, height: 6 },
               shadowOpacity: 0.4,
               shadowRadius: 12,
-            }}><FontAwesome name="photo" size={55} color="#fff" /></View>
+            }}>
+            {/* <FontAwesome name="photo" size={55} color="#fff" /> */}
+            <Image
+              source={{ uri: "iqbDefault100x100.jpg"}}
+              style={{
+                width: 95,
+                height: 95,
+                borderRadius: 50
+              }}
+            />
+          </View>
           <Text
             style={{
               fontFamily: "montserrat-semibold",
@@ -57,7 +69,7 @@ const SalonInfo = () => {
               textAlign: "center",
               marginVertical: 20
             }}
-          >Test Salon By John</Text>
+          >TEst</Text>
 
           <View style={{
             borderColor: "rgba(0,0,0,0.4)",
@@ -201,7 +213,7 @@ const SalonInfo = () => {
                 shadowRadius: 12,
                 elevation: 12
               }}><FontAwesome6 name="location-dot" size={24} color="#fff" /></View>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>United Kingdom</Text>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>Germany</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, width: "50%" }]}>
               <View style={{
@@ -218,7 +230,7 @@ const SalonInfo = () => {
                 shadowRadius: 12,
                 elevation: 12
               }}><Feather name="phone-call" size={24} color="#fff" /></View>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>1234567890</Text>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{salonInfodata?.[0]?.ContactTel}</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, width: "50%" }]}>
               <View style={{

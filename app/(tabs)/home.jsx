@@ -1,12 +1,24 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import { Fontisto, MaterialIcons, Entypo, Ionicons, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
+
+  useEffect(() => {
+    const getloginsalonuserdata = async() => {
+        const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+        const userinfodata = await AsyncStorage.getItem('user-logininfo')
+        console.log("Salon Info data ", saloninfodata)
+        console.log("User Info data ", userinfodata)
+    }
+
+    getloginsalonuserdata()
+},[])
 
   const router = useRouter()
   const [join, setJoin] = useState(false)

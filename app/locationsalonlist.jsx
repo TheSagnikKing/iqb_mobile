@@ -1,11 +1,18 @@
-import { StyleSheet, Text, View, TextInput, FlatList, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, FlatList, Pressable, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import { useDispatch, useSelector } from 'react-redux';
+import { retrieveSalonListAction } from '../redux/Actions/LocationAction';
 
 const LocationSalonList = () => {
+
+    const params = useLocalSearchParams();
+
+    console.log("From locationsalonlist ", params.city)
 
     const [salonName, setSalonName] = useState("")
 
@@ -43,9 +50,27 @@ const LocationSalonList = () => {
     ])
 
     const router = useRouter()
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (params.city) {
+            dispatch(retrieveSalonListAction(params.city, "retrieveSalonList.php"))
+        }
+    }, [dispatch])
+
+    const retrieveSalonList = useSelector(state => state.retrieveSalonList)
+
+    const {
+        loading,
+        response: retrieveSalonListData,
+        error
+    } = retrieveSalonList
+
     return (
         <View style={{ flex: 1, backgroundColor: "#fff", padding: 10, position: "relative" }}>
-            <View style={styles.location_header}>
+            <Toast />
+            {/* <View style={styles.location_header}>
                 <View><Feather name="search" size={22} color="black" /></View>
                 <TextInput
                     secureTextEntry={true}
@@ -55,31 +80,43 @@ const LocationSalonList = () => {
                     onChangeText={text => setSalonName(text)}
                     value={salonName}
                 />
-            </View>
+            </View> */}
 
-            <FlatList
-                data={salonlist}
-                renderItem={({ item }) => <View style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 20,
-                    padding: 10,
-                    marginBottom: 10,
-                    backgroundColor: "#efefef",
-                    borderColor: "rgba(0,0,0,0.4)",
-                    borderWidth: 2,
-                    borderRadius: 5
-                }}>
-                    <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
-                    <View>
-                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginBottom: 5 }}>IQB Dev</Text>
-                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>67 Foxhall Street, NG318AN</Text>
-                    </View>
-                </View>}
-                keyExtractor={item => item._id}
-            />
+            {
+                loading ?
+                    <View style={{ paddingTop: 20 }}><ActivityIndicator size={24} color={"#000"} /></View> :
+                    retrieveSalonListData.length == 0 ?
+                        <View style={{ paddingTop: 20 }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>Oops no salonlist found !</Text></View> :
+                        error ?
+                            <View style={{ paddingTop: 20 }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>Oops no salonlist found !</Text></View> :
+                            <FlatList
+                                data={retrieveSalonListData}
+                                renderItem={({ item }) => <Pressable style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 20,
+                                    padding: 10,
+                                    marginBottom: 10,
+                                    backgroundColor: "#efefef",
+                                    borderColor: "rgba(0,0,0,0.4)",
+                                    borderWidth: 2,
+                                    borderRadius: 5
+                                }}
+                                    onPress={() => router.push({ pathname: "/connectsalon", params: { SalonCode: item.SalonCode } })}
+                                >
+                                    <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
+                                    <View>
+                                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginBottom: 5 }}>{item.SalonName}</Text>
+                                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>{item.Address}{","}{item.PostCode}</Text>
+                                    </View>
+                                </Pressable>}
+                                keyExtractor={item => item.SalonCode}
+                                showsVerticalScrollIndicator={false}
+                            />
+            }
 
-            <Pressable
+
+            {/* <Pressable
                 style={{
                     position: "absolute",
                     bottom: 15,
@@ -97,7 +134,7 @@ const LocationSalonList = () => {
                     elevation: 12,
                 }}
                 onPress={() => router.push("/connectsalon")}
-            ><FontAwesome6 name="add" size={24} color="#fff" /></Pressable>
+            ><FontAwesome6 name="add" size={24} color="#fff" /></Pressable> */}
         </View>
     )
 }

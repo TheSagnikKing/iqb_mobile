@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { signinAction } from '../redux/Actions/AuthAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { SAVE_SALONINFO } from '../redux/Constants/LocationConstant';
 
 const Signin = () => {
 
@@ -30,6 +31,17 @@ const Signin = () => {
 
         dispatch(signinAction(email, password, 0, router, "iqueuelogin.php"))
     }
+
+    const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async() => {
+            const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+            setCurrentSalonInfo(JSON.parse(saloninfodata))
+        }
+
+        getloginsalonuserdata()
+    },[])
 
     return (
         <SafeAreaView style={styles.signin_container}>
@@ -65,7 +77,7 @@ const Signin = () => {
                             textAlign: "center",
                             marginBottom: 10
                         }}
-                    >Welcome To Iqueue Barbers</Text>
+                    >Welcome To <Text>{currentSalonInfo?.[0]?.SalonName}</Text></Text>
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",

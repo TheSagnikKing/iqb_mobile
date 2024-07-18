@@ -46,6 +46,7 @@ export const signinAction = (email, password, salonid, router, endpoint) => asyn
             if(data?.Response[0]?.Activated == "N"){
                 router.push({ pathname: "/activationcode", params: data?.Response[0] })
             }else if(data?.Response[0]?.Activated == "Y"){
+                await AsyncStorage.setItem('user-logininfo', JSON.stringify(data.Response));
                 router.push("/home")
             }
 
@@ -60,14 +61,14 @@ export const signinAction = (email, password, salonid, router, endpoint) => asyn
     }
 };
 
-export const activatedAccountAction = (Email, SalonId, endpoint, router) => async (dispatch) => {
+export const activatedAccountAction = (params, endpoint, router) => async (dispatch) => {
     try {
         dispatch({
             type: ACTIVATED_ACCOUNT_REQ
         });
 
         const body = {
-            "query":`UPDATE CustomersRegisteredTable set Activated='Y' WHERE Email='${Email}' AND SalonId=${SalonId}`
+            "query":`UPDATE CustomersRegisteredTable set Activated='Y' WHERE Email='${params.Email}' AND SalonId=${params.SalonId}`
         }
 
         const { data } = await api.post(`/${endpoint}`, body);
@@ -96,6 +97,7 @@ export const activatedAccountAction = (Email, SalonId, endpoint, router) => asyn
             });
 
             console.log("Activaiton code success")
+            await AsyncStorage.setItem('user-logininfo', JSON.stringify(params));
             router.push("/home")
         }
 

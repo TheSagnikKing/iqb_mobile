@@ -21,7 +21,7 @@ const Activationcode = () => {
 
   const activationcodePressed = () => {
     if (params.ActivationCode == activationcode) {
-      dispatch(activatedAccountAction(params.Email, params.SalonId, "iqueuedirectquery2.php", router))
+      dispatch(activatedAccountAction(params,"iqueuedirectquery2.php", router))
     } else {
       Toast.show({
         type: 'error',

@@ -1,15 +1,43 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
 import { AntDesign, FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { iqbSalonsAction } from '../redux/Actions/LocationAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ConnectSalon = () => {
 
+    const params = useLocalSearchParams();
+
+    console.log("From Salon Info ", params.SalonCode)
+  
     const router = useRouter()
+  
+    const dispatch = useDispatch()
+  
+    useEffect(() => {
+      if (params.SalonCode) {
+        dispatch(iqbSalonsAction(params.SalonCode, "iqbsalons.php"))
+      }
+    }, [dispatch])
+  
+    const {
+      loading,
+      response: salonInfodata,
+      error
+    } = useSelector(state => state.iqbSalons)
+
+    const connectPressed = async() => {
+        if(salonInfodata){
+            await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
+            router.push("/signin")
+        } 
+    }
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: "#fff"}}>
@@ -58,7 +86,7 @@ const ConnectSalon = () => {
                             textAlign: "center",
                             marginVertical: 20
                         }}
-                    >Test Salon By John</Text>
+                    >{salonInfodata?.[0]?.SalonName}</Text>
 
                     <View style={{
                         borderColor: "rgba(0,0,0,0.4)",
@@ -200,7 +228,7 @@ const ConnectSalon = () => {
                                 shadowRadius: 12,
                                 elevation: 12
                             }}><FontAwesome6 name="location-dot" size={24} color="#fff" /></View>
-                            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>United Kingdom</Text>
+                            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>{salonInfodata?.[0]?.County}</Text>
                         </View>
                         <View style={[styles.saloninfo_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, width: "50%" }]}>
                             <View style={{
@@ -283,7 +311,7 @@ const ConnectSalon = () => {
                     borderTopColor: "rgba(0,0,0,0.4)",
                     borderTopWidth: 1
                 }}
-                onPress={() => router.push("/signin")}>
+                onPress={() => connectPressed()}>
                 <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Connect</Text>
             </Pressable>
         </SafeAreaView>

@@ -95,10 +95,6 @@ const Signup = () => {
         dispatch(signupCheckEmailAction(signupdata, "iqueuecheckemail.php", router))
 
         // router.push({ pathname: "/agree", params: signupdata })
-
-        // console.log(signupdata)
-
-        // dispatch(signupAction(signupdata, "iqueueregister.php", router))
     }
 
     const toggleSwitch = () => setMarketingemails(previousState => !previousState);

@@ -44,6 +44,18 @@ const _layout = () => {
             headerShown: false
           }}
         />
+
+        <Stack.Screen name="agree"
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen name="activationcode"
+          options={{
+            headerShown: false
+          }}
+        />
         <Stack.Screen name="(tabs)"
           options={{
             headerShown: false

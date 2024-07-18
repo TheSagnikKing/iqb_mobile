@@ -1,32 +1,111 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Switch, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CheckBox from 'expo-checkbox';
+import { useDispatch, useSelector } from "react-redux"
+import { signupAction, signupCheckEmailAction } from '../redux/Actions/AuthAction';
+import Toast from 'react-native-toast-message';
+
+// signup click -> check email 
+// if success -> go to agree page
+// if agree success -> iqueueregister api means signup api.
+// then a pop will open when press ok call MapUserSalon and IqueuesendEmail
+// after then again a ok popup will come. when press take me to login page
+
+
+//change location
+// in the changelocation atlease two letter when type will call (places apis).
+// then user choose a place and press search button. 
+// it will retrievesalonlist.php. filter api is not present 
+// when a salon is choosen then go to saloninfo.
+// there immediately call the iqbsalons.php (this api entire data to be saved in the async storage)
+// after that connect salon press save all the info into the async storage and then redirect to signin page
+
 
 const Signup = () => {
 
-    const [firstName, setFirstName] = useState("")
+    const [firstname, setFirstName] = useState("")
     const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [isSelected, setSelection] = useState(false);
+    const [activationcode, setActivationcode] = useState(123456)
+    const [activated, setActivated] = useState("N")
+    const [loggedin, setLoggedin] = useState("N")
+    const [registerdate, setRegisterdate] = useState("08-07-2024")
+    const [salonid, setSalonid] = useState(0)
+    const [maketingemails, setMarketingemails] = useState(false)
+    // const [UserLevel, setUserLevel] = useState(0)
+    const [IsBarber, setIsBarber] = useState(false)
+
+    const router = useRouter()
+
+    useEffect(() => {
+        function formatDate(date) {
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+
+            setRegisterdate(`${day}-${month}-${year}`)
+        }
+
+        const today = new Date();
+        formatDate(today);
+
+
+        generateRandomCode = () => {
+            const min = 100000;
+            const max = 999999;
+            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            const randomCode = randomNum;
+            setActivationcode(randomCode)
+        }
+
+        generateRandomCode()
+    }, [])
+
+    const dispatch = useDispatch()
+
+    const signupCheckEmail = useSelector(state => state.signupCheckEmail)
+
+    const {
+        loading
+    } = signupCheckEmail
 
     const signupClicked = () => {
-        const signupdata = { firstName, lastname, email, password }
 
-        console.log(signupdata)
-        setFirstName("")
-        setLastName("")
-        setEmail("")
-        setPassword("")
+        const signupdata = {
+            firstname,
+            lastname,
+            email,
+            password,
+            activationcode,
+            activated,
+            loggedin,
+            registerdate,
+            salonid: 127,
+            maketingemails: maketingemails ? 1 : 0,
+            UserLevel: IsBarber ? 1 : 0,
+            IsBarber
+        }
+
+        dispatch(signupCheckEmailAction(signupdata, "iqueuecheckemail.php", router))
+
+        // router.push({ pathname: "/agree", params: signupdata })
+
+        // console.log(signupdata)
+
+        // dispatch(signupAction(signupdata, "iqueueregister.php", router))
     }
 
+    const toggleSwitch = () => setMarketingemails(previousState => !previousState);
 
     return (
         <SafeAreaView style={styles.signup_container}>
+                  <Toast />
             <ScrollView style={styles.signup_content_container}>
                 <View style={styles.signup_content_top}>
                     <View
@@ -42,7 +121,7 @@ const Signup = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
-                            elevation:12,
+                            elevation: 12,
                             marginHorizontal: "auto",
                             marginBottom: 20
                         }}
@@ -80,10 +159,9 @@ const Signup = () => {
                         placeholder='First Name'
                         style={styles.input}
                         onChangeText={text => setFirstName(text)}
-                        value={firstName}
+                        value={firstname}
                     />
                     <TextInput
-                        secureTextEntry={true}
                         editable
                         placeholder='Last Name'
                         style={styles.input}
@@ -116,8 +194,8 @@ const Signup = () => {
                     >
                         <CheckBox
                             disabled={false}
-                            value={isSelected}
-                            onValueChange={(newValue) => setSelection(newValue)}
+                            value={IsBarber}
+                            onValueChange={(newValue) => setIsBarber(newValue)}
                             style={{
                                 width: 22,
                                 height: 22,
@@ -129,6 +207,17 @@ const Signup = () => {
                                 fontSize: 14
                             }}
                         >I am also a barber</Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, gap: 15 }}>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={maketingemails ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={maketingemails}
+                        />
+                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
                     </View>
                 </View>
                 <View style={styles.signup_content_bottom}>
@@ -150,13 +239,18 @@ const Signup = () => {
                         }}
                         onPress={signupClicked}
                     >
-                        <Text
-                            style={{
-                                color: Colors.PRIMARYTEXT,
-                                fontSize: 16,
-                                fontFamily: "montserrat-medium"
-                            }}
-                        >Sign up</Text>
+                        {
+                            loading ?
+                                <ActivityIndicator size={20} color={"#fff"} /> :
+                                <Text
+                                    style={{
+                                        color: Colors.PRIMARYTEXT,
+                                        fontSize: 16,
+                                        fontFamily: "montserrat-medium"
+                                    }}
+                                >Sign up</Text>
+                        }
+
                     </Pressable>
 
                     <Text

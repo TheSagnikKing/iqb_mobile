@@ -1,32 +1,39 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { signinAction } from '../redux/Actions/AuthAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const Signin = () => {
 
-    const demo = useSelector(state => state.demo)
+    //arghya43@yopmail.com
+    //12345678
 
     const router = useRouter()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const signinClicked = () => {
-        const signindata = { email, password }
+    const dispatch = useDispatch()
 
-        console.log(signindata)
-        setEmail("")
-        setPassword("")
+    const {
+        loading,
+        response
+    } = useSelector(state => state.signin)
 
-        router.push("/home")
+    const signinClicked = async () => {
+
+        dispatch(signinAction(email, password, 0, router, "iqueuelogin.php"))
     }
 
     return (
         <SafeAreaView style={styles.signin_container}>
+            <Toast />
             <ScrollView style={styles.signin_content_container}>
                 <View style={styles.signin_content_top}>
                     <View
@@ -91,12 +98,12 @@ const Signin = () => {
                             justifyContent: "flex-end",
                         }}
                     >
-                        <Text
-                            style={{
-                                fontFamily: "montserrat-medium",
-                                fontSize: 14
-                            }}
-                        >Forgot Password ?</Text>
+                        <Pressable
+                            onPress={() => {}}
+                        ><Text style={{
+                            fontFamily: "montserrat-medium",
+                            fontSize: 14
+                        }}>Forgot Password ?</Text></Pressable>
                     </View>
                 </View>
                 <View style={styles.signin_content_bottom}>
@@ -118,13 +125,18 @@ const Signin = () => {
                         }}
                         onPress={signinClicked}
                     >
-                        <Text
-                            style={{
-                                color: Colors.PRIMARYTEXT,
-                                fontSize: 16,
-                                fontFamily: "montserrat-medium"
-                            }}
-                        >Sign in</Text>
+                        {
+                            loading ?
+                                <ActivityIndicator size={20} color={"#fff"}/> :
+                                <Text
+                                    style={{
+                                        color: Colors.PRIMARYTEXT,
+                                        fontSize: 16,
+                                        fontFamily: "montserrat-medium"
+                                    }}
+                                >Sign in</Text>
+                        }
+
                     </Pressable>
 
                     <View

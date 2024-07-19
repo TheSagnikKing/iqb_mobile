@@ -13,8 +13,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ConnectSalon = () => {
 
     const params = useLocalSearchParams();
-
-    console.log("From Salon Info ", params.SalonCode)
   
     const router = useRouter()
   

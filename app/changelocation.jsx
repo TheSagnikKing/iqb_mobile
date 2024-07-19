@@ -36,6 +36,14 @@ const ChangeLocation = () => {
         setSearch(search.split(",")[0])
     }
 
+    const searchSalonPressed = () => {
+        if (search.length < 2) {
+            alert("Atleast 2 charecters needed for search")
+        } else {
+            router.push({ pathname: "/locationsalonlist", params: { city: search } })
+        }  
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <Toast />
@@ -129,8 +137,7 @@ const ChangeLocation = () => {
                     }
 
                 </View>
-                <Pressable style={styles.searchbtn} onPress={() => router.push({ pathname: "/locationsalonlist", params: { city: search } })
-                }>
+                <Pressable style={styles.searchbtn} onPress={searchSalonPressed}>
                     <Text style={{
                         fontFamily: "montserrat-semibold",
                         fontSize: 16,

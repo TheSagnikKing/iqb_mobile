@@ -8,6 +8,7 @@ import CheckBox from 'expo-checkbox';
 import { useDispatch, useSelector } from "react-redux"
 import { signupAction, signupCheckEmailAction } from '../redux/Actions/AuthAction';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // signup click -> check email 
 // if success -> go to agree page
@@ -75,6 +76,19 @@ const Signup = () => {
         loading
     } = signupCheckEmail
 
+    const [currentSalonInfo, setCurrentSalonInfo] = useState(0)
+
+    useEffect(() => {
+        const getloginsalonuserdata = async () => {
+            const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+            setCurrentSalonInfo(JSON.parse(saloninfodata))
+        }
+
+        getloginsalonuserdata()
+    }, [])
+
+    // console.log("Current Salon Info ",currentSalonInfo)
+
     const signupClicked = () => {
 
         const signupdata = {
@@ -86,11 +100,13 @@ const Signup = () => {
             activated,
             loggedin,
             registerdate,
-            salonid: 127,
+            salonid: currentSalonInfo?.[0]?.id,
             maketingemails: maketingemails ? 1 : 0,
             UserLevel: IsBarber ? 1 : 0,
             IsBarber
         }
+
+        console.log("Sign up ", signupdata)
 
         dispatch(signupCheckEmailAction(signupdata, "iqueuecheckemail.php", router))
 
@@ -101,7 +117,7 @@ const Signup = () => {
 
     return (
         <SafeAreaView style={styles.signup_container}>
-                  <Toast />
+            <Toast />
             <ScrollView style={styles.signup_content_container}>
                 <View style={styles.signup_content_top}>
                     <View

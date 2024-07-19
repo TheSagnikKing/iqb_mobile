@@ -12,9 +12,6 @@ import { SAVE_SALONINFO } from '../redux/Constants/LocationConstant';
 
 const Signin = () => {
 
-    //arghya43@yopmail.com
-    //12345678
-
     const router = useRouter()
 
     const [email, setEmail] = useState("")
@@ -42,6 +39,8 @@ const Signin = () => {
 
         getloginsalonuserdata()
     },[])
+
+    console.log("Current Salon Info ", currentSalonInfo)
 
     return (
         <SafeAreaView style={styles.signin_container}>

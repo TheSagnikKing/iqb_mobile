@@ -13,8 +13,8 @@ const Home = () => {
     const getloginsalonuserdata = async() => {
         const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
         const userinfodata = await AsyncStorage.getItem('user-logininfo')
-        console.log("Salon Info data ", saloninfodata)
-        console.log("User Info data ", userinfodata)
+        // console.log("Salon Info data ", saloninfodata)
+        // console.log("User Info data ", userinfodata)
     }
 
     getloginsalonuserdata()

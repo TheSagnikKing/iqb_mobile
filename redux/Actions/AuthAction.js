@@ -112,6 +112,10 @@ const iqueuesendEmailAction = (signupdata, endpoint, router) => async (dispatch)
             type: IQUEUE_SENDEMAIL_REQ
         });
 
+        const saloninfo = await AsyncStorage.getItem('user-saloninfo')
+
+        const currentSalonInfo = JSON.parse(saloninfo)
+
         const params = {
             firstname: signupdata.firstname,
             lastname: signupdata.lastname,
@@ -120,11 +124,13 @@ const iqueuesendEmailAction = (signupdata, endpoint, router) => async (dispatch)
             activationcode: signupdata.activationcode,
             salonid: signupdata.salonid,
             username: signupdata.username,
-            vSalonname: "IQBDev",
-            vSalonTel: "01473233111",
-            vSalonWeb: "www.iqueuebarbers.com"
+            vSalonname: currentSalonInfo?.[0]?.SalonName,
+            vSalonTel: currentSalonInfo?.[0]?.ContactTel,
+            vSalonWeb: currentSalonInfo?.[0]?.SalonWebsite
 
         };
+
+        // console.log("From IQUEUE SEND EMAIL ACTION ", params)
 
         const url = `/${endpoint}`
 
@@ -137,9 +143,9 @@ const iqueuesendEmailAction = (signupdata, endpoint, router) => async (dispatch)
             headers
         });
 
-        console.log("email ",  data)
-        console.log("email", typeof(data))
-        console.log("status ", status)
+        // console.log("email ",  data)
+        // console.log("email", typeof(data))
+        // console.log("status ", status)
 
         if( status == 200){
             dispatch({

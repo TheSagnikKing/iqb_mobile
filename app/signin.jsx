@@ -40,8 +40,6 @@ const Signin = () => {
         getloginsalonuserdata()
     },[])
 
-    console.log("Current Salon Info ", currentSalonInfo)
-
     return (
         <SafeAreaView style={styles.signin_container}>
             <Toast />

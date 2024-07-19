@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, FlatList } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, ScrollView, Pressable, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header/Header';
 import { Foundation } from '@expo/vector-icons';
 import { Colors } from "../../constants/Colors"
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { queueListAction } from '../../redux/Actions/QueueAction';
 
 const qlistdata = [
   {
@@ -83,6 +86,31 @@ const qlistdata = [
 ]
 
 const QList = () => {
+
+  const dispatch = useDispatch()
+
+  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      setCurrentSalonInfo(JSON.parse(saloninfodata))
+      const salondata = JSON.parse(saloninfodata)
+      dispatch(queueListAction({ salonid: salondata?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
+    }
+
+    getloginsalonuserdata()
+  }, [])
+
+  const queueList = useSelector(state => state.queueList)
+
+  const {
+    loading,
+    response: qlistdata
+  } = queueList
+
+  console.log("This salon QUEUE LIST ARE ", qlistdata)
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header />
@@ -135,27 +163,45 @@ const QList = () => {
             <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Barber</Text>
           </View>
         </View>
-        <FlatList
-          data={qlistdata}
-          renderItem={({ item }) => (
+
+        {
+          loading ?
             <View style={{
-              backgroundColor: "#efefef",
-              height: 60,
-              display: "flex",
-              flexDirection: "row",
+              padding: 10,
+              justifyContent: "center",
               alignItems: "center",
-              justifyContent: "space-around",
-              borderBottomColor: "rgba(0,0,0,0.2)",
-              borderBottomWidth: 1
-            }}>
-              <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.qpos}</Text>
-              <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
-              <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.barber}</Text>
-            </View>
-          )}
-          keyExtractor={item => item._id}
-          showsVerticalScrollIndicator={false}
-        />
+              flex: 1
+            }}><ActivityIndicator size={20} color={"#000"}/></View> :
+            qlistdata.length == 0 ?
+              <View style={{
+                padding: 10,
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1
+              }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>No Queue List available</Text></View> :
+              <FlatList
+                data={qlistdata}
+                renderItem={({ item }) => (
+                  <View style={{
+                    backgroundColor: "#efefef",
+                    height: 60,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    borderBottomColor: "rgba(0,0,0,0.2)",
+                    borderBottomWidth: 1
+                  }}>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.Username}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
+                  </View>
+                )}
+                keyExtractor={item => item.id}
+                showsVerticalScrollIndicator={false}
+              />
+        }
+
       </View>
     </SafeAreaView>
   );

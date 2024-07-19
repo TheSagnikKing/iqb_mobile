@@ -6,19 +6,42 @@ import { Colors } from '../../constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { adminRet2Action } from '../../redux/Actions/HomeAction';
 
 const Home = () => {
 
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
+  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+
   useEffect(() => {
-    const getloginsalonuserdata = async() => {
-        const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
-        const userinfodata = await AsyncStorage.getItem('user-logininfo')
-        // console.log("Salon Info data ", saloninfodata)
-        // console.log("User Info data ", userinfodata)
+    const getloginsalonuserdata = async () => {
+      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
+      setCurrentSalonInfo(JSON.parse(saloninfodata))
+      setCurrentUserInfo(JSON.parse(userinfodata))
     }
 
     getloginsalonuserdata()
-},[])
+  }, [])
+
+  // console.log("User Info ", currentUserInfo)
+  // console.log("Salon Info ", currentSalonInfo)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType}, "adminMergedRet2.php"))
+  },[])
+
+  const admiMergeRet2 = useSelector(state => state.adminRet2)
+
+  const {
+    loading,
+    response
+  } = admiMergeRet2
+
+  console.log("The Home page data ", response)
 
   const router = useRouter()
   const [join, setJoin] = useState(false)
@@ -56,11 +79,11 @@ const Home = () => {
           <View style={[styles.queue_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 2, height: 200 }]}>
             <View style={styles.queue_status_item_icon}>
               <Fontisto name="scissors" size={24} color="#fff" />
-              <View style={styles.statusonline}></View>
+              <View style={[styles.statusonline, { backgroundColor: response?.SystemStatus ? "limegreen" : "red" }]}></View>
             </View>
             <View>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: 16, marginBottom: 5 }}>System Status</Text>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>ON</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>{response?.SystemStatus ? "On" : "Off"}</Text>
             </View>
           </View>
           <View style={[styles.queue_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, height: 200 }]}>
@@ -69,7 +92,7 @@ const Home = () => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: 16, marginBottom: 5 }}>Queuing</Text>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>5</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>{response?.Queuing}</Text>
             </View>
           </View>
 
@@ -79,7 +102,7 @@ const Home = () => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: 16, marginBottom: 5 }}>Barbers On Duty</Text>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>N/A</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>{response?.BarbersOnDuty}</Text>
             </View>
           </View>
           <View style={[styles.queue_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, height: 200 }]}>
@@ -88,7 +111,7 @@ const Home = () => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: 16, marginBottom: 5 }}>Next In Queue</Text>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>1</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>{response?.NextPositionAvailable}</Text>
             </View>
           </View>
 
@@ -133,7 +156,7 @@ const Home = () => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: 16, marginBottom: 5 }}>Estimated Wait Time</Text>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>N/A</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 16 }}>{response?.EstimatedWaitTime}</Text>
             </View>
           </View>
         </View>
@@ -268,7 +291,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    backgroundColor: "limegreen",
     height: 17,
     width: 17,
     borderRadius: 9,

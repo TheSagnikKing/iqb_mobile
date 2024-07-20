@@ -1,18 +1,44 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
 import { AntDesign, FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { iqbSalonsAction } from '../redux/Actions/LocationAction';
+import { getsalonsdetailsbyIdAction } from '../redux/Actions/HomeAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 const SalonInfo = () => {
+  const router = useRouter()
 
+  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
 
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      setCurrentSalonInfo(JSON.parse(saloninfodata))
+    }
 
+    getloginsalonuserdata()
+  }, [])
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if(currentSalonInfo.length > 0){
+      dispatch(getsalonsdetailsbyIdAction(currentSalonInfo?.[0]?.id, "GetSalonDetailsById.php"))
+    }
+  },[dispatch,currentSalonInfo])
+
+  const {
+    loading,
+    response: saloninforesponse
+  } = useSelector(state => state.getsalonsdetailsbyId);
+  
+  console.log("Response Salon Info ", saloninforesponse?.Response)
+ 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{
@@ -69,7 +95,7 @@ const SalonInfo = () => {
               textAlign: "center",
               marginVertical: 20
             }}
-          >TEst</Text>
+          >{saloninforesponse?.Response?.SalonName}</Text>
 
           <View style={{
             borderColor: "rgba(0,0,0,0.4)",
@@ -213,7 +239,7 @@ const SalonInfo = () => {
                 shadowRadius: 12,
                 elevation: 12
               }}><FontAwesome6 name="location-dot" size={24} color="#fff" /></View>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>Germany</Text>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>{saloninforesponse?.Response?.county}</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, width: "50%" }]}>
               <View style={{
@@ -230,7 +256,7 @@ const SalonInfo = () => {
                 shadowRadius: 12,
                 elevation: 12
               }}><Feather name="phone-call" size={24} color="#fff" /></View>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{salonInfodata?.[0]?.ContactTel}</Text>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{saloninforesponse?.Response?.ContactTel}</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, width: "50%" }]}>
               <View style={{

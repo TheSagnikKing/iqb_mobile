@@ -3,10 +3,16 @@ import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Header = () => {
 
   const router = useRouter()
+
+  const logoutPressed = async() => {
+    await AsyncStorage.removeItem('user-logininfo');
+    router.push("/signin")
+  }
 
   return (
     <View style={styles.header_container}>
@@ -47,7 +53,7 @@ const Header = () => {
           <Ionicons name="information-circle-outline" size={24} color="black" />
         </Pressable>
         <Pressable
-          onPress={() => router.push("/signin")}
+          onPress={logoutPressed}
         >
           <MaterialCommunityIcons name="power" size={24} color="black" />
         </Pressable>

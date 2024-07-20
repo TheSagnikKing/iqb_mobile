@@ -90,17 +90,24 @@ const QList = () => {
   const dispatch = useDispatch()
 
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+  const [lastRefreshTime, setLastRefreshTime] = useState(null);
 
   useEffect(() => {
     const getloginsalonuserdata = async () => {
       const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
       setCurrentSalonInfo(JSON.parse(saloninfodata))
-      const salondata = JSON.parse(saloninfodata)
-      dispatch(queueListAction({ salonid: salondata?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
     }
 
     getloginsalonuserdata()
   }, [])
+
+  useEffect(() => {
+    if (currentSalonInfo.length > 0) {
+      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
+      setLastRefreshTime(new Date().toLocaleTimeString());
+    }
+
+  }, [dispatch, currentSalonInfo])
 
   const queueList = useSelector(state => state.queueList)
 
@@ -108,6 +115,22 @@ const QList = () => {
     loading,
     response: qlistdata
   } = queueList
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentSalonInfo.length > 0) {
+        dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"));
+        setLastRefreshTime(new Date().toLocaleTimeString());
+      }
+    }, 10000);
+
+    return () => clearInterval(interval); // Cleanup function to clear interval on unmount
+  }, [dispatch, currentSalonInfo]);
+
+  const refreshqlistPressed = () => {
+    dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
+    setLastRefreshTime(new Date().toLocaleTimeString());
+  }
 
   console.log("This salon QUEUE LIST ARE ", qlistdata)
 
@@ -128,7 +151,7 @@ const QList = () => {
                 fontFamily: "montserrat-medium",
                 fontSize: 14
               }}
-            >Last refreshing time: 17:24</Text>
+            >Last refreshing time: <Text>{`${lastRefreshTime}`}</Text></Text>
           </View>
 
           <Pressable
@@ -146,6 +169,7 @@ const QList = () => {
               shadowRadius: 12,
               elevation: 12,
             }}
+            onPress={refreshqlistPressed}
           ><Foundation name="refresh" size={22} color="#fff" /></Pressable>
         </View>
 
@@ -171,7 +195,7 @@ const QList = () => {
               justifyContent: "center",
               alignItems: "center",
               flex: 1
-            }}><ActivityIndicator size={20} color={"#000"}/></View> :
+            }}><ActivityIndicator size={20} color={"#000"} /></View> :
             qlistdata.length == 0 ?
               <View style={{
                 padding: 10,
@@ -193,7 +217,7 @@ const QList = () => {
                     borderBottomWidth: 1
                   }}>
                     <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.Username}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.FirstLastName}</Text>
                     <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
                   </View>
                 )}

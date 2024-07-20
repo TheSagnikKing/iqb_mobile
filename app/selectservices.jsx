@@ -1,43 +1,52 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { getservicesbybarberIdsalonIdAction, iqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const selectservices = () => {
+
+  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
+      setCurrentSalonInfo(JSON.parse(saloninfodata))
+      setCurrentUserInfo(JSON.parse(userinfodata))
+    }
+
+    getloginsalonuserdata()
+  }, [])
+
+  // console.log("The currentSalonInfo ", currentSalonInfo)
+
+  // console.log("The Current User Info ", currentUserInfo)
 
   const params = useLocalSearchParams();
 
   console.log(params)
 
-  const servicesdata = [
-    {
-      _id: 1
-    },
-    {
-      _id: 2,
-    },
-    // {
-    //   _id: 3,
-    // },
-    // {
-    //   _id: 4
-    // },
-    // {
-    //   _id: 5
-    // },
-    // {
-    //   _id: 6,
-    // },
-    // {
-    //   _id: 7,
-    // },
-    // {
-    //   _id: 8
-    // }
-  ]
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getservicesbybarberIdsalonIdAction(params, "GetServicesByBarberIdSalonId.php"))
+  }, [])
+
+  const getservicesbybarberIdsalonId = useSelector(state => state.getservicesbybarberIdsalonId)
+
+  const {
+    loading,
+    response: serviceslist
+  } = getservicesbybarberIdsalonId
+
+  // console.log("The Selected Services are ", serviceslist)
 
   const [selectedServices, setSelectedServices] = useState([])
 
@@ -47,6 +56,16 @@ const selectservices = () => {
 
   const deleteServiceClicked = (service) => {
     setSelectedServices((prev) => prev.filter((ser) => ser._id !== service._id))
+  }
+
+  const joinqueuepressed = () => {
+    const joinqueuedata = {
+      checkUsername: currentUserInfo?.[0]?.UserName,
+      salonid: currentUserInfo?.[0]?.SalonId
+    }
+
+    dispatch(iqueuejoinedSelectAction(joinqueuedata, "iqueuejoinedqselect.php"))
+    console.log(joinqueuedata)
   }
 
   return (
@@ -78,8 +97,8 @@ const selectservices = () => {
               }}
             /></View>
           <View>
-            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>John</Text>
-            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>Estimated wait time: 0hrs: 0mins</Text>
+            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>{params.BarberName}</Text>
+            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>Estimated wait time: {params.EWT} mins</Text>
           </View>
         </View>
 
@@ -95,68 +114,80 @@ const selectservices = () => {
           <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
         </View>
 
-        <FlatList
-          data={servicesdata}
-          renderItem={({ item }) => <View style={{
-            height: 80,
-            backgroundColor: "#efefef",
-            marginTop: 5,
-            paddingHorizontal: 10,
-            justifyContent: "center",
-            borderRadius: 5,
-            borderColor: "rgba(0,0,0,0.4)",
-            borderWidth: 1,
-          }}>
-            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Test Spa</Text>
+        {
+          loading ?
+            <View style={{
+              paddingVertical: 10
+            }}><ActivityIndicator size={20} color={"#000"} /></View> :
+            serviceslist.length == 0 ?
+              <View style={{
+                paddingVertical: 10
+              }}><Text>No Barbers Available</Text></View> :
+              <FlatList
+                data={serviceslist}
+                renderItem={({ item }) => <View style={{
+                  height: 80,
+                  backgroundColor: "#efefef",
+                  marginTop: 5,
+                  paddingHorizontal: 10,
+                  justifyContent: "center",
+                  borderRadius: 5,
+                  borderColor: "rgba(0,0,0,0.4)",
+                  borderWidth: 1,
+                }}>
+                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{item.ServiceName}</Text>
 
-              {
-                selectedServices.find((ser) => ser._id == item._id) ?
-                  <Pressable
-                    style={{
-                      width: 30,
-                      height: 30,
-                      backgroundColor: "red",
-                      borderRadius: 50,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 6 },
-                      shadowOpacity: 0.4,
-                      shadowRadius: 12,
-                      elevation:12,
-                    }}
-                    onPress={() => deleteServiceClicked(item)}
-                  ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
-                  <Pressable
-                    style={{
-                      width: 30,
-                      height: 30,
-                      backgroundColor: Colors.PRIMARY,
-                      borderRadius: 50,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 6 },
-                      shadowOpacity: 0.4,
-                      shadowRadius: 12,
-                      elevation:12,
-                    }}
-                    onPress={() => addServiceClicked(item)}
-                  ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
+                    {
+                      selectedServices.find((ser) => ser._id == item._id) ?
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            backgroundColor: "red",
+                            borderRadius: 50,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.4,
+                            shadowRadius: 12,
+                            elevation: 12,
+                          }}
+                          onPress={() => deleteServiceClicked(item)}
+                        ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            backgroundColor: Colors.PRIMARY,
+                            borderRadius: 50,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.4,
+                            shadowRadius: 12,
+                            elevation: 12,
+                          }}
+                          onPress={() => addServiceClicked(item)}
+                        ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
 
-              }
-            </View>
+                    }
+                  </View>
 
-            <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>$14.00</Text>
-              <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>0 hrs: 0 mins</Text>
-            </View>
+                  <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
+                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
+                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}{" "}mins</Text>
+                  </View>
 
-          </View>}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item._id}
-        />
+                </View>}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => item.serviceid}
+              />
+        }
+
+
 
       </View>
       <Pressable
@@ -166,7 +197,7 @@ const selectservices = () => {
           justifyContent: "center",
           alignItems: "center"
         }}
-        onPress={() => alert("Are you Sure ?")}
+        onPress={joinqueuepressed}
       >
         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
       </Pressable>

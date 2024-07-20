@@ -1,6 +1,6 @@
 import Toast from "react-native-toast-message";
 import api from "../Api/Api";
-import { ADMIN_MERGE_RET2_FAIL, ADMIN_MERGE_RET2_REQ, ADMIN_MERGE_RET2_SUCCESS } from "../Constants/HomeConstant";
+import { ADMIN_MERGE_RET2_FAIL, ADMIN_MERGE_RET2_REQ, ADMIN_MERGE_RET2_SUCCESS, GET_SALON_DETAILSBYID_FAIL, GET_SALON_DETAILSBYID_REQ, GET_SALON_DETAILSBYID_SUCCESS } from "../Constants/HomeConstant";
 
 export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
     try {
@@ -40,6 +40,44 @@ export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
                 payload: {
                     ...data.Response
                 },
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+export const getsalonsdetailsbyIdAction = (SalonId, endpoint) => async (dispatch) => {
+    try {
+        dispatch({
+            type: GET_SALON_DETAILSBYID_REQ
+        });
+
+        const body = {
+            SalonId,
+        }
+
+        const { data } = await api.post(`/${endpoint}`, body);
+
+        if (data.StatusCode == 201) {
+            dispatch({
+                type: GET_SALON_DETAILSBYID_FAIL,
+                payload: data.StatusMessage
+            });
+
+
+            Toast.show({
+                type: 'error',
+                text1: data.StatusMessage,
+                position: "bottom",
+                bottomOffset: 0,
+            });
+
+        } else if (data.StatusCode == 200) {
+            dispatch({
+                type: GET_SALON_DETAILSBYID_SUCCESS,
+                payload: data,
             });
         }
 

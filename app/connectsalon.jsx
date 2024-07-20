@@ -13,32 +13,32 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ConnectSalon = () => {
 
     const params = useLocalSearchParams();
-  
+
     const router = useRouter()
-  
+
     const dispatch = useDispatch()
-  
+
     useEffect(() => {
-      if (params.SalonCode) {
-        dispatch(iqbSalonsAction(params.SalonCode, "iqbsalons.php"))
-      }
+        if (params.SalonCode) {
+            dispatch(iqbSalonsAction(params.SalonCode, "iqbsalons.php"))
+        }
     }, [dispatch])
-  
+
     const {
-      loading,
-      response: salonInfodata,
-      error
+        loading,
+        response: salonInfodata,
+        error
     } = useSelector(state => state.iqbSalons)
 
-    const connectPressed = async() => {
-        if(salonInfodata){
+    const connectPressed = async () => {
+        if (salonInfodata) {
             await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
             router.push("/signin")
-        } 
+        }
     }
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: "#fff"}}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
                 backgroundColor: "#fff",
                 paddingHorizontal: 15,
@@ -300,18 +300,21 @@ const ConnectSalon = () => {
                 </View>
             </ScrollView>
 
-            <Pressable
-                style={{
-                    height: 50,
-                    backgroundColor: Colors.PRIMARY,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderTopColor: "rgba(0,0,0,0.4)",
-                    borderTopWidth: 1
-                }}
-                onPress={() => connectPressed()}>
-                <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Connect</Text>
-            </Pressable>
+            {
+                salonInfodata && <Pressable
+                    style={{
+                        height: 50,
+                        backgroundColor: Colors.PRIMARY,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderTopColor: "rgba(0,0,0,0.4)",
+                        borderTopWidth: 1
+                    }}
+                    onPress={() => connectPressed()}>
+                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Connect</Text>
+                </Pressable>
+            }
+
         </SafeAreaView>
     )
 }

@@ -41,8 +41,6 @@ const Home = () => {
     response
   } = admiMergeRet2
 
-  console.log("The Home page data ", response)
-
   const router = useRouter()
   const [join, setJoin] = useState(false)
 

@@ -6,9 +6,11 @@ import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCustomerDetailsByCustomeridAction } from '../redux/Actions/ProfileAction';
 
 const editprofile = () => {
-
+    
     const [currentUserInfo, setCurrentUserInfo] = useState([])
 
     useEffect(() => {
@@ -20,13 +22,6 @@ const editprofile = () => {
         getloginsalonuserdata()
     }, [])
 
-    console.log("Edit Profile from currentUserInfo ", currentUserInfo?.[0])
-
-    const [FirstName, setFirstName] = useState("")
-    const [LastName, setLastName] = useState("")
-    const [Email, setemail] = useState("")
-
-
     const router = useRouter()
 
     const [fullName, setFullName] = useState("")
@@ -34,9 +29,49 @@ const editprofile = () => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [maketingemails, setMarketingemails] = useState(false)
 
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const toggleSwitch = () => setMarketingemails(previousState => !previousState);
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(currentUserInfo.length > 0){
+            dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+        }
+    },[dispatch,currentUserInfo])
+
+    const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
+
+    const {
+        loading,
+        response:customerdetailsdata
+    } = getCustomerDetailsByCustomerid
+
+    useEffect(() => {
+        if(customerdetailsdata){
+            setFullName(`${customerdetailsdata?.CustomerFName} ${customerdetailsdata?.CustomerLName}`)
+            setEmail(customerdetailsdata?.CustomerEmail)
+            setPhoneNumber(customerdetailsdata?.CustomerPhone)
+            setDateofbirth(customerdetailsdata?.CustomerDOB)
+        }
+    },[customerdetailsdata])
+
+
+    // console.log("Get Customer details ", customerdetailsdata)
+
+    const editProfilePressed = () => {
+        const editprofiledata = {
+            fullName,
+            email,
+            dateofbirth,
+            phoneNumber,
+            maketingemails: maketingemails ? 1 : 0
+        }
+
+        console.log("Edit profile data ", editprofiledata)
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -118,10 +153,10 @@ const editprofile = () => {
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
                         <Switch
                             trackColor={{ false: '#767577', true: '#81b0ff' }}
-                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            thumbColor={maketingemails ? '#f5dd4b' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={toggleSwitch}
-                            value={isEnabled}
+                            value={maketingemails}
                         />
                     </View>
                 </View>
@@ -133,7 +168,7 @@ const editprofile = () => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}
-                onPress={() => alert("Are you Sure ?")}>
+                onPress={() => editProfilePressed()}>
                 <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Update</Text>
             </Pressable>
         </SafeAreaView>

@@ -5,8 +5,6 @@ import { Colors } from '../constants/Colors'
 import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 
-// onPress={() => router.push({ pathname: "/selectservices", params: { _id: item._id } })}
-
 const Joingroup = () => {
 
     const [groupjointemplate, setGroupjoinTemplate] = useState(
@@ -20,7 +18,7 @@ const Joingroup = () => {
 
     const router = useRouter()
 
-    const [customerName, setCustomerName] = useState("")
+    const [joinqueuearray, setJoinquearray] = useState([])
 
     const customerOnChange = (text) => {
         setGroupjoinTemplate(
@@ -39,7 +37,9 @@ const Joingroup = () => {
     // console.log("JoinId", groupjoin.joinid)
 
     useEffect(() => {
-        console.log("Join group template ",groupjoin)
+        setJoinquearray({
+            firstlastname: groupjoin.customerName
+        })
         setGroupjoinTemplate({ ...groupjointemplate, service: groupjoin.services.ServiceName, barberName: groupjoin.barberName, price: groupjoin.services.ServicePrice, customerName: groupjoin.customerName });
 
     }, [])
@@ -82,7 +82,7 @@ const Joingroup = () => {
             payload: grp._id
         })
     }
-    console.log("customerselected", customerSelectedGroupJoin)
+    // console.log("customerselected", customerSelectedGroupJoin)
 
     return (
         <>

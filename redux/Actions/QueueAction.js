@@ -1,4 +1,4 @@
-import { GETSERVICES_BY_BARBERID_SALONID_FAIL, GETSERVICES_BY_BARBERID_SALONID_REQ, GETSERVICES_BY_BARBERID_SALONID_SUCCESS, IQUEUE_BARBER_SELECT_FAIL, IQUEUE_BARBER_SELECT_REQ, IQUEUE_BARBER_SELECT_SUCCESS, IQUEUE_CHECK_POSITON_FAIL, IQUEUE_CHECK_POSITON_REQ, IQUEUE_CHECK_POSITON_SUCCESS, IQUEUE_CHECKLIST_FAIL, IQUEUE_CHECKLIST_REQ, IQUEUE_CHECKLIST_SUCCESS, IQUEUE_JOINED_SELECT_REQ, IQUEUE_JOINED_SELECT_SUCCESS } from "../Constants/QueueConstant";
+import { GETSERVICES_BY_BARBERID_SALONID_FAIL, GETSERVICES_BY_BARBERID_SALONID_REQ, GETSERVICES_BY_BARBERID_SALONID_SUCCESS, IQUEUE_BARBER_SELECT_FAIL, IQUEUE_BARBER_SELECT_REQ, IQUEUE_BARBER_SELECT_SUCCESS, IQUEUE_CHECK_POSITON_FAIL, IQUEUE_CHECK_POSITON_REQ, IQUEUE_CHECK_POSITON_SUCCESS, IQUEUE_CHECKLIST_FAIL, IQUEUE_CHECKLIST_REQ, IQUEUE_CHECKLIST_SUCCESS, IQUEUE_INSERTJOINQ_FAIL, IQUEUE_INSERTJOINQ_REQ, IQUEUE_INSERTJOINQ_SUCCESS, IQUEUE_JOINED_SELECT_REQ, IQUEUE_JOINED_SELECT_SUCCESS } from "../Constants/QueueConstant";
 import api from "../Api/Api";
 import Toast from "react-native-toast-message";
 
@@ -79,8 +79,8 @@ export const getservicesbybarberIdsalonIdAction = (params, endpoint) => async (d
         });
 
         const body = {
-            BarberId: 441,
-            SalonId: 127
+            BarberId: params.BarberId,
+            SalonId: params.SalonId
         }
 
         const url = `/${endpoint}`;
@@ -107,7 +107,7 @@ export const getservicesbybarberIdsalonIdAction = (params, endpoint) => async (d
                 payload: data.Response,
             });
 
-            console.log("servicessss ", data)
+            // console.log("servicessss ", data)
         }
 
     } catch (error) {
@@ -115,42 +115,49 @@ export const getservicesbybarberIdsalonIdAction = (params, endpoint) => async (d
     }
 };
 
-export const iqueuejoinedSelectAction = (joinqueuedata, endpoint) => async (dispatch) => {
+const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch) => {
     try {
         dispatch({
-            type: IQUEUE_JOINED_SELECT_REQ
+            type: IQUEUE_INSERTJOINQ_REQ
         });
-
-        const { checkUsername, salonid } = joinqueuedata;
-
-        const body = {
-            checkUsername: "34736",
-            salonid: "127"
-        };
 
         const url = `/${endpoint}`;
 
-        const { data, status } = await api.post(url, body, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
 
-        // if(data.StatusCode == 201){
-        //     dispatch({
-        //         type: IQUEUE_JOINED_SELECT_SUCCESS,
-        //         payload: data.Response
-        //     })
-        // }
+        const { data, status } = await api.post(url, joinqdata, { headers });
 
-        console.log("Api Response ", data);
+        if (data.StatusCode == 201) {
+            dispatch({
+                type: IQUEUE_INSERTJOINQ_FAIL,
+                payload: data.Response
+            })
+
+            Toast.show({
+                type: 'error',
+                text1: data.StatusMessage,
+                position: "bottom",
+                bottomOffset: 0,
+            });
+
+        } else if (data.StatusCode == 200) {
+            dispatch({
+                type: IQUEUE_INSERTJOINQ_SUCCESS,
+                payload: data.Response
+            })
+
+            console.log("Finally iqueue insert joinq ", data);
+            router.push("/home")
+        }
 
     } catch (error) {
         console.error("API Request Error:", error);
     }
 };
 
-export const iqueuecheckpositionAction = (salonid, endpoint) => async (dispatch) => {
+const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => async (dispatch) => {
     try {
         dispatch({
             type: IQUEUE_CHECK_POSITON_REQ
@@ -179,7 +186,50 @@ export const iqueuecheckpositionAction = (salonid, endpoint) => async (dispatch)
                 payload: data.Response
             })
 
-            console.log("Api Response ", data);
+            dispatch(iqueueinsertjoinqAction({...joinqueuedata, position: data.Response }, "iqueueinsertinjoinq_v2.php", router))
+        }
+
+    } catch (error) {
+        console.error("API Request Error:", error);
+    }
+};
+
+export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router) => async (dispatch) => {
+    try {
+        dispatch({
+            type: IQUEUE_JOINED_SELECT_REQ
+        });
+
+        const { checkUsername, salonid } = iqueuecheckdata;
+
+        const body = {
+            checkUsername,
+            salonid
+        };
+
+        const url = `/${endpoint}`;
+
+        const { data, status } = await api.post(url, body, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        if(data.StatusCode == 201){
+            dispatch({
+                type: IQUEUE_JOINED_SELECT_SUCCESS,
+                payload: data.Response
+            })
+
+            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata,"iqueuecheckposition.php",router))
+        }else if(data.StatusCode == 200){
+            Toast.show({
+                type: 'error',
+                text1: "Already in the queue",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+            console.warn("User already in the queue")
         }
 
     } catch (error) {

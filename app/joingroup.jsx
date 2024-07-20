@@ -39,9 +39,12 @@ const Joingroup = () => {
     // console.log("JoinId", groupjoin.joinid)
 
     useEffect(() => {
-        setGroupjoinTemplate({ ...groupjointemplate, service: groupjoin.services.service, barberName: groupjoin.barberName, price: groupjoin.services.price, customerName: groupjoin.customerName });
+        console.log("Join group template ",groupjoin)
+        setGroupjoinTemplate({ ...groupjointemplate, service: groupjoin.services.ServiceName, barberName: groupjoin.barberName, price: groupjoin.services.ServicePrice, customerName: groupjoin.customerName });
 
     }, [])
+
+    console.log("Group join new template ", groupjointemplate)
 
     const dispatch = useDispatch()
 
@@ -193,30 +196,20 @@ const Joingroup = () => {
                         borderWidth: 1,
                         marginBottom: 10,
                     }}>
-                        <TextInput
-                            editable
-                            placeholder='Enter FullName'
-                            style={styles.input}
-                            onChangeText={(text) => customerOnChange(text)}
-                            value={item.customerName}
-                        />
+                        <View style={{
+                            height: 35,
+                            borderBottomColor: Colors.PRIMARY,
+                            borderBottomWidth: 2,
+                            paddingHorizontal: 10,
+                            fontFamily: "montserrat-medium",
+                            fontSize: 14,
+                            outlineStyle: "none",
+                            flexDirection:"row",
+                            alignItems:"center"
+                        }}><Text>{item.customerName}</Text></View>
                         <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <Pressable style={{
-                                    width: 130,
-                                    height: 35,
-                                    borderRadius: 5,
-                                    backgroundColor: Colors.PRIMARY,
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    shadowColor: "#000",
-                                    shadowOffset: { width: 0, height: 0 },
-                                    shadowOpacity: 0.4,
-                                    shadowRadius: 12,
-                                    elevation: 5
-                                }}
-                                    onPress={() => selectjoinclicked()}
-                                ><Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Select Options</Text></Pressable>
+                                <View/>
 
                                 <Pressable
                                     style={{

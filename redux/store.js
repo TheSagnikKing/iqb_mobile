@@ -3,7 +3,7 @@ import { groupjoinReducer,customerGroupJoinReducer } from "./Reducers/groupjoinR
 import { activatedAccountReducer, activatedResendEmailReducer, iqueuesendEmailReducer, mapUserSalonReducer, signinReducer, signupCheckEmailReducer, signupReducer } from "./Reducers/AuthReducer";
 import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./Reducers/LocationReducer"
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
-import { getservicesbybarberIdsalonIdReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
+import { getservicesbybarberIdsalonIdReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
 
 const rootReducer = combineReducers({
     groupjoin: groupjoinReducer,
@@ -28,7 +28,7 @@ const rootReducer = combineReducers({
     iqueuejoinedSelect: iqueuejoinedSelectReducer,
     getsalonsdetailsbyId:getsalonsdetailsbyIdReducer,
     iqueuecheckposition: iqueuecheckpositionReducer,
-
+    iqueueinsertjoinq:iqueueinsertjoinqReducer,
 })
 
 const initialState = {};

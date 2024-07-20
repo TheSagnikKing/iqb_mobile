@@ -1,12 +1,31 @@
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors } from '../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const editprofile = () => {
+
+    const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async () => {
+            const userinfodata = await AsyncStorage.getItem('user-logininfo')
+            setCurrentUserInfo(JSON.parse(userinfodata))
+        }
+
+        getloginsalonuserdata()
+    }, [])
+
+    console.log("Edit Profile from currentUserInfo ", currentUserInfo?.[0])
+
+    const [FirstName, setFirstName] = useState("")
+    const [LastName, setLastName] = useState("")
+    const [Email, setemail] = useState("")
+
 
     const router = useRouter()
 
@@ -95,8 +114,8 @@ const editprofile = () => {
                         />
                     </View>
 
-                    <View style={{ flexDirection: "row", alignItems:"center", justifyContent:"space-between" }}>
-                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY}}>Receive salon updates/offer</Text>
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
                         <Switch
                             trackColor={{ false: '#767577', true: '#81b0ff' }}
                             thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}

@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getservicesbybarberIdsalonIdAction, iqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const selectservices = () => {
 
@@ -31,7 +32,7 @@ const selectservices = () => {
 
   const params = useLocalSearchParams();
 
-  console.log(params)
+  console.log("Params services ", params)
 
   const dispatch = useDispatch()
 
@@ -51,25 +52,62 @@ const selectservices = () => {
   const [selectedServices, setSelectedServices] = useState([])
 
   const addServiceClicked = (service) => {
-    setSelectedServices([...selectedServices, service])
+    if(selectedServices.length < 1){
+      setSelectedServices([...selectedServices, service])
+    }
   }
 
   const deleteServiceClicked = (service) => {
-    setSelectedServices((prev) => prev.filter((ser) => ser._id !== service._id))
+    setSelectedServices((prev) => prev.filter((ser) => ser.serviceid !== service.serviceid))
   }
 
+  const [timejoinedq, setTimejoinedq] = useState("")
+  const [rdatejoinedq, setRdatejoinedq] = useState("")
+
+  useEffect(() => {
+    const options = { hour12: false };
+    const time = new Date().toLocaleTimeString([], options);
+    setTimejoinedq(time)
+
+    const date = new Date();
+    const dateoptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString('en-US', dateoptions).replace(/\//g, '-');
+    setRdatejoinedq(formattedDate)
+  }, []);
+
+  const router = useRouter()
+
   const joinqueuepressed = () => {
-    const joinqueuedata = {
+    const iqueuecheckdata = {
       checkUsername: currentUserInfo?.[0]?.UserName,
       salonid: currentUserInfo?.[0]?.SalonId
     }
 
-    dispatch(iqueuejoinedSelectAction(joinqueuedata, "iqueuejoinedqselect.php"))
-    console.log(joinqueuedata)
+    const joinqueuedata = {
+      username: currentUserInfo?.[0]?.UserName,
+      firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
+      barbername: params?.BarberName,
+      BarberId: params.BarberId,
+      salonid: currentUserInfo?.[0]?.SalonId,
+      timejoinedq,
+      rdatejoinedq,
+      ServiceId: selectedServices?.[0]?.serviceid,
+      is_single_join: "yes",
+    }
+
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php",router))  },
+    ]);
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Toast/>
       <View style={{
         backgroundColor: "#fff",
         flex: 1,
@@ -139,7 +177,7 @@ const selectservices = () => {
                     <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{item.ServiceName}</Text>
 
                     {
-                      selectedServices.find((ser) => ser._id == item._id) ?
+                      selectedServices.find((ser) => ser.serviceid == item.serviceid) ?
                         <Pressable
                           style={{
                             width: 30,
@@ -186,9 +224,7 @@ const selectservices = () => {
                 keyExtractor={item => item.serviceid}
               />
         }
-
-
-
+        
       </View>
       <Pressable
         style={{

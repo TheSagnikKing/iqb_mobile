@@ -1,20 +1,17 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors'
 import { useRouter } from 'expo-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { iqueuebarberSelectAction } from '../redux/Actions/QueueAction';
 
 const Joingroupbarbers = () => {
 
   const router = useRouter()
 
   const barberlist = [
-    {
-      _id: 1,
-      name: "Any Barber",
-      borderColor: "rgba(0,0,0,0.4)"
-    },
     {
       _id: 2,
       name: "Smith",
@@ -29,38 +26,92 @@ const Joingroupbarbers = () => {
 
   const dispatch = useDispatch()
 
-  const barberPressed = (barber) => {
-      dispatch({
-        type: "SELECT_BARBER",
-        payload: barber.name
-      })
-    router.push("/joingroupservices")
+  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      setCurrentSalonInfo(JSON.parse(saloninfodata))
+    }
+
+    getloginsalonuserdata()
+  }, [])
+
+  // console.log("The current Salon Info ", currentSalonInfo)
+
+  useEffect(() => {
+    if (currentSalonInfo.length > 0) {
+      dispatch(iqueuebarberSelectAction(currentSalonInfo?.[0]?.id, "iqueuebarberselect2.php"))
+    }
+
+  }, [dispatch, currentSalonInfo])
+
+
+  const {
+    loading,
+    response: barberlistdata
+  } = useSelector(state => state.iqueuebarberSelect)
+
+  // console.log("The join queue barbers ", barberlistdata)
+
+  const barberPressed = (BarberName, BarberId) => {
+    dispatch({
+      type: "SELECT_BARBER",
+      payload: BarberName
+    })
+
+    router.push({ pathname: "/joingroupservices", params: { BarberId, SalonId: currentSalonInfo?.[0]?.id } })
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 10, paddingVertical: 10 }}>
 
-      <FlatList
-        data={barberlist}
-        renderItem={({ item }) => <Pressable
-          onPress={() => barberPressed(item)}
-          style={{ height: 60, backgroundColor: "#efefef", borderRadius: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, marginBottom: 10, borderColor: "rgba(0,0,0,0.4)", borderWidth: 1 }}>
-          <View style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 20,
-          }}>
-            <View style={{ width: 45, height: 45, borderColor: `${item.borderColor}`, borderWidth: 3, borderRadius: 50 }}></View>
-            <Text style={{
-              fontFamily: "montserrat-semibold",
-              fontSize: 14
-            }}>{item.name}</Text>
-          </View>
+      <Pressable
+        onPress={() => barberPressed("Any Barber", 777777)}
+        style={{ height: 60, backgroundColor: "#efefef", borderRadius: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, marginBottom: 10, borderColor: "rgba(0,0,0,0.4)", borderWidth: 1 }}>
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 20,
+        }}>
+          <View style={{ width: 45, height: 45, borderColor: `rgba(0,0,0,0.4)`, borderWidth: 3, borderRadius: 50 }}></View>
+          <Text style={{
+            fontFamily: "montserrat-semibold",
+            fontSize: 14
+          }}>Any Barber</Text>
+        </View>
 
-          <View><Feather name="arrow-right-circle" size={26} color="black" /></View>
-        </Pressable>}
-        keyExtractor={item => item._id}
-      />
+        <View><Feather name="arrow-right-circle" size={26} color="black" /></View>
+      </Pressable>
+
+      {
+        loading ?
+          <View><ActivityIndicator size={20} color={"#000"} /></View> :
+          barberlistdata.length == 0 ?
+            <View><Text>No Barbers Available</Text></View> :
+            <FlatList
+              data={barberlistdata}
+              renderItem={({ item }) => <Pressable
+                onPress={() => barberPressed(item.BarberName, item.BarberId)}
+                style={{ height: 60, backgroundColor: "#efefef", borderRadius: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, marginBottom: 10, borderColor: "rgba(0,0,0,0.4)", borderWidth: 1 }}>
+                <View style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 20,
+                }}>
+                  <View style={{ width: 45, height: 45, borderColor: `${Colors.PRIMARY}`, borderWidth: 3, borderRadius: 50 }}></View>
+                  <Text style={{
+                    fontFamily: "montserrat-semibold",
+                    fontSize: 14
+                  }}>{item.BarberName}</Text>
+                </View>
+
+                <View><Feather name="arrow-right-circle" size={26} color="black" /></View>
+              </Pressable>}
+              keyExtractor={item => item.id}
+            />
+      }
+
     </View>
   )
 }

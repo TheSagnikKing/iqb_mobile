@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { groupjoinReducer,customerGroupJoinReducer } from "./Reducers/groupjoinReducer";
+import { groupjoinReducer,customerGroupJoinReducer, groupjoinqueueReducer, groupjoinsendReducer } from "./Reducers/groupjoinReducer";
 import { activatedAccountReducer, activatedResendEmailReducer, iqueuesendEmailReducer, mapUserSalonReducer, signinReducer, signupCheckEmailReducer, signupReducer } from "./Reducers/AuthReducer";
 import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./Reducers/LocationReducer"
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
@@ -31,6 +31,9 @@ const rootReducer = combineReducers({
     iqueuecheckposition: iqueuecheckpositionReducer,
     iqueueinsertjoinq:iqueueinsertjoinqReducer,
     getCustomerDetailsByCustomerid: getCustomerDetailsByCustomeridReducer,
+
+    groupjoinqueue: groupjoinqueueReducer,
+    groupjoinsend: groupjoinsendReducer,
 })
 
 const initialState = {};

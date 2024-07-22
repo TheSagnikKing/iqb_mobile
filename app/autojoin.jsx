@@ -113,7 +113,7 @@ const Autojoin = () => {
     const joinqueuedata = {
       username: currentUserInfo?.[0]?.UserName,
       firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
-      barbername: selectedServices?.[0]?.BarberNName,
+      barbername: selectedServices?.[0]?.BarberName,
       BarberId: selectedServices?.[0]?.BarberId,
       salonid: currentUserInfo?.[0]?.SalonId,
       timejoinedq,

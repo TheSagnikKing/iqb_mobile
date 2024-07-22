@@ -11,27 +11,17 @@ const Joingroupbarbers = () => {
 
   const router = useRouter()
 
-  const barberlist = [
-    {
-      _id: 2,
-      name: "Smith",
-      borderColor: Colors.PRIMARY
-    },
-    {
-      _id: 3,
-      name: "Jones",
-      borderColor: Colors.PRIMARY
-    },
-  ]
-
   const dispatch = useDispatch()
 
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
 
   useEffect(() => {
     const getloginsalonuserdata = async () => {
       const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
       setCurrentSalonInfo(JSON.parse(saloninfodata))
+      setCurrentUserInfo(JSON.parse(userinfodata))
     }
 
     getloginsalonuserdata()
@@ -58,6 +48,22 @@ const Joingroupbarbers = () => {
     dispatch({
       type: "SELECT_BARBER",
       payload: BarberName
+    })
+
+    dispatch({
+      type: "BARBER_DETAILS",
+      payload: {
+        barbername: BarberName,
+        BarberId: BarberId,
+        salonid: currentSalonInfo?.[0]?.id
+      }
+    })
+
+    dispatch({
+      type: "USERNAME_DETAIL",
+      payload: {
+        username: currentUserInfo?.[0]?.UserName
+      }
     })
 
     router.push({ pathname: "/joingroupservices", params: { BarberId, SalonId: currentSalonInfo?.[0]?.id } })

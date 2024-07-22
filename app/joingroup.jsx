@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Joingroup = () => {
 
+    const dispatch = useDispatch()
+
     const [groupjointemplate, setGroupjoinTemplate] = useState(
         {
             customerName: "",
@@ -16,7 +18,49 @@ const Joingroup = () => {
         }
     )
 
+    const [joinqueuetemplate, setJoinqueuetemplate ] = useState({
+        username: "",
+        firstlastname: "",
+        barbername: "",
+        BarberId: 0,
+        salonid: 0,
+        timejoinedq: "",
+        rdatejoinedq: "",
+        ServiceId: 0,
+        qgcode: ""
+    })
+
+    const [ joinqueuesendata, setJoinqueuesenddata ] = useState([])
+
     const router = useRouter()
+
+    // const [randomCode, setRandomCode] = useState('');
+
+    // useEffect(() => {
+        // const generateRandomCode = () => {
+        //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        //     let code = '';
+        //     for (let i = 0; i < 6; i++) {
+        //         const randomIndex = Math.floor(Math.random() * characters.length);
+        //         code += characters[randomIndex];
+        //     }
+
+        //     dispatch({
+        //         type: "QGCODE_DETAIL",
+        //         payload: {
+        //             qgcode: code
+        //         }
+        //     })
+
+        //     return code;
+        // };
+
+    //     setRandomCode(generateRandomCode());
+    // }, []);
+
+    const groupjoinqueue = useSelector(state => state.groupjoinqueue)
+
+    // console.log("THE JOIN GROUP QUEUE DATA FROM JOINGROUP>JSX", groupjoinqueue)
 
     const [joinqueuearray, setJoinquearray] = useState([])
 
@@ -27,6 +71,13 @@ const Joingroup = () => {
         dispatch({
             type: "CUSTOMER_NAME",
             payload: text
+        })
+
+        dispatch({
+            type: "REST_DETAILS",
+            payload: {
+                firstlastname: text
+            }
         })
     }
 
@@ -41,12 +92,10 @@ const Joingroup = () => {
             firstlastname: groupjoin.customerName
         })
         setGroupjoinTemplate({ ...groupjointemplate, service: groupjoin.services.ServiceName, barberName: groupjoin.barberName, price: groupjoin.services.ServicePrice, customerName: groupjoin.customerName });
-
+        // console.log("Group join new groupjoinqueue ", groupjoinqueue)
     }, [])
 
-    console.log("Group join new template ", groupjointemplate)
-
-    const dispatch = useDispatch()
+    // console.log("Group join new template ", groupjointemplate)
 
     const selectjoinclicked = (joinid) => {
         router.push({ pathname: "/joingroupbarbers" })
@@ -73,8 +122,19 @@ const Joingroup = () => {
                 type: "CUSTOMER_NAME",
                 payload: ""
             })
+
+            dispatch({
+                type: "ADD_JOINDATA",
+                payload: groupjoinqueue
+            })
+
+            dispatch({
+                type: "RESET"
+            })
         }
     }
+
+    const groupjoinsend = useSelector(state => state.groupjoinsend)
 
     const deletejoinPressed = (grp) => {
         dispatch({
@@ -83,6 +143,24 @@ const Joingroup = () => {
         })
     }
     // console.log("customerselected", customerSelectedGroupJoin)
+
+    const groupjoinpressed = async () => {
+        const generateRandomCode = () => {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                code += characters[randomIndex];
+            }
+            return code;
+        };
+    
+        const randomCode = generateRandomCode();
+        
+        const updatedGroupJoinSend = groupjoinsend.map((s) => ({ ...s, qgcode: randomCode }));
+
+        console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend);
+    };
 
     return (
         <>
@@ -278,7 +356,7 @@ const Joingroup = () => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}
-                onPress={() => alert("Are you Sure ?")}
+                onPress={() => groupjoinpressed()}
             >
                 <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
             </Pressable>

@@ -122,7 +122,7 @@ const Autojoin = () => {
       is_single_join: "",
     }
 
-    Alert.alert('Alert Title', 'My Alert Msg', [
+    Alert.alert('Join Queue', 'Are you sure ?', [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),

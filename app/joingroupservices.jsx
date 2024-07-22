@@ -9,8 +9,7 @@ import { getservicesbybarberIdsalonIdAction } from '../redux/Actions/QueueAction
 const Joingroupservices = () => {
 
     const params = useLocalSearchParams()
-
-    console.log("The params of joingroupservice ", params)
+    // console.log("The params of joingroupservice ", params)
 
     useEffect(() => {
         dispatch(getservicesbybarberIdsalonIdAction(params, "GetServicesByBarberIdSalonId.php"))

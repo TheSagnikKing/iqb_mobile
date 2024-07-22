@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
@@ -7,7 +7,8 @@ import { useRouter } from 'expo-router';
 import { Colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCustomerDetailsByCustomeridAction } from '../redux/Actions/ProfileAction';
+import { getCustomerDetailsByCustomeridAction, iqueueupdatecustomerdetailsAction } from '../redux/Actions/ProfileAction';
+import Toast from 'react-native-toast-message';
 
 const editprofile = () => {
     
@@ -61,20 +62,32 @@ const editprofile = () => {
 
     // console.log("Get Customer details ", customerdetailsdata)
 
+
     const editProfilePressed = () => {
         const editprofiledata = {
-            fullName,
+            firstname: fullName.split(" ")[0],
+            lastname: fullName.split(" ")[1],
             email,
-            dateofbirth,
-            phoneNumber,
-            maketingemails: maketingemails ? 1 : 0
+            dob:dateofbirth,
+            password,
+            mobile: phoneNumber,
+            maketingemails: maketingemails ? 1 : 0,
+            salonid: currentUserInfo?.[0]?.SalonId
         }
 
-        console.log("Edit profile data ", editprofiledata)
+        Alert.alert('Update Profile', 'Are you sure ?', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () =>  dispatch(iqueueupdatecustomerdetailsAction(editprofiledata, "iqueueupdatecustomerdetails.php", router))},
+        ]);
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <Toast/>
             <ScrollView style={{ flex: 1 }}>
                 <View style={styles.editprofile_header_container}>
                     <View style={{

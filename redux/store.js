@@ -3,8 +3,8 @@ import { groupjoinReducer,customerGroupJoinReducer, groupjoinqueueReducer, group
 import { activatedAccountReducer, activatedResendEmailReducer, iqueuesendEmailReducer, mapUserSalonReducer, signinReducer, signupCheckEmailReducer, signupReducer } from "./Reducers/AuthReducer";
 import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./Reducers/LocationReducer"
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
-import { getservicesbybarberIdsalonIdReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
-import { getCustomerDetailsByCustomeridReducer } from "./Reducers/ProfileReducer";
+import { getservicesbybarberIdsalonIdReducer, groupiqueuejoinedSelectReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
+import { getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
 
 const rootReducer = combineReducers({
     groupjoin: groupjoinReducer,
@@ -31,9 +31,12 @@ const rootReducer = combineReducers({
     iqueuecheckposition: iqueuecheckpositionReducer,
     iqueueinsertjoinq:iqueueinsertjoinqReducer,
     getCustomerDetailsByCustomerid: getCustomerDetailsByCustomeridReducer,
+    iqueueupdatecustomerdetails:iqueueupdatecustomerdetailsReducer,
 
     groupjoinqueue: groupjoinqueueReducer,
     groupjoinsend: groupjoinsendReducer,
+    
+    groupiqueuejoinedSelect: groupiqueuejoinedSelectReducer,
 })
 
 const initialState = {};

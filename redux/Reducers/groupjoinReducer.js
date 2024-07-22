@@ -36,10 +36,16 @@ export const customerGroupJoinReducer = (state = {
 }, action) => {
     switch (action.type) {
         case "CUSTOMER_SELECT_JOIN_GROUP": {
+
+            const { groupjointemplate, _id } = action.payload;
+
             return {
                 ...state,
-                customerSelectedGroupJoin: [...state.customerSelectedGroupJoin, { ...action.payload, _id: uuidv4() }]
-            }
+                customerSelectedGroupJoin: [
+                    ...state.customerSelectedGroupJoin,
+                    { ...groupjointemplate, _id }
+                ]
+            };
         }
         case "CUSTOMER_DELETE_JOIN_GROUP": {
             const deletecustomerjoingroupid = action.payload
@@ -48,6 +54,11 @@ export const customerGroupJoinReducer = (state = {
             return {
                 ...state,
                 customerSelectedGroupJoin: updatedcustomerjoingroup
+            }
+        }
+        case "RESET_CUSTOMER_GROUP": {
+            return  {
+                customerSelectedGroupJoin: []
             }
         }
         default:
@@ -75,7 +86,8 @@ export const groupjoinqueueReducer = (state = {
                 barbername: action.payload.barbername,
                 BarberId: action.payload.BarberId,
                 salonid: action.payload.salonid,
-                _id: uuidv4(),
+                // _id: uuidv4(),
+                _id: ""
             };
         case "SERVICES_DETAILS":
             return {
@@ -94,7 +106,7 @@ export const groupjoinqueueReducer = (state = {
                 ...state,
                 username: action.payload.username
             }
-        case "QGCODE_DETAIL": 
+        case "QGCODE_DETAIL":
             return {
                 ...state,
                 qgcode: action.payload.qgcode
@@ -121,10 +133,21 @@ export const groupjoinqueueReducer = (state = {
 export const groupjoinsendReducer = (state = [], action) => {
     switch (action.type) {
         case "ADD_JOINDATA":
+
+            const { groupjoinqueue, _id } = action.payload
             return [
                 ...state,
-                action.payload
+                { ...groupjoinqueue, _id }
             ];
+        case "DELETE_JOINDATA": {
+            const deletecustomerjoingroupid = action.payload;
+
+            const updatedcustomerjoingroup = state.filter((grp) => grp._id !== deletecustomerjoingroupid);
+            return updatedcustomerjoingroup; 
+        }
+        case "RESET_SEND_GROUP": {
+            return []
+        }
         default:
             return state;
     }

@@ -1,11 +1,23 @@
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors'
 import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
+import { groupiqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
 
 const Joingroup = () => {
+
+    const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async () => {
+            const userinfodata = await AsyncStorage.getItem('user-logininfo')
+            setCurrentUserInfo(JSON.parse(userinfodata))
+        }
+
+        getloginsalonuserdata()
+    }, [])
 
     const dispatch = useDispatch()
 
@@ -18,7 +30,7 @@ const Joingroup = () => {
         }
     )
 
-    const [joinqueuetemplate, setJoinqueuetemplate ] = useState({
+    const [joinqueuetemplate, setJoinqueuetemplate] = useState({
         username: "",
         firstlastname: "",
         barbername: "",
@@ -30,30 +42,30 @@ const Joingroup = () => {
         qgcode: ""
     })
 
-    const [ joinqueuesendata, setJoinqueuesenddata ] = useState([])
+    const [joinqueuesendata, setJoinqueuesenddata] = useState([])
 
     const router = useRouter()
 
     // const [randomCode, setRandomCode] = useState('');
 
     // useEffect(() => {
-        // const generateRandomCode = () => {
-        //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        //     let code = '';
-        //     for (let i = 0; i < 6; i++) {
-        //         const randomIndex = Math.floor(Math.random() * characters.length);
-        //         code += characters[randomIndex];
-        //     }
+    // const generateRandomCode = () => {
+    //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     let code = '';
+    //     for (let i = 0; i < 6; i++) {
+    //         const randomIndex = Math.floor(Math.random() * characters.length);
+    //         code += characters[randomIndex];
+    //     }
 
-        //     dispatch({
-        //         type: "QGCODE_DETAIL",
-        //         payload: {
-        //             qgcode: code
-        //         }
-        //     })
+    //     dispatch({
+    //         type: "QGCODE_DETAIL",
+    //         payload: {
+    //             qgcode: code
+    //         }
+    //     })
 
-        //     return code;
-        // };
+    //     return code;
+    // };
 
     //     setRandomCode(generateRandomCode());
     // }, []);
@@ -107,10 +119,26 @@ const Joingroup = () => {
 
     const addJoinQueuePressed = () => {
         if (groupjointemplate.customerName !== "" && groupjointemplate.barberName !== "" && groupjointemplate.service !== "" && groupjointemplate.price !== 0 && customerSelectedGroupJoin.length < 5) {
+            const generateRandomCode = () => {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let code = '';
+                for (let i = 0; i < 6; i++) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    code += characters[randomIndex];
+                }
+                return code;
+            };
+
+            const randomCode = generateRandomCode();
+
             dispatch({
                 type: "CUSTOMER_SELECT_JOIN_GROUP",
-                payload: groupjointemplate
+                payload: {
+                    groupjointemplate,
+                    _id: randomCode
+                }
             })
+
             setGroupjoinTemplate({
                 _id: 1,
                 customerName: "",
@@ -125,7 +153,10 @@ const Joingroup = () => {
 
             dispatch({
                 type: "ADD_JOINDATA",
-                payload: groupjoinqueue
+                payload: {
+                    groupjoinqueue,
+                    _id: randomCode
+                }
             })
 
             dispatch({
@@ -141,8 +172,16 @@ const Joingroup = () => {
             type: "CUSTOMER_DELETE_JOIN_GROUP",
             payload: grp._id
         })
+
+        console.log(grp._id)
+
+        dispatch({
+            type: "DELETE_JOINDATA",
+            payload: grp._id
+        })
     }
-    // console.log("customerselected", customerSelectedGroupJoin)
+
+    console.log("Customerselected", customerSelectedGroupJoin)
 
     const groupjoinpressed = async () => {
         const generateRandomCode = () => {
@@ -154,12 +193,27 @@ const Joingroup = () => {
             }
             return code;
         };
-    
+
         const randomCode = generateRandomCode();
-        
+
+        const iqueuecheckdata = {
+            checkUsername: currentUserInfo?.[0]?.UserName,
+            salonid: currentUserInfo?.[0]?.SalonId
+        }
+
         const updatedGroupJoinSend = groupjoinsend.map((s) => ({ ...s, qgcode: randomCode }));
 
-        console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend);
+        // console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
+
+        Alert.alert('Join Queue', 'Are you sure ?', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            { text: 'OK', onPress: () => dispatch(groupiqueuejoinedSelectAction(iqueuecheckdata,updatedGroupJoinSend,"iqueuejoinedqselect2.php",router ))},
+        ]);
+
     };
 
     return (
@@ -282,12 +336,12 @@ const Joingroup = () => {
                             fontFamily: "montserrat-medium",
                             fontSize: 14,
                             outlineStyle: "none",
-                            flexDirection:"row",
-                            alignItems:"center"
+                            flexDirection: "row",
+                            alignItems: "center"
                         }}><Text>{item.customerName}</Text></View>
                         <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <View/>
+                                <View />
 
                                 <Pressable
                                     style={{

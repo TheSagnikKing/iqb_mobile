@@ -95,7 +95,7 @@ const selectservices = () => {
       is_single_join: "yes",
     }
 
-    Alert.alert('Alert Title', 'My Alert Msg', [
+    Alert.alert('Join Queue', 'Are you sure ?', [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),

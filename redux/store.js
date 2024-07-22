@@ -4,7 +4,7 @@ import { activatedAccountReducer, activatedResendEmailReducer, iqueuesendEmailRe
 import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./Reducers/LocationReducer"
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
 import { getservicesbybarberIdsalonIdReducer, groupiqueuejoinedSelectReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
-import { getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
+import { forgotcheckemailReducer, forgotSendPasswordReducer, getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
 
 const rootReducer = combineReducers({
     groupjoin: groupjoinReducer,
@@ -37,6 +37,9 @@ const rootReducer = combineReducers({
     groupjoinsend: groupjoinsendReducer,
     
     groupiqueuejoinedSelect: groupiqueuejoinedSelectReducer,
+
+    forgotcheckemail: forgotcheckemailReducer,
+    forgotSendPassword: forgotSendPasswordReducer,
 })
 
 const initialState = {};

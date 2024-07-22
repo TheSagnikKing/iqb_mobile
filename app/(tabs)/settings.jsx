@@ -76,6 +76,7 @@ const Settings = () => {
             <View><Feather name="arrow-right-circle" size={26} color="black" /></View>
           </Pressable>}
           keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </SafeAreaView>

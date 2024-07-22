@@ -40,6 +40,7 @@ const Signin = () => {
         getloginsalonuserdata()
     },[])
 
+
     return (
         <SafeAreaView style={styles.signin_container}>
             <Toast />
@@ -108,7 +109,7 @@ const Signin = () => {
                         }}
                     >
                         <Pressable
-                            onPress={() => {}}
+                            onPress={() => router.push("/forgot")}
                         ><Text style={{
                             fontFamily: "montserrat-medium",
                             fontSize: 14

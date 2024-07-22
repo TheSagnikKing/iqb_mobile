@@ -45,6 +45,8 @@ const _layout = () => {
           }}
         />
 
+        <Stack.Screen name="forgot"/>
+
         <Stack.Screen name="agree"
           options={{
             headerShown: false

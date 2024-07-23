@@ -45,7 +45,7 @@ const _layout = () => {
           }}
         />
 
-        <Stack.Screen name="forgot"/>
+        <Stack.Screen name="forgot" />
 
         <Stack.Screen name="agree"
           options={{
@@ -105,6 +105,16 @@ const _layout = () => {
             headerShown: false
           }}
         />
+
+        <Stack.Screen name="salonbarberservices"
+        />
+
+        <Stack.Screen name="saloninfogallery"
+          options={{
+            headerTitle: "Salon Gallery"
+          }}
+        />
+
         <Stack.Screen name="changelocation"
           options={{
             headerShown: false
@@ -120,6 +130,16 @@ const _layout = () => {
             headerShown: false
           }}
         />
+
+        <Stack.Screen name="connectsalonbarberservices"
+        />
+
+        <Stack.Screen name="conectsalongallery"
+          options={{
+            headerTitle: "Salon Gallery"
+          }}
+        />
+
         <Stack.Screen name="help"
           options={{
             headerTitle: "Help"

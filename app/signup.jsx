@@ -89,28 +89,54 @@ const Signup = () => {
 
     // console.log("Current Salon Info ",currentSalonInfo)
 
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
     const signupClicked = () => {
 
-        const signupdata = {
-            firstname,
-            lastname,
-            email,
-            password,
-            activationcode,
-            activated,
-            loggedin,
-            registerdate,
-            salonid: currentSalonInfo?.[0]?.id,
-            maketingemails: maketingemails ? 1 : 0,
-            UserLevel: IsBarber ? 1 : 0,
-            IsBarber
+        if (firstname == "" && lastname == "" && email == "" && password == "") {
+            Toast.show({
+                type: 'error',
+                text1: "Please fill all the fields",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        } else if (password.length < 6) {
+            Toast.show({
+                type: 'error',
+                text1: "Password length must be 6 charecters",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        } else if (!validateEmail(email)) {
+            Toast.show({
+                type: 'error',
+                text1: "Invalid email format",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        } else {
+            const signupdata = {
+                firstname,
+                lastname,
+                email,
+                password,
+                activationcode,
+                activated,
+                loggedin,
+                registerdate,
+                salonid: currentSalonInfo?.[0]?.id,
+                maketingemails: maketingemails ? 1 : 0,
+                UserLevel: IsBarber ? 1 : 0,
+                IsBarber
+            }
+
+
+            dispatch(signupCheckEmailAction(signupdata, "iqueuecheckemail.php", router))
+
+            // router.push({ pathname: "/agree", params: signupdata })
         }
-
-        console.log("Sign up ", signupdata)
-
-        dispatch(signupCheckEmailAction(signupdata, "iqueuecheckemail.php", router))
-
-        // router.push({ pathname: "/agree", params: signupdata })
     }
 
     const toggleSwitch = () => setMarketingemails(previousState => !previousState);

@@ -24,9 +24,36 @@ const Signin = () => {
         response
     } = useSelector(state => state.signin)
 
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
     const signinClicked = async () => {
 
-        dispatch(signinAction(email, password, 0, router, "iqueuelogin.php"))
+        if(email == "" && password == ""){
+            Toast.show({
+                type: 'error',
+                text1: "Please fill all the fields",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        }else if (!validateEmail(email)) {
+            Toast.show({
+                type: 'error',
+                text1: "Invalid email format",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        }else if (password.length < 6) {
+            Toast.show({
+                type: 'error',
+                text1: "Password length must be 6 charecters",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        }else{
+            dispatch(signinAction(email, password, 0, router, "iqueuelogin.php"))
+        }        
     }
 
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])

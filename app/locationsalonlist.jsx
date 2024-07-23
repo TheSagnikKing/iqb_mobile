@@ -67,6 +67,8 @@ const LocationSalonList = () => {
         error
     } = retrieveSalonList
 
+    // console.log("Retrieve salon list ", retrieveSalonListData)
+
     return (
         <View style={{ flex: 1, backgroundColor: "#fff", padding: 10, position: "relative" }}>
             <Toast />
@@ -102,7 +104,7 @@ const LocationSalonList = () => {
                                     borderWidth: 2,
                                     borderRadius: 5
                                 }}
-                                    onPress={() => router.push({ pathname: "/connectsalon", params: { SalonCode: item.SalonCode } })}
+                                    onPress={() => router.push({ pathname: "/connectsalon", params: { SalonCode: item.SalonCode, SalonId: item.id} })}
                                 >
                                     <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
                                     <View>

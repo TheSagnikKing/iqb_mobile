@@ -1,15 +1,53 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCustomerDetailsByCustomeridAction } from '../../redux/Actions/ProfileAction';
 
 const Header = () => {
 
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
+      setCurrentUserInfo(JSON.parse(userinfodata))
+    }
+
+    getloginsalonuserdata()
+  }, [])
+
+  const [CustomerImage, setCustomerImage] = useState("")
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (currentUserInfo.length > 0) {
+      dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+    }
+  }, [dispatch, currentUserInfo])
+
+  const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
+
+  const {
+    loading,
+    response: customerdetailsdata
+  } = getCustomerDetailsByCustomerid
+
+  console.log("sdvsvksdkbkds ", customerdetailsdata)
+
+  useEffect(() => {
+    if (customerdetailsdata) {
+      setCustomerImage(customerdetailsdata?.CustomerImage)
+    }
+  }, [customerdetailsdata])
+
   const router = useRouter()
 
-  const logoutPressed = async() => {
+  const logoutPressed = async () => {
     await AsyncStorage.removeItem('user-logininfo');
     router.push("/signin")
   }
@@ -25,14 +63,19 @@ const Header = () => {
         }}
       >
         <Pressable onPress={() => router.push("/profile")}>
-          <Image
-            source={require("../../assets/images/profile.webp")}
-            style={{
-              width: 35,
-              height: 35,
-              borderRadius: 50
-            }}
-          />
+
+          {
+            CustomerImage !== "" && <Image
+              source={{ uri: CustomerImage }}
+              style={{
+                width: 35,
+                height: 35,
+                borderRadius: 50,
+                borderColor: "rgba(0,0,0,0.4)",
+                borderWidth: 2
+              }}
+            />
+          }
         </Pressable>
         <Text
           style={{

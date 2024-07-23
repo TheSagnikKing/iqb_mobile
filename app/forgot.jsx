@@ -31,19 +31,39 @@ const Forgot = () => {
 
     const { loading } = useSelector(state => state.forgotcheckemail)
 
-    const forgotPressed = () => {
-        const sendpassworddata = {
-            vSalonname: currentSalonInfo?.[0]?.SalonName,
-            vSalonTel: currentSalonInfo?.[0]?.ContactTel,
-            vSalonWeb: currentSalonInfo?.[0]?.SalonWebsite
-        }
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
 
-        dispatch(forgotcheckemailAction(email, currentSalonInfo?.[0]?.id, "iqueuecheckemail.php", sendpassworddata))
+    const forgotPressed = () => {
+        if (email == "") {
+            Toast.show({
+                type: 'error',
+                text1: "Email is required",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        } else if (!validateEmail(email)) {
+            Toast.show({
+                type: 'error',
+                text1: "Invalid email format",
+                position: "bottom",
+                bottomOffset: 0,
+            });
+        } else {
+            const sendpassworddata = {
+                vSalonname: currentSalonInfo?.[0]?.SalonName,
+                vSalonTel: currentSalonInfo?.[0]?.ContactTel,
+                vSalonWeb: currentSalonInfo?.[0]?.SalonWebsite
+            }
+
+            dispatch(forgotcheckemailAction(email, currentSalonInfo?.[0]?.id, "iqueuecheckemail.php", sendpassworddata))
+        }
     }
 
     return (
         <View style={{ flex: 1, backgroundColor: "#fff", paddingVertical: 20, paddingHorizontal: 10 }}>
-            <Toast/>
+            <Toast />
             <View style={{
                 height: 60,
                 width: 60,

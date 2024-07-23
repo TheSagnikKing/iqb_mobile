@@ -5,6 +5,7 @@ import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
 import { getservicesbybarberIdsalonIdReducer, groupiqueuejoinedSelectReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
 import { forgotcheckemailReducer, forgotSendPasswordReducer, getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
+import { getbarberbysalonidReducer, getsalonimagelistReducer, getservicesbybarberidsalonidReducer } from "./Reducers/SalonReducer";
 
 const rootReducer = combineReducers({
     groupjoin: groupjoinReducer,
@@ -40,12 +41,21 @@ const rootReducer = combineReducers({
 
     forgotcheckemail: forgotcheckemailReducer,
     forgotSendPassword: forgotSendPasswordReducer,
+
+    getbarberbysalonid: getbarberbysalonidReducer,
+    getservicesbybarberidsalonid: getservicesbybarberidsalonidReducer,
+    getsalonimagelist: getsalonimagelistReducer,
 })
 
 const initialState = {};
 
 const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          immutableCheck: { warnAfter: 128 },
+          serializableCheck: { warnAfter: 128 },
+    }),
     preloadedState: initialState,
 
 });

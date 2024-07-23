@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Colors } from '../constants/Colors'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -7,8 +7,48 @@ import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCustomerDetailsByCustomeridAction } from '../redux/Actions/ProfileAction';
 
 const profile = () => {
+
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+  useEffect(() => {
+    const getloginsalonuserdata = async () => {
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
+      setCurrentUserInfo(JSON.parse(userinfodata))
+    }
+
+    getloginsalonuserdata()
+  }, [])
+
+  const [CustomerImage, setCustomerImage] = useState("")
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (currentUserInfo.length > 0) {
+      dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+    }
+  }, [dispatch, currentUserInfo])
+
+  const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
+
+  const {
+    loading,
+    response: customerdetailsdata
+  } = getCustomerDetailsByCustomerid
+
+  console.log("sdvsvksdkbkds ", customerdetailsdata)
+
+  useEffect(() => {
+    if (customerdetailsdata) {
+      setCustomerImage(customerdetailsdata?.CustomerImage)
+    }
+  }, [customerdetailsdata])
 
   const router = useRouter()
 
@@ -16,31 +56,31 @@ const profile = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.profile_header_container}>
         <View style={{
-          flexDirection:"row",
+          flexDirection: "row",
           alignItems: "center",
           gap: 30
         }}>
           <Pressable onPress={() => router.push("/home")}><AntDesign name="arrowleft" size={24} color="black" /></Pressable>
-          <Text style={{fontFamily: "montserrat-medium", fontSize: 18}}>Profile</Text>
+          <Text style={{ fontFamily: "montserrat-medium", fontSize: 18 }}>Profile</Text>
         </View>
 
         <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 20
-        }}
-      >
-        <Pressable onPress={() => router.push("/editprofile")}>
-          <Feather name="edit" size={22} color="black" />
-        </Pressable>
-        <Pressable
-          onPress={() => router.push("/signin")}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 20
+          }}
         >
-          <MaterialCommunityIcons name="power" size={24} color="black" />
-        </Pressable>
-      </View>
+          <Pressable onPress={() => router.push("/editprofile")}>
+            <Feather name="edit" size={22} color="black" />
+          </Pressable>
+          <Pressable
+            onPress={() => router.push("/signin")}
+          >
+            <MaterialCommunityIcons name="power" size={24} color="black" />
+          </Pressable>
+        </View>
       </View>
       <ScrollView style={{ flex: 1, padding: 10 }}>
         <View style={{
@@ -51,8 +91,9 @@ const profile = () => {
           borderRadius: 50,
           marginTop: 10,
         }}>
-          <Image
-            source={require("../assets/images/profile.webp")}
+          {
+            CustomerImage !== "" && <Image
+            source={{ uri: CustomerImage }}
             style={{
               width: "100%",
               height: "100%",
@@ -61,6 +102,8 @@ const profile = () => {
               borderWidth: 2
             }}
           />
+          }
+          
           <View style={{
             position: "absolute",
             bottom: -5,
@@ -117,7 +160,7 @@ const profile = () => {
 export default profile
 
 const styles = StyleSheet.create({
-  profile_header_container:{
+  profile_header_container: {
     height: 50,
     backgroundColor: "#fff",
     paddingHorizontal: 15,

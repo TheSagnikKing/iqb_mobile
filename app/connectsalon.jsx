@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -9,6 +9,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { iqbSalonsAction } from '../redux/Actions/LocationAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getbarberbysalonidAction } from '../redux/Actions/SalonAction';
 
 const ConnectSalon = () => {
 
@@ -36,6 +37,20 @@ const ConnectSalon = () => {
             router.push("/signin")
         }
     }
+
+    useEffect(() => {
+        if (params.SalonId) {
+            dispatch(getbarberbysalonidAction(params.SalonId, "GetBarberBySalonId.php"))
+        }
+    }, [dispatch])
+
+    const getbarberbysalonid = useSelector(state => state.getbarberbysalonid)
+
+    const {
+        loading: getbarberbysalonidLoading,
+        response
+    } = getbarberbysalonid
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -139,54 +154,42 @@ const ConnectSalon = () => {
                 </View>
 
                 <View style={{ marginTop: 45 }}>
-                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16 }}> Barbers</Text>
-                    <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center", gap: 10, flexWrap: 'wrap' }}>
-                        <View style={{
-                            backgroundColor: Colors.PRIMARY,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 10,
-                            borderRadius: 5,
-                            width: 100,
-                            height: 45,
-                            paddingLeft: 5,
-                            boxShadow: '0px 6px 12px rgba(0,0,0,0.4)'
-                        }}>
-                            <Image
-                                source={require("../assets/images/profile.webp")}
-                                style={{
-                                    width: 35,
-                                    height: 35,
-                                    borderRadius: 50
-                                }}
-                            />
-                            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARYTEXT }}>Arg</Text>
-                        </View>
-                        <View style={{
-                            backgroundColor: Colors.PRIMARY,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 10,
-                            borderRadius: 5,
-                            width: 100,
-                            height: 45,
-                            paddingLeft: 5, shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 6 },
-                            shadowOpacity: 0.4,
-                            shadowRadius: 12, boxShadow: '0px 6px 12px rgba(0,0,0,0.4)'
-                        }}>
-                            <Image
-                                source={require("../assets/images/profile.webp")}
-                                style={{
-                                    width: 35,
-                                    height: 35,
-                                    borderRadius: 50
-                                }}
-                            />
-                            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARYTEXT }}>Arg</Text>
-                        </View>
+                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 10 }}> Barbers</Text>
 
-                    </View>
+                    {
+                        getbarberbysalonidLoading ? <View></View> :
+                            response.length == 0 ? <View></View> :
+                                <FlatList
+                                    horizontal
+                                    data={response}
+                                    renderItem={({ item }) => <Pressable style={{
+                                        backgroundColor: Colors.PRIMARY,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 10,
+                                        borderRadius: 5,
+                                        width: 100,
+                                        height: 45,
+                                        paddingLeft: 5,
+                                        boxShadow: '0px 6px 12px rgba(0,0,0,0.4)',
+                                        marginRight: 10
+                                    }}
+                                        onPress={() => router.push({ pathname: "/connectsalonbarberservices", params: { BarberId: item.BarberId, SalonId: params.SalonId } })}
+                                    >
+                                        <Image
+                                            source={{ uri: item.BarberPic }}
+                                            style={{
+                                                width: 35,
+                                                height: 35,
+                                                borderRadius: 50
+                                            }}
+                                        />
+                                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARYTEXT }}>{item.BarberName}</Text>
+                                    </Pressable>}
+                                    keyExtractor={item => item.BarberId}
+                                />
+                    }
+
 
                     <View style={{
                         marginTop: 30,
@@ -194,7 +197,7 @@ const ConnectSalon = () => {
                         flexWrap: "wrap",
                         position: "relative",
                     }}>
-                        <View style={[styles.saloninfo_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 2, width: "50%" }]}>
+                        <Pressable onPress={() => router.push({ pathname: "/conectsalongallery", params: { SalonId: params.SalonId } })} style={[styles.saloninfo_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 2, width: "50%" }]}>
                             <View style={{
                                 width: 50,
                                 height: 50,
@@ -210,7 +213,7 @@ const ConnectSalon = () => {
                                 elevation: 12
                             }}><FontAwesome name="photo" size={24} color="#fff" /></View>
                             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Image Gallery</Text>
-                        </View>
+                        </Pressable>
                         <View style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
                             <View style={{
                                 width: 50,

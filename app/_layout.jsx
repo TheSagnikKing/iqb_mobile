@@ -107,6 +107,9 @@ const _layout = () => {
         />
 
         <Stack.Screen name="salonbarberservices"
+        options={{
+          headerTitle: ""
+        }}
         />
 
         <Stack.Screen name="saloninfogallery"
@@ -132,6 +135,9 @@ const _layout = () => {
         />
 
         <Stack.Screen name="connectsalonbarberservices"
+        options={{
+          headerTitle: ""
+        }}
         />
 
         <Stack.Screen name="conectsalongallery"

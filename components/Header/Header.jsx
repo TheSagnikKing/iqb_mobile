@@ -37,7 +37,7 @@ const Header = () => {
     response: customerdetailsdata
   } = getCustomerDetailsByCustomerid
 
-  console.log("sdvsvksdkbkds ", customerdetailsdata)
+  // console.log("sdvsvksdkbkds ", customerdetailsdata)
 
   useEffect(() => {
     if (customerdetailsdata) {

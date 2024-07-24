@@ -11,6 +11,8 @@ import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomerDetailsByCustomeridAction } from '../redux/Actions/ProfileAction';
+import * as ImagePicker from 'expo-image-picker';
+import api from '../redux/Api/Api';
 
 const profile = () => {
 
@@ -51,6 +53,70 @@ const profile = () => {
   }, [customerdetailsdata])
 
   const router = useRouter()
+
+  const uploadprofilepressed = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission required', 'Please enable camera roll permissions to upload an image.');
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
+      if (!result.canceled) {
+        uploadImage(result, 34736 ); // Pass the result object directly to the upload function
+        // console.log("Upload Profile RESULT ", result)
+      }
+    } catch (error) {
+      console.error('Error picking an image', error);
+    }
+  }
+
+  const uploadImage = async (result, userId) => {
+    try {
+      let formData = new FormData();
+  
+      const base64Response = await fetch("file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png");
+      const blob = await base64Response.blob();
+  
+      const index = "1000023216.png".lastIndexOf('.');
+      const ext = "1000023216.png".substring(index + 1);
+      const fileName = `${userId}.${ext}`;
+
+      console.log("the filename ", fileName)
+  
+      formData.append('file', "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png", fileName);
+  
+      const {data } = await api.post("/upload_profile_image.php", formData)
+      
+      console.log("The success ", data)
+      
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  };
+
+  // const uploadImage = async (result,userId) => {
+  //   try {
+
+  //     let formData = new FormData();
+
+  //     // Convert base64 string to blob
+  //     const base64Response = await fetch(result.uri);
+  //     const blob = await base64Response.blob();
+
+  //     // Construct filename with UserId and original extension
+  //     const index = result.fileName.lastIndexOf('.');
+  //     const ext = result.fileName.substring(index + 1);
+  //     const fileName = `${userId}.${ext}`;
+
+  //     console.log("File name ", fileName)
+  //   } catch (error) {
+  //     console.error('Upload failed:', error);
+  //   }
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -93,18 +159,18 @@ const profile = () => {
         }}>
           {
             CustomerImage !== "" && <Image
-            source={{ uri: CustomerImage }}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: 50,
-              borderColor: "rgba(0,0,0,0.4)",
-              borderWidth: 2
-            }}
-          />
+              source={{ uri: CustomerImage }}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 50,
+                borderColor: "rgba(0,0,0,0.4)",
+                borderWidth: 2
+              }}
+            />
           }
-          
-          <View style={{
+
+          <Pressable style={{
             position: "absolute",
             bottom: -5,
             right: -10,
@@ -119,7 +185,9 @@ const profile = () => {
             shadowOpacity: 0.4,
             shadowRadius: 12,
             elevation: 12
-          }}><MaterialCommunityIcons name="camera-outline" size={22} color="#fff" /></View>
+          }}
+            onPress={() => uploadprofilepressed()}
+          ><MaterialCommunityIcons name="camera-outline" size={22} color="#fff" /></Pressable>
         </View>
 
         <View style={{

@@ -51,7 +51,7 @@ const ConnectSalon = () => {
         response
     } = getbarberbysalonid
 
-
+    console.log("SALON INFO ", salonInfodata)
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
@@ -91,7 +91,19 @@ const ConnectSalon = () => {
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
-                        }}><FontAwesome name="photo" size={55} color="#fff" /></View>
+                        }}>
+                        {
+                            salonInfodata?.[0]?.SalonAppIcon && <Image
+                                source={{ uri: `https://server.iqueuebarbers.com/~iqueue/SalonAppIcons/${salonInfodata?.[0]?.SalonAppIcon}` }}
+                                style={{
+                                    width: 95,
+                                    height: 95,
+                                    borderRadius: 50
+                                }}
+                            />
+                        }
+
+                    </View>
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",

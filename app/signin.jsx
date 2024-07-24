@@ -12,6 +12,17 @@ import { SAVE_SALONINFO } from '../redux/Constants/LocationConstant';
 
 const Signin = () => {
 
+    const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async() => {
+            const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+            setCurrentSalonInfo(JSON.parse(saloninfodata))
+        }
+
+        getloginsalonuserdata()
+    },[])
+
     const router = useRouter()
 
     const [email, setEmail] = useState("")
@@ -51,22 +62,17 @@ const Signin = () => {
                 position: "bottom",
                 bottomOffset: 0,
             });
+        }else if(currentSalonInfo.length == 0){
+            Toast.show({
+                type: 'error',
+                text1: "Please select a salon!",
+                position: "bottom",
+                bottomOffset: 0,
+            });
         }else{
             dispatch(signinAction(email, password, 0, router, "iqueuelogin.php"))
         }        
     }
-
-    const [currentSalonInfo, setCurrentSalonInfo] = useState([])
-
-    useEffect(() => {
-        const getloginsalonuserdata = async() => {
-            const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
-            setCurrentSalonInfo(JSON.parse(saloninfodata))
-        }
-
-        getloginsalonuserdata()
-    },[])
-
 
     return (
         <SafeAreaView style={styles.signin_container}>

@@ -38,7 +38,7 @@ const SalonInfo = () => {
     response: saloninforesponse
   } = useSelector(state => state.getsalonsdetailsbyId);
 
-  // console.log("Response Salon Info ", saloninforesponse?.Response)
+  console.log("Response Salon Info ", saloninforesponse?.Response)
 
   // console.log("The currentsalon info ", currentSalonInfo?.[0]?.id)
 
@@ -97,15 +97,16 @@ const SalonInfo = () => {
               shadowOpacity: 0.4,
               shadowRadius: 12,
             }}>
-            {/* <FontAwesome name="photo" size={55} color="#fff" /> */}
-            <Image
-              source={{ uri: "iqbDefault100x100.jpg" }}
-              style={{
-                width: 95,
-                height: 95,
-                borderRadius: 50
-              }}
-            />
+            {
+              saloninforesponse?.Response?.SalonAppIcon && <Image
+                source={{ uri: `https://server.iqueuebarbers.com/~iqueue/SalonAppIcons/${saloninforesponse?.Response?.SalonAppIcon}` }}
+                style={{
+                  width: 95,
+                  height: 95,
+                  borderRadius: 50
+                }}
+              />
+            }
           </View>
           <Text
             style={{

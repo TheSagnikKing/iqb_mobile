@@ -31,8 +31,10 @@ const Home = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType}, "adminMergedRet2.php"))
-  },[])
+    if(currentUserInfo.length > 0){
+      dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType}, "adminMergedRet2.php"))
+    }
+  },[dispatch,currentUserInfo])
 
   const admiMergeRet2 = useSelector(state => state.adminRet2)
 

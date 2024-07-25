@@ -20,6 +20,8 @@ const Header = () => {
     getloginsalonuserdata()
   }, [])
 
+  console.log("Current user info ", currentUserInfo)
+
   const [CustomerImage, setCustomerImage] = useState("")
 
   const dispatch = useDispatch()
@@ -71,7 +73,7 @@ const Header = () => {
         <Pressable onPress={() => router.push("/profile")}>
 
           {
-            customerdetailsdata  && <Image
+            customerdetailsdata ? <Image
               source={{ uri: customerdetailsdata?.CustomerImage }}
               style={{
                 width: 35,
@@ -80,7 +82,13 @@ const Header = () => {
                 borderColor: "rgba(0,0,0,0.4)",
                 borderWidth: 2
               }}
-            />
+            /> : <View style={{
+              width: 35,
+              height: 35,
+              borderRadius: 50,
+              borderColor: "rgba(0,0,0,0.4)",
+              borderWidth: 2
+            }}></View>
           }
         </Pressable>
         <Text
@@ -88,7 +96,7 @@ const Header = () => {
             fontFamily: "montserrat-semibold",
             fontSize: 14
           }}
-        >John Doe</Text>
+        >{`${currentUserInfo?.[0]?.FirstName}`}</Text>
       </View>
       <View
         style={{

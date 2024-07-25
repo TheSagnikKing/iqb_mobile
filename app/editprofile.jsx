@@ -40,6 +40,7 @@ const editprofile = () => {
     useEffect(() => {
         if(currentUserInfo.length > 0){
             dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+            // setPassword(currentUserInfo?.[0].Password)
         }
     },[dispatch,currentUserInfo])
 
@@ -56,12 +57,11 @@ const editprofile = () => {
             setEmail(customerdetailsdata?.CustomerEmail)
             setPhoneNumber(customerdetailsdata?.CustomerPhone)
             setDateofbirth(customerdetailsdata?.CustomerDOB)
-            setPassword(customerdetailsdata?.Password)
         }
     },[customerdetailsdata])
 
 
-    // console.log("Get Customer details ", customerdetailsdata)
+    console.log("Get Customer details ", customerdetailsdata)
 
 
     const editProfilePressed = () => {
@@ -70,11 +70,13 @@ const editprofile = () => {
             lastname: fullName.split(" ")[1],
             email,
             dob:dateofbirth,
-            password,
+            password: currentUserInfo?.[0].Password,
             mobile: phoneNumber,
             maketingemails: maketingemails ? 1 : 0,
             salonid: currentUserInfo?.[0]?.SalonId
         }
+
+        console.log("Edit Profile ", editprofiledata)
 
         Alert.alert('Update Profile', 'Are you sure ?', [
             {
@@ -152,7 +154,7 @@ const editprofile = () => {
                         />
                     </View>
 
-                    <View>
+                    {/* <View>
                         <Text style={{ textAlign: "left", fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Password</Text>
                         <TextInput
                             editable
@@ -161,7 +163,7 @@ const editprofile = () => {
                             onChangeText={text => setPassword(text)}
                             value={password}
                         />
-                    </View>
+                    </View> */}
 
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>

@@ -24,11 +24,17 @@ const Header = () => {
 
   const dispatch = useDispatch()
 
+  // useEffect(() => {
+  //   if (currentUserInfo.length > 0) {
+  //     dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+  //   }
+  // }, [dispatch, currentUserInfo])
+
   useEffect(() => {
     if (currentUserInfo.length > 0) {
       dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
     }
-  }, [dispatch, currentUserInfo])
+  }, [dispatch])
 
   const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
 

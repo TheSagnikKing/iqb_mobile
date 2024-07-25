@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getservicesbybarberIdsalonIdAction, iqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
+import Toast from 'react-native-toast-message';
 
 const Autojoin = () => {
 
@@ -128,58 +129,61 @@ const Autojoin = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
     ]);
 
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={{
-        backgroundColor: "#fff",
-        flex: 1,
-        paddingVertical: 10,
-        paddingHorizontal: 15
-      }}>
+    <>
+      <Toast />
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
 
         <View style={{
-          height: 80,
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 20
+          backgroundColor: "#fff",
+          flex: 1,
+          paddingVertical: 10,
+          paddingHorizontal: 15
         }}>
+
           <View style={{
+            height: 80,
+            flexDirection: "row",
             alignItems: "center",
-            justifyContent: "center"
-          }}><Image
-              source={require("../assets/images/profile.webp")}
-              style={{
-                width: 70,
-                height: 70,
-                borderRadius: 50,
-                borderColor: "rgba(0,0,0,0.4)",
-                borderWidth: 1
-              }}
-            /></View>
-          <View>
-            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>John</Text>
-            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>Estimated wait time: 0hrs: 0mins</Text>
+            gap: 20
+          }}>
+            <View style={{
+              alignItems: "center",
+              justifyContent: "center"
+            }}><Image
+                source={require("../assets/images/profile.webp")}
+                style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: 50,
+                  borderColor: "rgba(0,0,0,0.4)",
+                  borderWidth: 1
+                }}
+              /></View>
+            <View>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>John</Text>
+              <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>Estimated wait time: 0hrs: 0mins</Text>
+            </View>
           </View>
-        </View>
 
-        <View style={{
-          height: 70,
-          backgroundColor: Colors.PRIMARY,
-          marginTop: 5,
-          paddingHorizontal: 10,
-          justifyContent: "center",
-          borderRadius: 5,
-        }}>
-          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 18, color: Colors.PRIMARYTEXT }}>Select Service</Text>
-          <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
-        </View>
+          <View style={{
+            height: 70,
+            backgroundColor: Colors.PRIMARY,
+            marginTop: 5,
+            paddingHorizontal: 10,
+            justifyContent: "center",
+            borderRadius: 5,
+          }}>
+            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 18, color: Colors.PRIMARYTEXT }}>Select Service</Text>
+            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
+          </View>
 
-        {/* <FlatList
+          {/* <FlatList
           data={servicesdata}
           renderItem={({ item }) => <View style={{
             height: 80,
@@ -242,92 +246,93 @@ const Autojoin = () => {
           keyExtractor={item => item._id}
         /> */}
 
-        {
-          loading ?
-            <View style={{
-              paddingVertical: 10
-            }}><ActivityIndicator size={20} color={"#000"} /></View> :
-            serviceslist.length == 0 ?
+          {
+            loading ?
               <View style={{
                 paddingVertical: 10
-              }}><Text>No Barbers Available</Text></View> :
-              <FlatList
-                data={serviceslist}
-                renderItem={({ item }) => <View style={{
-                  height: 80,
-                  backgroundColor: "#efefef",
-                  marginTop: 5,
-                  paddingHorizontal: 10,
-                  justifyContent: "center",
-                  borderRadius: 5,
-                  borderColor: "rgba(0,0,0,0.4)",
-                  borderWidth: 1,
-                }}>
-                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{item.ServiceName}</Text>
+              }}><ActivityIndicator size={20} color={"#000"} /></View> :
+              serviceslist.length == 0 ?
+                <View style={{
+                  paddingVertical: 10
+                }}><Text>No Barbers Available</Text></View> :
+                <FlatList
+                  data={serviceslist}
+                  renderItem={({ item }) => <View style={{
+                    height: 80,
+                    backgroundColor: "#efefef",
+                    marginTop: 5,
+                    paddingHorizontal: 10,
+                    justifyContent: "center",
+                    borderRadius: 5,
+                    borderColor: "rgba(0,0,0,0.4)",
+                    borderWidth: 1,
+                  }}>
+                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                      <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{item.ServiceName}</Text>
 
-                    {
-                      selectedServices.find((ser) => ser.serviceid == item.serviceid) ?
-                        <Pressable
-                          style={{
-                            width: 30,
-                            height: 30,
-                            backgroundColor: "red",
-                            borderRadius: 50,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 6 },
-                            shadowOpacity: 0.4,
-                            shadowRadius: 12,
-                            elevation: 12,
-                          }}
-                          onPress={() => deleteServiceClicked(item)}
-                        ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
-                        <Pressable
-                          style={{
-                            width: 30,
-                            height: 30,
-                            backgroundColor: Colors.PRIMARY,
-                            borderRadius: 50,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 6 },
-                            shadowOpacity: 0.4,
-                            shadowRadius: 12,
-                            elevation: 12,
-                          }}
-                          onPress={() => addServiceClicked(item)}
-                        ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
+                      {
+                        selectedServices.find((ser) => ser.serviceid == item.serviceid) ?
+                          <Pressable
+                            style={{
+                              width: 30,
+                              height: 30,
+                              backgroundColor: "red",
+                              borderRadius: 50,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              shadowColor: '#000',
+                              shadowOffset: { width: 0, height: 6 },
+                              shadowOpacity: 0.4,
+                              shadowRadius: 12,
+                              elevation: 12,
+                            }}
+                            onPress={() => deleteServiceClicked(item)}
+                          ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
+                          <Pressable
+                            style={{
+                              width: 30,
+                              height: 30,
+                              backgroundColor: Colors.PRIMARY,
+                              borderRadius: 50,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              shadowColor: '#000',
+                              shadowOffset: { width: 0, height: 6 },
+                              shadowOpacity: 0.4,
+                              shadowRadius: 12,
+                              elevation: 12,
+                            }}
+                            onPress={() => addServiceClicked(item)}
+                          ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
 
-                    }
-                  </View>
+                      }
+                    </View>
 
-                  <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
-                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}{" "}mins</Text>
-                  </View>
+                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
+                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
+                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}{" "}mins</Text>
+                    </View>
 
-                </View>}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={item => item.serviceid}
-              />
-        }
+                  </View>}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={item => item.serviceid}
+                />
+          }
 
+        </View>
+        <Pressable
+          style={{
+            height: 50,
+            backgroundColor: Colors.PRIMARY,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={() => autojoinPressed()}
+        >
+          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
+        </Pressable>
       </View>
-      <Pressable
-        style={{
-          height: 50,
-          backgroundColor: Colors.PRIMARY,
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-        onPress={() => autojoinPressed()}
-      >
-        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
-      </Pressable>
-    </View>
+    </>
   )
 }
 

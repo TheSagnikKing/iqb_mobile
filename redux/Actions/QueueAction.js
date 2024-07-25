@@ -233,13 +233,13 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
 
             dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router))
         } else if (data.StatusCode == 200) {
-            Toast.show({
-                type: 'error',
-                text1: "Already in the queue",
-                position: "bottom",
-                bottomOffset: 0,
-            });
-            console.warn("User already in the queue")
+            // Toast.show({
+            //     type: 'error',
+            //     text1: "User already in the queue",
+            //     position: "bottom",
+            //     bottomOffset: 0,
+            // });
+            alert("User already in the queue")
         }
 
     } catch (error) {
@@ -281,13 +281,15 @@ export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, en
             )));
 
         } else if (data.StatusCode == 200) {
-            Toast.show({
-                type: 'error',
-                text1: "Already in the queue",
-                position: "bottom",
-                bottomOffset: 0,
-            });
-            console.warn("User already in the queue")
+
+            alert("User already in the queue")
+            // Toast.show({
+            //     type: 'error',
+            //     text1: "Already in the queue",
+            //     position: "bottom",
+            //     bottomOffset: 0,
+            // });
+            // console.warn("User already in the queue")
         }
 
     } catch (error) {

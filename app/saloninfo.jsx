@@ -186,7 +186,7 @@ const SalonInfo = () => {
                     borderRadius: 5,
                     width: 100,
                     height: 45,
-                    paddingLeft: 5,
+                    paddingHorizontal: 5,
                     boxShadow: '0px 6px 12px rgba(0,0,0,0.4)',
                     marginRight: 10
                   }}
@@ -203,6 +203,7 @@ const SalonInfo = () => {
                     <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARYTEXT }}>{item.BarberName}</Text>
                   </Pressable>}
                   keyExtractor={item => item.BarberId}
+                  showsHorizontalScrollIndicator={false}
                 />
           }
 

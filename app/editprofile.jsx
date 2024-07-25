@@ -56,6 +56,7 @@ const editprofile = () => {
             setEmail(customerdetailsdata?.CustomerEmail)
             setPhoneNumber(customerdetailsdata?.CustomerPhone)
             setDateofbirth(customerdetailsdata?.CustomerDOB)
+            setPassword(customerdetailsdata?.Password)
         }
     },[customerdetailsdata])
 

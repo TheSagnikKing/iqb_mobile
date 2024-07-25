@@ -84,7 +84,7 @@ export const iqueueupdatecustomerdetailsAction = (iqueuedata, endpoint, router) 
                 payload: data.Response,
             });
 
-            router.push("/home")
+            // router.push("/home")
             console.log("Update Response ", data)
         }
 

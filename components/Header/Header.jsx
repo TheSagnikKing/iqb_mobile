@@ -24,17 +24,17 @@ const Header = () => {
 
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   if (currentUserInfo.length > 0) {
-  //     dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
-  //   }
-  // }, [dispatch, currentUserInfo])
-
   useEffect(() => {
     if (currentUserInfo.length > 0) {
       dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
     }
-  }, [dispatch])
+  }, [dispatch, currentUserInfo])
+
+  // useEffect(() => {
+  //   if (currentUserInfo.length > 0) {
+  //     dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
+  //   }
+  // }, [dispatch])
 
   const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
 
@@ -45,11 +45,11 @@ const Header = () => {
 
   // console.log("sdvsvksdkbkds ", customerdetailsdata)
 
-  useEffect(() => {
-    if (customerdetailsdata) {
-      setCustomerImage(customerdetailsdata?.CustomerImage)
-    }
-  }, [customerdetailsdata])
+  // useEffect(() => {
+  //   if (customerdetailsdata) {
+  //     setCustomerImage(customerdetailsdata?.CustomerImage)
+  //   }
+  // }, [customerdetailsdata])
 
   const router = useRouter()
 
@@ -71,8 +71,8 @@ const Header = () => {
         <Pressable onPress={() => router.push("/profile")}>
 
           {
-            CustomerImage !== "" && <Image
-              source={{ uri: CustomerImage }}
+            customerdetailsdata  && <Image
+              source={{ uri: customerdetailsdata?.CustomerImage }}
               style={{
                 width: 35,
                 height: 35,

@@ -46,11 +46,11 @@ const profile = () => {
 
   console.log("sdvsvksdkbkds ", customerdetailsdata)
 
-  useEffect(() => {
-    if (customerdetailsdata) {
-      setCustomerImage(customerdetailsdata?.CustomerImage)
-    }
-  }, [customerdetailsdata])
+  // useEffect(() => {
+  //   if (customerdetailsdata) {
+  //     setCustomerImage(customerdetailsdata?.CustomerImage)
+  //   }
+  // }, [customerdetailsdata])
 
   const router = useRouter()
 
@@ -158,8 +158,8 @@ const profile = () => {
           marginTop: 10,
         }}>
           {
-            CustomerImage !== "" && <Image
-              source={{ uri: CustomerImage }}
+            customerdetailsdata && <Image
+              source={{ uri: customerdetailsdata?.CustomerImage }}
               style={{
                 width: "100%",
                 height: "100%",

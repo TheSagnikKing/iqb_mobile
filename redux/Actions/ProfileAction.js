@@ -1,6 +1,7 @@
 import Toast from "react-native-toast-message";
 import { FORGOT_CHECK_EMAIL_FAIL, FORGOT_CHECK_EMAIL_REQ, FORGOT_CHECK_EMAIL_SUCCESS, FORGOT_SEND_PASSWORD_FAIL, FORGOT_SEND_PASSWORD_REQ, FORGOT_SEND_PASSWORD_SUCCESS, GET_CUSTOMER_DETAILS_FAIL, GET_CUSTOMER_DETAILS_REQ, GET_CUSTOMER_DETAILS_SUCCESS, IQUEUE_UPDATE_CUSTOMER_DETAILS_FAIL, IQUEUE_UPDATE_CUSTOMER_DETAILS_REQ, IQUEUE_UPDATE_CUSTOMER_DETAILS_SUCCESS } from "../Constants/ProfileConstant";
 import api from "../Api/Api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getCustomerDetailsByCustomeridAction = (SalonId, CustomerId, endpoint) => async (dispatch) => {
     try {
@@ -41,7 +42,7 @@ export const getCustomerDetailsByCustomeridAction = (SalonId, CustomerId, endpoi
     }
 };
 
-export const iqueueupdatecustomerdetailsAction = (iqueuedata, endpoint, router) => async (dispatch) => {
+export const iqueueupdatecustomerdetailsAction = (iqueuedata, endpoint, router, currentUserInfo) => async (dispatch) => {
     try {
         dispatch({
             type: IQUEUE_UPDATE_CUSTOMER_DETAILS_REQ
@@ -84,8 +85,19 @@ export const iqueueupdatecustomerdetailsAction = (iqueuedata, endpoint, router) 
                 payload: data.Response,
             });
 
+            // Update the object with the new password
+            const updatedUserInfo = { ...currentUserInfo[0], Password: iqueuedata.password, MaketingEmails: iqueuedata.maketingemails };
+
+            // Create a new array with the updated object
+            const newCurrentUserInfo = [updatedUserInfo];
+
+            console.log("updated async userINFO ", newCurrentUserInfo)
+
+            await AsyncStorage.removeItem('user-logininfo');
+            await AsyncStorage.setItem('user-logininfo', JSON.stringify(newCurrentUserInfo));
+
             router.push("/home")
-            console.log("Update Response ", data)
+            // console.log("Update Response ", data)
         }
 
     } catch (error) {
@@ -133,7 +145,7 @@ export const forgotcheckemailAction = (email, salonid, endpoint, sendpassworddat
             }
 
             console.log("Check Email data ", senddata)
-            dispatch(forgotSendPasswordAction(senddata,"iqueuesendpassword.php"))
+            dispatch(forgotSendPasswordAction(senddata, "iqueuesendpassword.php"))
         }
 
     } catch (error) {
@@ -148,9 +160,13 @@ const forgotSendPasswordAction = (senddata, endpoint) => async (dispatch) => {
             type: FORGOT_SEND_PASSWORD_REQ
         });
 
-        const params = senddata
+        const body = senddata
 
-        const { data, status } = await api.post(`/${endpoint}?${new URLSearchParams(params).toString()}`);
+        const { data, status } = await api.post(`/${endpoint}`, body, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
 
         if (status == 200) {
             dispatch({

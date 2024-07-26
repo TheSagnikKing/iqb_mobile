@@ -1,11 +1,13 @@
 import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors'
 import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { groupiqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Joingroup = () => {
 
@@ -182,7 +184,7 @@ const Joingroup = () => {
         })
     }
 
-    console.log("Customerselected", customerSelectedGroupJoin)
+    // console.log("Customerselected", customerSelectedGroupJoin)
 
     const groupjoinpressed = async () => {
         const generateRandomCode = () => {
@@ -204,7 +206,7 @@ const Joingroup = () => {
 
         const updatedGroupJoinSend = groupjoinsend.map((s) => ({ ...s, qgcode: randomCode }));
 
-        // console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
+        console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
 
         Alert.alert('Join Queue', 'Are you sure ?', [
             {
@@ -212,14 +214,32 @@ const Joingroup = () => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
-            { text: 'OK', onPress: () => dispatch(groupiqueuejoinedSelectAction(iqueuecheckdata,updatedGroupJoinSend,"iqueuejoinedqselect2.php",router ))},
+            { text: 'OK', onPress: () => dispatch(groupiqueuejoinedSelectAction(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", router)) },
         ]);
 
     };
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <View style={styles.header_container}>
+                <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 30
+                }}>
+                    <Pressable onPress={() => router.push("/home")}><AntDesign name="arrowleft" size={24} color="black" /></Pressable>
+                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 18 }}>Group Join</Text>
+                </View>
+
+                <Pressable
+                    onPress={() => router.push("/help")}
+                >
+                    <FontAwesome6 name="question-circle" size={24} color="black" />
+                </Pressable>
+
+            </View>
             <View style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 10 }}>
+                <Toast />
                 <View style={{ marginVertical: 20, flexDirection: "row", gap: 10 }}>
                     <View><Ionicons name="information-circle-outline" size={35} color={Colors.PRIMARY} /></View>
                     <View style={{ flex: 1 }}>
@@ -415,7 +435,7 @@ const Joingroup = () => {
             >
                 <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
             </Pressable>
-        </>
+        </SafeAreaView>
     )
 }
 
@@ -430,5 +450,16 @@ const styles = StyleSheet.create({
         fontFamily: "montserrat-medium",
         fontSize: 14,
         outlineStyle: "none",
-    }
+    },
+    header_container: {
+        height: 50,
+        backgroundColor: "#fff",
+        paddingHorizontal: 15,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderBottomColor: "rgba(0,0,0,0.2)",
+        borderBottomWidth: 1
+    },
 })

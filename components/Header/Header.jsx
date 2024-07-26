@@ -20,7 +20,7 @@ const Header = () => {
     getloginsalonuserdata()
   }, [])
 
-  console.log("Current user info ", currentUserInfo)
+  // console.log("Current user info ", currentUserInfo)
 
   const [CustomerImage, setCustomerImage] = useState("")
 

@@ -44,7 +44,7 @@ const profile = () => {
     response: customerdetailsdata
   } = getCustomerDetailsByCustomerid
 
-  console.log("sdvsvksdkbkds ", customerdetailsdata)
+  // console.log("sdvsvksdkbkds ", customerdetailsdata)
 
   // useEffect(() => {
   //   if (customerdetailsdata) {
@@ -66,7 +66,7 @@ const profile = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        uploadImage(result, 34736 ); // Pass the result object directly to the upload function
+        uploadImage(result, 34736); // Pass the result object directly to the upload function
         // console.log("Upload Profile RESULT ", result)
       }
     } catch (error) {
@@ -77,22 +77,22 @@ const profile = () => {
   const uploadImage = async (result, userId) => {
     try {
       let formData = new FormData();
-  
+
       const base64Response = await fetch("file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png");
       const blob = await base64Response.blob();
-  
+
       const index = "1000023216.png".lastIndexOf('.');
       const ext = "1000023216.png".substring(index + 1);
       const fileName = `${userId}.${ext}`;
 
       console.log("the filename ", fileName)
-  
+
       formData.append('file', "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png", fileName);
-  
-      const {data } = await api.post("/upload_profile_image.php", formData)
-      
+
+      const { data } = await api.post("/upload_profile_image.php", formData)
+
       console.log("The success ", data)
-      
+
     } catch (error) {
       console.error('Upload failed:', error);
     }
@@ -184,18 +184,31 @@ const profile = () => {
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.4,
             shadowRadius: 12,
-            elevation: 12
+            elevation: 12,
+            marginBottom: 20
           }}
             onPress={() => uploadprofilepressed()}
           ><MaterialCommunityIcons name="camera-outline" size={22} color="#fff" /></Pressable>
         </View>
+
+        <Text style={{
+          fontFamily: "montserrat-semibold",
+          textAlign: "center",
+          marginBottom: 10
+        }}>{`${customerdetailsdata?.CustomerFName} ${customerdetailsdata?.CustomerLName}`}</Text>
+
+        <Text style={{
+          fontFamily: "montserrat-semibold",
+          textAlign: "center",
+          marginBottom: 10
+        }}>{customerdetailsdata?.CustomerEmail}</Text>
 
         <View style={{
           width: 60,
           height: 60,
           borderRadius: 50,
           marginHorizontal: "auto",
-          marginVertical: 30,
+          marginVertical: 20,
           backgroundColor: Colors.PRIMARY,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 6 },
@@ -206,11 +219,18 @@ const profile = () => {
           alignItems: "center",
         }}><FontAwesome name="birthday-cake" size={22} color="#fff" /></View>
 
+        <Text style={{
+          fontFamily: "montserrat-semibold",
+          textAlign: "center",
+          marginBottom: 10
+        }}>{customerdetailsdata?.CustomerDOB}</Text>
+
         <View style={{
           width: 60,
           height: 60,
           borderRadius: 50,
           marginHorizontal: "auto",
+          marginVertical: 20,
           backgroundColor: Colors.PRIMARY,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 6 },
@@ -220,6 +240,12 @@ const profile = () => {
           justifyContent: "center",
           alignItems: "center",
         }}><Feather name="phone-call" size={24} color="#fff" /></View>
+
+        <Text style={{
+          fontFamily: "montserrat-semibold",
+          textAlign: "center",
+          marginBottom: 10
+        }}>{customerdetailsdata?.CustomerPhone}</Text>
       </ScrollView>
     </SafeAreaView>
   )

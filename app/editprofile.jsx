@@ -31,8 +31,6 @@ const editprofile = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [maketingemails, setMarketingemails] = useState(false)
-
-    const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setMarketingemails(previousState => !previousState);
 
     const dispatch = useDispatch()
@@ -40,7 +38,8 @@ const editprofile = () => {
     useEffect(() => {
         if(currentUserInfo.length > 0){
             dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
-            // setPassword(currentUserInfo?.[0].Password)
+            setPassword(currentUserInfo?.[0]?.Password)
+            setMarketingemails(currentUserInfo?.[0]?.MaketingEmails == 1 ? true : false)
         }
     },[dispatch,currentUserInfo])
 
@@ -61,7 +60,7 @@ const editprofile = () => {
     },[customerdetailsdata])
 
 
-    console.log("Get Customer details ", customerdetailsdata)
+    // console.log("Get Customer details ", customerdetailsdata)
 
 
     const editProfilePressed = () => {
@@ -70,13 +69,13 @@ const editprofile = () => {
             lastname: fullName.split(" ")[1],
             email,
             dob:dateofbirth,
-            password: currentUserInfo?.[0].Password,
+            password,
             mobile: phoneNumber,
             maketingemails: maketingemails ? 1 : 0,
             salonid: currentUserInfo?.[0]?.SalonId
         }
 
-        console.log("Edit Profile ", editprofiledata)
+        // console.log("Edit Profile ", editprofiledata)
 
         Alert.alert('Update Profile', 'Are you sure ?', [
             {
@@ -84,7 +83,7 @@ const editprofile = () => {
               onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () =>  dispatch(iqueueupdatecustomerdetailsAction(editprofiledata, "iqueueupdatecustomerdetails.php", router))},
+            {text: 'OK', onPress: () =>  dispatch(iqueueupdatecustomerdetailsAction(editprofiledata, "iqueueupdatecustomerdetails.php", router, currentUserInfo))},
         ]);
     }
 
@@ -125,7 +124,7 @@ const editprofile = () => {
                         <Text style={{ textAlign: "left", fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Date of Birth</Text>
                         <TextInput
                             editable
-                            placeholder='Date of Birth'
+                            placeholder='DD-MM-YYYY'
                             style={styles.input}
                             onChangeText={text => setDateofbirth(text)}
                             value={dateofbirth}
@@ -154,7 +153,7 @@ const editprofile = () => {
                         />
                     </View>
 
-                    {/* <View>
+                    <View>
                         <Text style={{ textAlign: "left", fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Password</Text>
                         <TextInput
                             editable
@@ -163,7 +162,7 @@ const editprofile = () => {
                             onChangeText={text => setPassword(text)}
                             value={password}
                         />
-                    </View> */}
+                    </View>
 
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>

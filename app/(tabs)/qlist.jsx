@@ -116,23 +116,23 @@ const QList = () => {
     response: qlistdata
   } = queueList
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (currentSalonInfo.length > 0) {
-        dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"));
-        setLastRefreshTime(new Date().toLocaleTimeString());
-      }
-    }, 10000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (currentSalonInfo.length > 0) {
+  //       dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"));
+  //       setLastRefreshTime(new Date().toLocaleTimeString());
+  //     }
+  //   }, 10000);
 
-    return () => clearInterval(interval); // Cleanup function to clear interval on unmount
-  }, [dispatch, currentSalonInfo]);
+  //   return () => clearInterval(interval); // Cleanup function to clear interval on unmount
+  // }, [dispatch, currentSalonInfo]);
 
   const refreshqlistPressed = () => {
     dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
     setLastRefreshTime(new Date().toLocaleTimeString());
   }
 
-  console.log("This salon QUEUE LIST ARE ", qlistdata)
+  // console.log("This salon QUEUE LIST ARE ", qlistdata)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -216,7 +216,7 @@ const QList = () => {
                     borderBottomColor: "rgba(0,0,0,0.2)",
                     borderBottomWidth: 1
                   }}>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.Position}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
                     <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.FirstLastName}</Text>
                     <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
                   </View>

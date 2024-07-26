@@ -84,7 +84,7 @@ const _layout = () => {
 
         <Stack.Screen name="joingroup"
           options={{
-            headerTitle: "Group Join"
+            headerShown: false
           }}
         />
 

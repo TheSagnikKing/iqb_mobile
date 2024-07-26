@@ -33,6 +33,7 @@ const ConnectSalon = () => {
 
     const connectPressed = async () => {
         if (salonInfodata) {
+            await AsyncStorage.removeItem('user-saloninfo');
             await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
             router.push("/signin")
         }
@@ -51,7 +52,7 @@ const ConnectSalon = () => {
         response
     } = getbarberbysalonid
 
-    console.log("SALON INFO ", salonInfodata)
+    // console.log("SALON INFO ", salonInfodata)
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
@@ -316,7 +317,7 @@ const ConnectSalon = () => {
             </ScrollView>
 
             {
-                salonInfodata && <Pressable
+                salonInfodata?.length > 0 && <Pressable
                     style={{
                         height: 50,
                         backgroundColor: Colors.PRIMARY,

@@ -11,6 +11,8 @@ const Activationcode = () => {
 
   const params = useLocalSearchParams();
 
+  console.log("Params from activation code ", params)
+
   const router = useRouter()
 
   console.log("Activation Page ", params)

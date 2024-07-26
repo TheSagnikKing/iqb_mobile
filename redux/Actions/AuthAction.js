@@ -97,7 +97,8 @@ export const activatedAccountAction = (params, endpoint, router) => async (dispa
             });
 
             console.log("Activaiton code success")
-            await AsyncStorage.setItem('user-logininfo', JSON.stringify(params));
+            await AsyncStorage.removeItem('user-logininfo');
+            await AsyncStorage.setItem('user-logininfo', JSON.stringify([params]));
             router.push("/home")
         }
 

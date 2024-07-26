@@ -86,14 +86,16 @@ const selectservices = () => {
     const joinqueuedata = {
       username: currentUserInfo?.[0]?.UserName,
       firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
-      barbername: params?.BarberName,
-      BarberId: params.BarberId,
+      barbername: selectedServices?.[0]?.BarberNName,
+      BarberId: selectedServices?.[0]?.BarberId,
       salonid: currentUserInfo?.[0]?.SalonId,
       timejoinedq,
       rdatejoinedq,
       ServiceId: selectedServices?.[0]?.serviceid,
       is_single_join: "yes",
     }
+
+    console.log("Single joinqueuedata ",joinqueuedata)
 
     Alert.alert('Join Queue', 'Are you sure ?', [
       {

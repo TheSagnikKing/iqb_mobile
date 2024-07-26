@@ -114,7 +114,7 @@ const Autojoin = () => {
     const joinqueuedata = {
       username: currentUserInfo?.[0]?.UserName,
       firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
-      barbername: selectedServices?.[0]?.BarberName,
+      barbername: selectedServices?.[0]?.BarberNName,
       BarberId: selectedServices?.[0]?.BarberId,
       salonid: currentUserInfo?.[0]?.SalonId,
       timejoinedq,
@@ -122,6 +122,8 @@ const Autojoin = () => {
       ServiceId: selectedServices?.[0]?.serviceid,
       is_single_join: "",
     }
+
+    console.log("Auto join join queue ",joinqueuedata)
 
     Alert.alert('Join Queue', 'Are you sure ?', [
       {
@@ -131,7 +133,6 @@ const Autojoin = () => {
       },
       { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
     ]);
-
   }
 
   return (

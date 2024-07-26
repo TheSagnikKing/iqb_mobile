@@ -156,6 +156,7 @@ const profile = () => {
           position: "relative",
           borderRadius: 50,
           marginTop: 10,
+          marginBottom: 20
         }}>
           {
             customerdetailsdata && <Image
@@ -185,7 +186,6 @@ const profile = () => {
             shadowOpacity: 0.4,
             shadowRadius: 12,
             elevation: 12,
-            marginBottom: 20
           }}
             onPress={() => uploadprofilepressed()}
           ><MaterialCommunityIcons name="camera-outline" size={22} color="#fff" /></Pressable>

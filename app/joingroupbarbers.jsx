@@ -51,15 +51,6 @@ const Joingroupbarbers = () => {
     })
 
     dispatch({
-      type: "BARBER_DETAILS",
-      payload: {
-        barbername: BarberName,
-        BarberId: BarberId,
-        salonid: currentSalonInfo?.[0]?.id
-      }
-    })
-
-    dispatch({
       type: "USERNAME_DETAIL",
       payload: {
         username: currentUserInfo?.[0]?.UserName

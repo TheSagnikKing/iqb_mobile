@@ -55,7 +55,15 @@ const Joingroupservices = () => {
             }
         })
 
-        
+        dispatch({
+            type: "BARBER_DETAILS",
+            payload: {
+              barbername: service.BarberNName,
+              BarberId: service.BarberId,
+              salonid: params.SalonId
+            }
+          })
+
         router.push("/joingroup")
     }
 

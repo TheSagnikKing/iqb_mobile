@@ -54,6 +54,8 @@ const Joingroupservices = () => {
                 rdatejoinedq
             }
         })
+
+        
         router.push("/joingroup")
     }
 

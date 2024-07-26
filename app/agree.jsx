@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, View, Alert, ActivityIndicator } from 'react-native'
-import React from 'react'
+import { Pressable, StyleSheet, Switch, Text, View, Alert, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from '../constants/Colors'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -17,6 +17,8 @@ const agree = () => {
   const dispatch = useDispatch()
 
   const signup = useSelector(state => state.signup)
+
+  const [agree, setAgree] = useState(false)
 
   const { loading } = signup
 
@@ -51,8 +53,8 @@ const agree = () => {
           </Text>
         </View>
 
-        <View style={{ flexDirection:"row", alignItems: "center", justifyContent:"flex-end", paddingHorizontal: 10}}>
-          <Pressable
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", paddingHorizontal: 10, gap: 15, paddingVertical: 20 }}>
+          {/* <Pressable
             onPress={agreePressed}
             style={{
               backgroundColor: Colors.PRIMARY,
@@ -70,15 +72,35 @@ const agree = () => {
               marginVertical: 20,
             }}
           >
-            {
-              loading ?
-                <ActivityIndicator size={20} color={"#fff"} /> :
-                <Text style={{ fontFamily: "montserrat-medium", fontSize: 15, color: Colors.PRIMARYTEXT }}>i agree</Text>
-            }
-          </Pressable>
+            <Text style={{ fontFamily: "montserrat-medium", fontSize: 15, color: Colors.PRIMARYTEXT }}>i agree</Text>
+          </Pressable> */}
+
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={agree ? '#f5dd4b' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => setAgree(prev => !prev)}
+            value={agree}
+          />
+
+          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 15, color: Colors.PRIMARY }}>i agree</Text>
         </View>
 
       </View>
+
+      {
+        agree && <Pressable
+          style={{
+            height: 50,
+            backgroundColor: Colors.PRIMARY,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={agreePressed}>
+          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Ok</Text>
+        </Pressable>
+      }
+
     </SafeAreaView>
   )
 }

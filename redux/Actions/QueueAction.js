@@ -150,19 +150,19 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch
             })
 
             // console.log("Finally iqueue insert joinq ", data);
-            // router.push("/home")
+            router.push("/home")
 
 
             // This is for group join data
-            // dispatch({
-            //     type: "RESET_SEND_GROUP"
-            // })
+            dispatch({
+                type: "RESET_SEND_GROUP"
+            })
 
-            // dispatch({
-            //     type: "RESET_CUSTOMER_GROUP",
-            // })
+            dispatch({
+                type: "RESET_CUSTOMER_GROUP",
+            })
 
-            console.log("DONE")
+            // console.log("DONE")
         }
 
     } catch (error) {
@@ -287,14 +287,20 @@ export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, en
                 await dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition.php", router));
             }
 
+            // router.push("/home")
         } else if (data.StatusCode == 200) {
 
             alert("User already in the queue")
+            // Toast.show({
+            //     type: 'error',
+            //     text1: "Already in the queue",
+            //     position: "bottom",
+            //     bottomOffset: 0,
+            // });
+            // console.warn("User already in the queue")
         }
 
     } catch (error) {
         console.error("API Request Error:", error);
     }
 };
-
-

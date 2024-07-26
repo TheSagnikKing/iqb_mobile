@@ -204,7 +204,7 @@ const Joingroup = () => {
             salonid: currentUserInfo?.[0]?.SalonId
         }
 
-        const updatedGroupJoinSend = groupjoinsend.map((s) => ({ ...s, qgcode: randomCode }));
+        const updatedGroupJoinSend = groupjoinsend.map((s,index) => ({ ...s, qgcode: randomCode, username: index == 0 ? `${s.username}` : `${s.username}-${index+1}`, firstlastname: `${s.firstlastname} *` }));
 
         console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
 

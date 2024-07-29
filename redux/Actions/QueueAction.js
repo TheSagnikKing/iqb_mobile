@@ -21,9 +21,15 @@ export const queueListAction = (queuelistdata, endpoint) => async (dispatch) => 
         });
 
         if (status == 200) {
+
+            const sorteddata = [...data].sort((a, b) => {
+                return a.QPosition - b.QPosition;
+            });
+
+
             dispatch({
                 type: IQUEUE_CHECKLIST_SUCCESS,
-                payload: data,
+                payload: sorteddata,
             });
         }
 

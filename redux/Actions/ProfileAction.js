@@ -31,9 +31,16 @@ export const getCustomerDetailsByCustomeridAction = (SalonId, CustomerId, endpoi
             });
 
         } else if (data.StatusCode == 200) {
+
+            const updatedcustomerprofile = {
+                ...data.Response, CustomerImage: data.Response.CustomerImage.replace('http://', 'https://')
+            }
+
+            // console.log("Update Customer Profile ", updatedcustomerprofile)
+
             dispatch({
                 type: GET_CUSTOMER_DETAILS_SUCCESS,
-                payload: data.Response,
+                payload: updatedcustomerprofile,
             });
         }
 

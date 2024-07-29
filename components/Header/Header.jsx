@@ -32,12 +32,6 @@ const Header = () => {
     }
   }, [dispatch, currentUserInfo])
 
-  // useEffect(() => {
-  //   if (currentUserInfo.length > 0) {
-  //     dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
-  //   }
-  // }, [dispatch])
-
   const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
 
   const {
@@ -45,20 +39,14 @@ const Header = () => {
     response: customerdetailsdata
   } = getCustomerDetailsByCustomerid
 
-  // console.log("sdvsvksdkbkds ", customerdetailsdata)
-
-  // useEffect(() => {
-  //   if (customerdetailsdata) {
-  //     setCustomerImage(customerdetailsdata?.CustomerImage)
-  //   }
-  // }, [customerdetailsdata])
-
   const router = useRouter()
 
   const logoutPressed = async () => {
     await AsyncStorage.removeItem('user-logininfo');
     router.push("/signin")
   }
+
+  console.log("The customerdetailsdata from header ",customerdetailsdata)
 
   return (
     <View style={styles.header_container}>
@@ -74,7 +62,7 @@ const Header = () => {
 
           {
             customerdetailsdata ? <Image
-              source={{ uri: customerdetailsdata?.CustomerImage }}
+              source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}`}}
               style={{
                 width: 35,
                 height: 35,

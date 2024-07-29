@@ -7,83 +7,7 @@ import { Colors } from "../../constants/Colors"
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { queueListAction } from '../../redux/Actions/QueueAction';
-
-const qlistdata = [
-  {
-    _id: 1,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 2,
-    qpos: 0,
-    name: "Sam",
-    barber: "Arg"
-  },
-  {
-    _id: 3,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 4,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 5,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 6,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 7,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-
-
-  {
-    _id: 8,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 9,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 10,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 11,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Arg"
-  },
-  {
-    _id: 12,
-    qpos: 0,
-    name: "John Doe",
-    barber: "Sagnik"
-  },
-]
+import { AntDesign } from '@expo/vector-icons';
 
 const QList = () => {
 
@@ -101,9 +25,11 @@ const QList = () => {
     getloginsalonuserdata()
   }, [])
 
+  const [pageno, setPageno] = useState(1)
+
   useEffect(() => {
     if (currentSalonInfo.length > 0) {
-      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
+      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: pageno }, "iqueuechecklist.php"))
       setLastRefreshTime(new Date().toLocaleTimeString());
     }
 
@@ -128,11 +54,27 @@ const QList = () => {
   // }, [dispatch, currentSalonInfo]);
 
   const refreshqlistPressed = () => {
-    dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: 1 }, "iqueuechecklist.php"))
+    dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: pageno }, "iqueuechecklist.php"))
     setLastRefreshTime(new Date().toLocaleTimeString());
   }
 
-  // console.log("This salon QUEUE LIST ARE ", qlistdata)
+  const nextqlist = () => {
+    const newPageno = pageno + 1;
+      setPageno(newPageno);
+      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: newPageno }, "iqueuechecklist.php"));
+      setLastRefreshTime(new Date().toLocaleTimeString());
+  }
+
+  const prevqlist = () => {
+    if (pageno > 1) {
+      const newPageno = pageno - 1;
+      setPageno(newPageno);
+      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: newPageno }, "iqueuechecklist.php"));
+      setLastRefreshTime(new Date().toLocaleTimeString());
+    }
+  }
+
+  console.log("This salon QUEUE LIST ARE ", qlistdata)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -204,6 +146,9 @@ const QList = () => {
                 flex: 1
               }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>No Queue List available</Text></View> :
               <FlatList
+                style={{
+                  maxHeight: 475
+                }}
                 data={qlistdata}
                 renderItem={({ item }) => (
                   <View style={{
@@ -222,9 +167,54 @@ const QList = () => {
                   </View>
                 )}
                 keyExtractor={item => item.id}
-                showsVerticalScrollIndicator={false}
               />
         }
+
+        {
+          loading == false &&
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center",
+            height: 45,
+            gap: 20
+          }}>
+            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16}}>Page No. <Text>{pageno}</Text></Text>
+
+            <Pressable style={{
+              marginLeft: "auto",
+              height: 35,
+              width: 35,
+              borderRadius: 50,
+              backgroundColor: Colors.PRIMARY,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.4,
+              shadowRadius: 12,
+              elevation: 12,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            onPress={prevqlist}
+            ><AntDesign name="caretleft" size={15} color={Colors.PRIMARYTEXT} /></Pressable>
+            <Pressable
+              style={{
+                height: 35,
+                width: 35,
+                borderRadius: 50,
+                backgroundColor: Colors.PRIMARY,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+                elevation: 12,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+              onPress={nextqlist}
+            ><AntDesign name="caretright" size={15} color={Colors.PRIMARYTEXT} /></Pressable>
+          </View>
+        }
+
 
       </View>
     </SafeAreaView>

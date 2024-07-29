@@ -54,6 +54,54 @@ const profile = () => {
 
   const router = useRouter()
 
+  // const uploadprofilepressed = async () => {
+  //   try {
+  //     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       Alert.alert('Permission required', 'Please enable camera roll permissions to upload an image.');
+  //       return;
+  //     }
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       quality: 1,
+  //     });
+  //     if (!result.canceled) {
+  //       // uploadImage(result, 34736); // Pass the result object directly to the upload function
+  //       console.log("Upload Profile RESULT ", result)
+  //       console.log("User Id ", currentUserInfo?.[0]?.UserId)
+  //       uploadImage(result, currentUserInfo?.[0]?.UserId);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error picking an image', error);
+  //   }
+  // }
+
+  // const uploadImage = async (result, userId) => {
+  //   try {
+
+  //     let formData = new FormData();
+
+  //     // Construct filename with UserId and original extension
+  //     const index = result.assets[0].fileName.lastIndexOf('.');
+  //     const ext = result.assets[0].fileName.substring(index + 1);
+  //     const fileName = `${userId}.${ext}`;
+
+  //     console.log("File name ", fileName)
+  //     console.log("File URI ", result.assets[0].uri)
+
+  //     formData.append('file', result, fileName);
+
+  //     const { data } = await api.post("/upload_profile_image.php", formData)
+
+  //     console.log("The success ", data)
+
+  //   } catch (error) {
+  //     console.error('Upload failed:', error);
+  //   }
+  // };
+
+
+
   const uploadprofilepressed = async () => {
     try {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -66,58 +114,55 @@ const profile = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        uploadImage(result, 34736); // Pass the result object directly to the upload function
-        // console.log("Upload Profile RESULT ", result)
+        // console.log("Upload Profile RESULT ", result);
+        // console.log("User Id ", currentUserInfo?.[0]?.UserId);
+        await uploadImage(result, currentUserInfo?.[0]?.UserId);
       }
     } catch (error) {
       console.error('Error picking an image', error);
     }
-  }
-
+  };
+  
   const uploadImage = async (result, userId) => {
     try {
-      let formData = new FormData();
-
-      const base64Response = await fetch("file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png");
-      const blob = await base64Response.blob();
-
-      const index = "1000023216.png".lastIndexOf('.');
-      const ext = "1000023216.png".substring(index + 1);
+      const asset = result.assets[0];
+      const response = await fetch(asset.uri);
+      const blob = await response.blob();
+  
+      const index = asset.fileName.lastIndexOf('.');
+      const ext = asset.fileName.substring(index + 1);
       const fileName = `${userId}.${ext}`;
 
-      console.log("the filename ", fileName)
+      console.log("The filename is ", fileName)
+       
+      let formData = new FormData();
+      formData.append('file', {
+        name: fileName,
+        type: blob.type,
+        uri: asset.uri,
+      });
+  
+      const { data } = await api.post("/upload_profile_image.php", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log("The success ", data);
 
-      formData.append('file', "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540sumeath%252Fiqb_mobile/ImagePicker/cd0f3d46-1e42-47fb-b96e-70ce7ebc4ef0.png", fileName);
+      if(data.StatusCode == 200){
+        router.push("/home")
+      }else if(data.StatusCode == 201){
+        alert(data.StatusMessage)
+      }
 
-      const { data } = await api.post("/upload_profile_image.php", formData)
-
-      console.log("The success ", data)
-
+      // router.push("/home")
     } catch (error) {
       console.error('Upload failed:', error);
     }
   };
 
-  // const uploadImage = async (result,userId) => {
-  //   try {
-
-  //     let formData = new FormData();
-
-  //     // Convert base64 string to blob
-  //     const base64Response = await fetch(result.uri);
-  //     const blob = await base64Response.blob();
-
-  //     // Construct filename with UserId and original extension
-  //     const index = result.fileName.lastIndexOf('.');
-  //     const ext = result.fileName.substring(index + 1);
-  //     const fileName = `${userId}.${ext}`;
-
-  //     console.log("File name ", fileName)
-  //   } catch (error) {
-  //     console.error('Upload failed:', error);
-  //   }
-  // };
-
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.profile_header_container}>
@@ -160,7 +205,7 @@ const profile = () => {
         }}>
           {
             customerdetailsdata && <Image
-              source={{ uri: customerdetailsdata?.CustomerImage }}
+              source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}` }}
               style={{
                 width: "100%",
                 height: "100%",

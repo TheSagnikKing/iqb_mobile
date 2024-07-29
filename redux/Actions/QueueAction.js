@@ -205,7 +205,7 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => 
                 payload: data.Response
             })
 
-            dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: data.Response }, "iqueueinsertinjoinq_v2.php", router))
+            dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router))
         }
 
     } catch (error) {
@@ -240,7 +240,7 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
                 payload: data.Response
             })
 
-            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router))
+            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition_v2.php", router))
         } else if (data.StatusCode == 200) {
             // Toast.show({
             //     type: 'error',
@@ -290,7 +290,7 @@ export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, en
             // )));
 
             for (const queue of joinqueuedata) {
-                await dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition.php", router));
+                await dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition_v2.php", router));
             }
 
             // router.push("/home")

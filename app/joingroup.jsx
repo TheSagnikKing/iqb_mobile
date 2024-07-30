@@ -8,6 +8,7 @@ import { groupiqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import api from '../redux/Api/Api';
 
 const Joingroup = () => {
 
@@ -186,6 +187,109 @@ const Joingroup = () => {
 
     // console.log("Customerselected", customerSelectedGroupJoin)
 
+    // const groupjoinpressed = async () => {
+    //     const generateRandomCode = () => {
+    //         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //         let code = '';
+    //         for (let i = 0; i < 6; i++) {
+    //             const randomIndex = Math.floor(Math.random() * characters.length);
+    //             code += characters[randomIndex];
+    //         }
+    //         return code;
+    //     };
+
+    //     const randomCode = generateRandomCode();
+
+    //     const iqueuecheckdata = {
+    //         checkUsername: currentUserInfo?.[0]?.UserName,
+    //         salonid: currentUserInfo?.[0]?.SalonId
+    //     }
+
+    //     const updatedGroupJoinSend = groupjoinsend.map((s,index) => ({ ...s, qgcode: randomCode, username: index == 0 ? `${s.username}` : `${s.username}-${index+1}`, firstlastname: `${s.firstlastname} *` }));
+
+    //     console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
+
+    //     Alert.alert('Join Queue', 'Are you sure ?', [
+    //         {
+    //             text: 'Cancel',
+    //             onPress: () => console.log('Cancel Pressed'),
+    //             style: 'cancel',
+    //         },
+    //         { text: 'OK', onPress: () => dispatch(groupiqueuejoinedSelectAction(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", router)) },
+    //     ]);
+
+    // };
+
+    const insertjoinq = async (joinqdata, endpoint) => {
+        try {
+            const url = `/${endpoint}`;
+
+            const headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            };
+
+            const { data, status } = await api.post(url, joinqdata, { headers });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const checkpostion = async (salonid, joinqueuedata, endpoint) => {
+        try {
+            const body = {
+                salonid
+            };
+
+            const url = `/${endpoint}`;
+
+            const { data, status } = await api.post(url, body, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            if (data.StatusCode == 200) {
+                await insertjoinq({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const groupjoinselect = async (iqueuecheckdata, updatedGroupJoinSend, endpoint) => {
+        try {
+            const body = iqueuecheckdata;
+
+            const url = `/${endpoint}`;
+
+            const { data, status } = await api.post(url, body, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            if (data.StatusCode == 201) {
+                for (const queue of updatedGroupJoinSend) {
+                    await checkpostion(iqueuecheckdata.salonid, queue, "iqueuecheckposition_v2.php")
+                }
+
+                router.push("/home")
+
+                dispatch({
+                    type: "RESET_SEND_GROUP"
+                })
+
+                dispatch({
+                    type: "RESET_CUSTOMER_GROUP",
+                })
+            } else if (data.StatusCode == 200) {
+                alert("User already in the queue")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const groupjoinpressed = async () => {
         const generateRandomCode = () => {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -204,7 +308,7 @@ const Joingroup = () => {
             salonid: currentUserInfo?.[0]?.SalonId
         }
 
-        const updatedGroupJoinSend = groupjoinsend.map((s,index) => ({ ...s, qgcode: randomCode, username: index == 0 ? `${s.username}` : `${s.username}-${index+1}`, firstlastname: `${s.firstlastname} *` }));
+        const updatedGroupJoinSend = groupjoinsend.map((s, index) => ({ ...s, qgcode: randomCode, username: index == 0 ? `${s.username}` : `${s.username}-${index + 1}`, firstlastname: `${s.firstlastname} *` }));
 
         console.log("The FINAL SEND JOIN DATA ", updatedGroupJoinSend)
 
@@ -214,10 +318,11 @@ const Joingroup = () => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
-            { text: 'OK', onPress: () => dispatch(groupiqueuejoinedSelectAction(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", router)) },
+            { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php") },
         ]);
 
     };
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

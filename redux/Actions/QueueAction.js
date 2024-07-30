@@ -150,23 +150,23 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch
             });
 
         } else if (data.StatusCode == 200) {
-            dispatch({
-                type: IQUEUE_INSERTJOINQ_SUCCESS,
-                payload: data.Response
-            })
+            // dispatch({
+            //     type: IQUEUE_INSERTJOINQ_SUCCESS,
+            //     payload: data.Response
+            // })
 
             // console.log("Finally iqueue insert joinq ", data);
-            router.push("/home")
+            // router.push("/home")
 
 
             // This is for group join data
-            dispatch({
-                type: "RESET_SEND_GROUP"
-            })
+            // dispatch({
+            //     type: "RESET_SEND_GROUP"
+            // })
 
-            dispatch({
-                type: "RESET_CUSTOMER_GROUP",
-            })
+            // dispatch({
+            //     type: "RESET_CUSTOMER_GROUP",
+            // })
 
             // console.log("DONE")
         }
@@ -200,10 +200,10 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => 
                 payload: data.Response
             })
         } else if (data.StatusCode == 200) {
-            dispatch({
-                type: IQUEUE_CHECK_POSITON_SUCCESS,
-                payload: data.Response
-            })
+            // dispatch({
+            //     type: IQUEUE_CHECK_POSITON_SUCCESS,
+            //     payload: data.Response
+            // })
 
             dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router))
         }
@@ -280,10 +280,10 @@ export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, en
         });
 
         if (data.StatusCode == 201) {
-            dispatch({
-                type: GROUP_IQUEUE_JOINED_SELECT_SUCCESS,
-                payload: data.Response
-            })
+            // dispatch({
+            //     type: GROUP_IQUEUE_JOINED_SELECT_SUCCESS,
+            //     payload: data.Response
+            // })
 
             // await Promise.all(joinqueuedata.map((queue) => (
             //     dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition.php", router))

@@ -150,13 +150,13 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch
             });
 
         } else if (data.StatusCode == 200) {
-            // dispatch({
-            //     type: IQUEUE_INSERTJOINQ_SUCCESS,
-            //     payload: data.Response
-            // })
+            dispatch({
+                type: IQUEUE_INSERTJOINQ_SUCCESS,
+                payload: data.Response
+            })
 
             // console.log("Finally iqueue insert joinq ", data);
-            // router.push("/home")
+            router.push("/home")
 
 
             // This is for group join data
@@ -200,10 +200,10 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => 
                 payload: data.Response
             })
         } else if (data.StatusCode == 200) {
-            // dispatch({
-            //     type: IQUEUE_CHECK_POSITON_SUCCESS,
-            //     payload: data.Response
-            // })
+            dispatch({
+                type: IQUEUE_CHECK_POSITON_SUCCESS,
+                payload: data.Response
+            })
 
             dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router))
         }
@@ -258,55 +258,55 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
 
 // FOR GROUP JOIN 
 
-export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router) => async (dispatch) => {
-    try {
-        dispatch({
-            type: GROUP_IQUEUE_JOINED_SELECT_REQ
-        });
+// export const groupiqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router) => async (dispatch) => {
+//     try {
+//         dispatch({
+//             type: GROUP_IQUEUE_JOINED_SELECT_REQ
+//         });
 
-        const { checkUsername, salonid } = iqueuecheckdata;
+//         const { checkUsername, salonid } = iqueuecheckdata;
 
-        const body = {
-            checkUsername,
-            salonid
-        };
+//         const body = {
+//             checkUsername,
+//             salonid
+//         };
 
-        const url = `/${endpoint}`;
+//         const url = `/${endpoint}`;
 
-        const { data, status } = await api.post(url, body, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+//         const { data, status } = await api.post(url, body, {
+//             headers: {
+//                 'Content-Type': 'application/x-www-form-urlencoded'
+//             }
+//         });
 
-        if (data.StatusCode == 201) {
-            // dispatch({
-            //     type: GROUP_IQUEUE_JOINED_SELECT_SUCCESS,
-            //     payload: data.Response
-            // })
+//         if (data.StatusCode == 201) {
+//             // dispatch({
+//             //     type: GROUP_IQUEUE_JOINED_SELECT_SUCCESS,
+//             //     payload: data.Response
+//             // })
 
-            // await Promise.all(joinqueuedata.map((queue) => (
-            //     dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition.php", router))
-            // )));
+//             // await Promise.all(joinqueuedata.map((queue) => (
+//             //     dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition.php", router))
+//             // )));
 
-            for (const queue of joinqueuedata) {
-                await dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition_v2.php", router));
-            }
+//             for (const queue of joinqueuedata) {
+//                 await dispatch(iqueuecheckpositionAction(salonid, queue, "iqueuecheckposition_v2.php", router));
+//             }
 
-            // router.push("/home")
-        } else if (data.StatusCode == 200) {
+//             // router.push("/home")
+//         } else if (data.StatusCode == 200) {
 
-            alert("User already in the queue")
-            // Toast.show({
-            //     type: 'error',
-            //     text1: "Already in the queue",
-            //     position: "bottom",
-            //     bottomOffset: 0,
-            // });
-            // console.warn("User already in the queue")
-        }
+//             alert("User already in the queue")
+//             // Toast.show({
+//             //     type: 'error',
+//             //     text1: "Already in the queue",
+//             //     position: "bottom",
+//             //     bottomOffset: 0,
+//             // });
+//             // console.warn("User already in the queue")
+//         }
 
-    } catch (error) {
-        console.error("API Request Error:", error);
-    }
-};
+//     } catch (error) {
+//         console.error("API Request Error:", error);
+//     }
+// };

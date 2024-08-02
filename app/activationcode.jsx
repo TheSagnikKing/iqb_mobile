@@ -80,6 +80,7 @@ const Activationcode = () => {
           style={styles.input}
           onChangeText={text => setActivationCode(text)}
           value={activationcode}
+          maxLength={6}
         />
         <Pressable
           style={{

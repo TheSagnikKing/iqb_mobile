@@ -28,6 +28,7 @@ const ChangeLocation = () => {
     const placesApi = useSelector(state => state.placesApi)
 
     const {
+        error,
         loading,
         response: locationsdata
     } = placesApi
@@ -43,6 +44,8 @@ const ChangeLocation = () => {
             router.push({ pathname: "/locationsalonlist", params: { city: search } })
         }  
     }
+
+    console.log("Error ", error)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -111,8 +114,9 @@ const ChangeLocation = () => {
                     {
                         loading ?
                             <View style={{ paddingTop: 20}}><ActivityIndicator size={24} color={"#000"}/></View> :
+                            error ? <View style={{ paddingTop: 20}}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center"}}>Oops no location found !</Text></View> :
                             locationsdata.length == 0 ?
-                                <View style={{ paddingTop: 20}}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center"}}>Oops no location found !</Text></View> :
+                                <View style={{ paddingTop: 20}}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center"}}>Please search by location !</Text></View> :
                                 <FlatList
                                     data={locationsdata}
                                     renderItem={({ item }) => <Pressable style={{

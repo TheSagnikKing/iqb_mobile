@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
 import { AntDesign, FontAwesome, FontAwesome6 } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { iqbSalonsAction } from '../redux/Actions/LocationAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getbarberbysalonidAction } from '../redux/Actions/SalonAction';
+import StarRating from 'react-native-star-rating-widget';
 
 const ConnectSalon = () => {
 
@@ -53,6 +54,7 @@ const ConnectSalon = () => {
     } = getbarberbysalonid
 
     // console.log("SALON INFO ", salonInfodata)
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
@@ -77,7 +79,7 @@ const ConnectSalon = () => {
                     </Pressable>
 
                 </View>
-                <View style={{ height: 330 }}>
+                <View style={{ height: "auto" }}>
                     <View
                         style={{
                             backgroundColor: Colors.PRIMARY,
@@ -113,57 +115,6 @@ const ConnectSalon = () => {
                             marginVertical: 20
                         }}
                     >{salonInfodata?.[0]?.SalonName}</Text>
-
-                    <View style={{
-                        borderColor: "rgba(0,0,0,0.4)",
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        backgroundColor: "#efefef",
-                        marginTop: 20
-                    }}>
-                        <View
-                            style={{
-                                width: "60%",
-                                borderColor: "rgba(0,0,0,0.4)",
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                backgroundColor: "#efefef",
-                                marginHorizontal: "auto",
-                                marginTop: -25,
-                                height: 50,
-                                justifyContent: "center",
-                                alignItems: "center"
-                            }}
-                        ><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Please Rate Us</Text></View>
-                        <View style={{ height: 60, flexDirection: "row", marginHorizontal: "auto", alignItems: "center", gap: 10 }}>
-                            <FontAwesome name="star" size={24} color="orangered" />
-                            <FontAwesome name="star" size={24} color="orangered" />
-                            <FontAwesome name="star" size={24} color="orangered" />
-                            <FontAwesome name="star" size={24} color="orangered" />
-                            <FontAwesome name="star" size={24} color="orangered" />
-                        </View>
-
-                        <Pressable
-                            style={{
-                                width: "30%",
-                                borderRadius: 5,
-                                backgroundColor: Colors.PRIMARY,
-                                marginHorizontal: "auto",
-                                marginBottom: -20,
-                                height: 40,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                zIndex: 2, shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 6 },
-                                shadowOpacity: 0.4,
-                                shadowRadius: 12, boxShadow: '0px 6px 12px rgba(0,0,0,0.4)'
-                            }}
-                            onPress={() => alert("Are you sure ?")}
-                        ><Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
-                        </Pressable>
-                    </View>
-
-
                 </View>
 
                 <View style={{ marginTop: 45 }}>

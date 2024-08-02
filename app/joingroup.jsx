@@ -50,33 +50,7 @@ const Joingroup = () => {
 
     const router = useRouter()
 
-    // const [randomCode, setRandomCode] = useState('');
-
-    // useEffect(() => {
-    // const generateRandomCode = () => {
-    //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     let code = '';
-    //     for (let i = 0; i < 6; i++) {
-    //         const randomIndex = Math.floor(Math.random() * characters.length);
-    //         code += characters[randomIndex];
-    //     }
-
-    //     dispatch({
-    //         type: "QGCODE_DETAIL",
-    //         payload: {
-    //             qgcode: code
-    //         }
-    //     })
-
-    //     return code;
-    // };
-
-    //     setRandomCode(generateRandomCode());
-    // }, []);
-
     const groupjoinqueue = useSelector(state => state.groupjoinqueue)
-
-    // console.log("THE JOIN GROUP QUEUE DATA FROM JOINGROUP>JSX", groupjoinqueue)
 
     const [joinqueuearray, setJoinquearray] = useState([])
 

@@ -46,7 +46,7 @@ const Header = () => {
     router.push("/signin")
   }
 
-  console.log("The customerdetailsdata from header ",customerdetailsdata)
+  console.log("The customerdetailsdata from header ssss",customerdetailsdata)
 
   return (
     <View style={styles.header_container}>

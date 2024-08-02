@@ -9,17 +9,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getsalonsdetailsbyIdAction } from '../redux/Actions/HomeAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import { getbarberbysalonidAction } from '../redux/Actions/SalonAction';
+import { getbarberbysalonidAction, iqbuserrateAction } from '../redux/Actions/SalonAction';
+import StarRating from 'react-native-star-rating-widget';
 
 const SalonInfo = () => {
   const router = useRouter()
 
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
 
   useEffect(() => {
     const getloginsalonuserdata = async () => {
       const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
       setCurrentSalonInfo(JSON.parse(saloninfodata))
+      setCurrentUserInfo(JSON.parse(userinfodata))
     }
 
     getloginsalonuserdata()
@@ -38,7 +42,8 @@ const SalonInfo = () => {
     response: saloninforesponse
   } = useSelector(state => state.getsalonsdetailsbyId);
 
-  console.log("Response Salon Info ", saloninforesponse?.Response)
+  // console.log("Response Salon Info ", saloninforesponse?.Response)
+  // console.log("Response User Info ", currentUserInfo)
 
   // console.log("The currentsalon info ", currentSalonInfo?.[0]?.id)
 
@@ -57,6 +62,39 @@ const SalonInfo = () => {
   } = getbarberbysalonid
 
   // console.log("Salon Info barbers are ", response)
+
+  const [rating, setRating] = useState(0);
+
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+  const date = new Date();
+  const formattedDate = formatDate(date);
+
+  const userRatePressed = () => {
+    const ratedata = {
+      salonid: saloninforesponse?.Response?.id,
+      username: currentUserInfo?.[0]?.UserName,
+      ratesystem: "true",
+      ratingscore: rating,
+      daterated: formattedDate
+    }
+
+    iqbuserrateAction(ratedata, dispatch, "iqbuserrate.php")
+  }
+
+  const iqbuserrate = useSelector(state => state.iqbuserrate)
+
+  const {
+    response:iqbuserrateResponse
+  } = iqbuserrate
+
+  console.log("Iqb user rate response ", iqbuserrate)
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -139,11 +177,12 @@ const SalonInfo = () => {
               }}
             ><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Please Rate Us</Text></View>
             <View style={{ height: 60, flexDirection: "row", marginHorizontal: "auto", alignItems: "center", gap: 10 }}>
-              <FontAwesome name="star" size={24} color="orangered" />
-              <FontAwesome name="star" size={24} color="orangered" />
-              <FontAwesome name="star" size={24} color="orangered" />
-              <FontAwesome name="star" size={24} color="orangered" />
-              <FontAwesome name="star" size={24} color="orangered" />
+              <StarRating
+                rating={rating}
+                onChange={setRating}
+                enableHalfStar={false}
+                color={"orangered"}
+              />
             </View>
 
             <Pressable
@@ -161,7 +200,7 @@ const SalonInfo = () => {
                 shadowOpacity: 0.4,
                 shadowRadius: 12, boxShadow: '0px 6px 12px rgba(0,0,0,0.4)'
               }}
-              onPress={() => alert("Are you sure ?")}
+              onPress={userRatePressed}
             ><Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
             </Pressable>
           </View>

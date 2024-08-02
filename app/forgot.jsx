@@ -57,7 +57,7 @@ const Forgot = () => {
                 vSalonWeb: currentSalonInfo?.[0]?.SalonWebsite
             }
 
-            dispatch(forgotcheckemailAction(email, currentSalonInfo?.[0]?.id, "iqueuecheckemail.php", sendpassworddata))
+            dispatch(forgotcheckemailAction(email, currentSalonInfo?.[0]?.id, "iqueuecheckemail.php", sendpassworddata, router))
         }
     }
 

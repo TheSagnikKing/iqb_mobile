@@ -2,6 +2,7 @@ import Toast from "react-native-toast-message";
 import { FORGOT_CHECK_EMAIL_FAIL, FORGOT_CHECK_EMAIL_REQ, FORGOT_CHECK_EMAIL_SUCCESS, FORGOT_SEND_PASSWORD_FAIL, FORGOT_SEND_PASSWORD_REQ, FORGOT_SEND_PASSWORD_SUCCESS, GET_CUSTOMER_DETAILS_FAIL, GET_CUSTOMER_DETAILS_REQ, GET_CUSTOMER_DETAILS_SUCCESS, IQUEUE_UPDATE_CUSTOMER_DETAILS_FAIL, IQUEUE_UPDATE_CUSTOMER_DETAILS_REQ, IQUEUE_UPDATE_CUSTOMER_DETAILS_SUCCESS } from "../Constants/ProfileConstant";
 import api from "../Api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 export const getCustomerDetailsByCustomeridAction = (SalonId, CustomerId, endpoint) => async (dispatch) => {
     try {
@@ -114,7 +115,7 @@ export const iqueueupdatecustomerdetailsAction = (iqueuedata, endpoint, router, 
 
 
 
-export const forgotcheckemailAction = (email, salonid, endpoint, sendpassworddata) => async (dispatch) => {
+export const forgotcheckemailAction = (email, salonid, endpoint, sendpassworddata, router) => async (dispatch) => {
     try {
         dispatch({
             type: FORGOT_CHECK_EMAIL_REQ
@@ -152,7 +153,7 @@ export const forgotcheckemailAction = (email, salonid, endpoint, sendpassworddat
             }
 
             console.log("Check Email data ", senddata)
-            dispatch(forgotSendPasswordAction(senddata, "iqueuesendpassword.php"))
+            dispatch(forgotSendPasswordAction(senddata, "iqueuesendpassword.php", router))
         }
 
     } catch (error) {
@@ -161,7 +162,7 @@ export const forgotcheckemailAction = (email, salonid, endpoint, sendpassworddat
 };
 
 
-const forgotSendPasswordAction = (senddata, endpoint) => async (dispatch) => {
+const forgotSendPasswordAction = (senddata, endpoint, router) => async (dispatch) => {
     try {
         dispatch({
             type: FORGOT_SEND_PASSWORD_REQ
@@ -181,7 +182,23 @@ const forgotSendPasswordAction = (senddata, endpoint) => async (dispatch) => {
                 payload: "An Email has been sent. Please check your inbox and allow upto 10mins",
             });
 
-            alert("An Email has been sent. Please check your inbox and allow upto 10mins")
+            Alert.alert(
+                "Email Sent",
+                "An Email has been sent. Please check your inbox and allow up to 10 minutes.",
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'OK',
+                        onPress: async () => {
+                            await router.push("/signin");
+                        }
+                    },
+                ]
+            );
         }
 
     } catch (error) {

@@ -5,7 +5,7 @@ import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./
 import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
 import { getservicesbybarberIdsalonIdReducer, groupiqueuejoinedSelectReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
 import { forgotcheckemailReducer, forgotSendPasswordReducer, getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
-import { getbarberbysalonidReducer, getsalonimagelistReducer, getservicesbybarberidsalonidReducer } from "./Reducers/SalonReducer";
+import { getbarberbysalonidReducer, getsalonimagelistReducer, getservicesbybarberidsalonidReducer, iqbuserrateReducer } from "./Reducers/SalonReducer";
 
 const rootReducer = combineReducers({
     groupjoin: groupjoinReducer,
@@ -45,6 +45,7 @@ const rootReducer = combineReducers({
     getbarberbysalonid: getbarberbysalonidReducer,
     getservicesbybarberidsalonid: getservicesbybarberidsalonidReducer,
     getsalonimagelist: getsalonimagelistReducer,
+    iqbuserrate: iqbuserrateReducer,
 })
 
 const initialState = {};

@@ -12,11 +12,23 @@ export const placesApiAction = (search) => async (dispatch) => {
 
         const { data, status } = await axios.post(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${search}&types&key=AIzaSyCc0rrgXw7WkdvKOqS5YeD6IWHKvl1OJa0`);
         
-        dispatch({
-            type: PLACES_API_SUCCESS,
-            payload: data.predictions,
-        });
+        if(data.status == "ZERO_RESULTS"){
+            dispatch({
+                type: PLACES_API_FAIL,
+                payload: true
+            })
+        }else{
+            dispatch({
+                type: PLACES_API_SUCCESS,
+                payload: data.predictions,
+            });
 
+            dispatch({
+                type: PLACES_API_FAIL,
+                payload: false
+            })
+        }
+        
     } catch (error) {
         dispatch({
             type: PLACES_API_FAIL,

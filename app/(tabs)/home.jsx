@@ -31,10 +31,10 @@ const Home = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if(currentUserInfo.length > 0){
-      dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType}, "adminMergedRet2.php"))
+    if (currentUserInfo.length > 0) {
+      dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType }, "adminMergedRet2.php"))
     }
-  },[dispatch,currentUserInfo])
+  }, [dispatch, currentUserInfo])
 
   const admiMergeRet2 = useSelector(state => state.adminRet2)
 
@@ -190,11 +190,22 @@ const Home = () => {
         {
           join && <View
             style={{
-              height: 140,
-              width: 185,
+              height: "auto",
+              width: 210,
               position: "absolute",
-              top: -140,
+              top: -170,
               right: 3,
+              backgroundColor: "#fff",
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.4,
+              shadowRadius: 12,
+              elevation: 12,
+              borderRadius: 10,
+              padding: 10,
+              flexDirection: "column",
+              // marginBottom: 10
+
             }}
           >
 
@@ -206,7 +217,7 @@ const Home = () => {
                 alignItems: "center",
                 justifyContent: "flex-end",
                 gap: 10,
-                marginBottom: 6,
+                marginBottom: 5,
                 animationdelay: 300
               }}>
                 <Text style={{

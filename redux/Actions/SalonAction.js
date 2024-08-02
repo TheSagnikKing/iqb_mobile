@@ -1,5 +1,5 @@
 import Toast from "react-native-toast-message";
-import { GET_BARBER_BY_SALONID_FAIL, GET_BARBER_BY_SALONID_REQ, GET_BARBER_BY_SALONID_SUCCESS, GET_SALON_IMAGE_LIST_FAIL, GET_SALON_IMAGE_LIST_REQ, GET_SALON_IMAGE_LIST_SUCCESS, GET_SERVICES_BY_BARBERID_SALONID_FAIL, GET_SERVICES_BY_BARBERID_SALONID_REQ, GET_SERVICES_BY_BARBERID_SALONID_SUCCESS } from "../Constants/SalonConstant";
+import { GET_BARBER_BY_SALONID_FAIL, GET_BARBER_BY_SALONID_REQ, GET_BARBER_BY_SALONID_SUCCESS, GET_SALON_IMAGE_LIST_FAIL, GET_SALON_IMAGE_LIST_REQ, GET_SALON_IMAGE_LIST_SUCCESS, GET_SERVICES_BY_BARBERID_SALONID_FAIL, GET_SERVICES_BY_BARBERID_SALONID_REQ, GET_SERVICES_BY_BARBERID_SALONID_SUCCESS, IQBUSER_RATE_REQ, IQBUSER_RATE_SUCCESS } from "../Constants/SalonConstant";
 import api from "../Api/Api";
 
 export const getbarberbysalonidAction = (SalonId, endpoint) => async (dispatch) => {
@@ -111,3 +111,22 @@ export const getsalonimagelistAction = (SalonId, endpoint) => async (dispatch) =
         console.log(error)
     }
 };
+
+export const iqbuserrateAction = async (ratedata, dispatch, endpoint) => {
+    try {
+        dispatch({
+            type: IQBUSER_RATE_REQ
+        });
+
+        const { data } = await api.post(`/${endpoint}`, ratedata);
+
+        if(data.StatusCode == 200){
+            dispatch({
+                type: IQBUSER_RATE_SUCCESS,
+                payload: data
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}

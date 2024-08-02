@@ -44,63 +44,7 @@ const profile = () => {
     response: customerdetailsdata
   } = getCustomerDetailsByCustomerid
 
-  // console.log("sdvsvksdkbkds ", customerdetailsdata)
-
-  // useEffect(() => {
-  //   if (customerdetailsdata) {
-  //     setCustomerImage(customerdetailsdata?.CustomerImage)
-  //   }
-  // }, [customerdetailsdata])
-
   const router = useRouter()
-
-  // const uploadprofilepressed = async () => {
-  //   try {
-  //     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       Alert.alert('Permission required', 'Please enable camera roll permissions to upload an image.');
-  //       return;
-  //     }
-  //     const result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       quality: 1,
-  //     });
-  //     if (!result.canceled) {
-  //       // uploadImage(result, 34736); // Pass the result object directly to the upload function
-  //       console.log("Upload Profile RESULT ", result)
-  //       console.log("User Id ", currentUserInfo?.[0]?.UserId)
-  //       uploadImage(result, currentUserInfo?.[0]?.UserId);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error picking an image', error);
-  //   }
-  // }
-
-  // const uploadImage = async (result, userId) => {
-  //   try {
-
-  //     let formData = new FormData();
-
-  //     // Construct filename with UserId and original extension
-  //     const index = result.assets[0].fileName.lastIndexOf('.');
-  //     const ext = result.assets[0].fileName.substring(index + 1);
-  //     const fileName = `${userId}.${ext}`;
-
-  //     console.log("File name ", fileName)
-  //     console.log("File URI ", result.assets[0].uri)
-
-  //     formData.append('file', result, fileName);
-
-  //     const { data } = await api.post("/upload_profile_image.php", formData)
-
-  //     console.log("The success ", data)
-
-  //   } catch (error) {
-  //     console.error('Upload failed:', error);
-  //   }
-  // };
-
-
 
   const uploadprofilepressed = async () => {
     try {

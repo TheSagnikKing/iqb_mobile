@@ -112,19 +112,38 @@ export const getsalonimagelistAction = (SalonId, endpoint) => async (dispatch) =
     }
 };
 
-export const iqbuserrateAction = async (ratedata, dispatch, endpoint) => {
+export const iqbuserrateAction = async (ratedata, dispatch, endpoint, daterated, personname, endpoint2) => {
     try {
         dispatch({
             type: IQBUSER_RATE_REQ
         });
 
-        const { data } = await api.post(`/${endpoint}`, ratedata);
+        const { data } = await api.post(`/${endpoint}`, ratedata, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
 
-        if(data.StatusCode == 200){
+        if (data.StatusCode == 200) {
             dispatch({
                 type: IQBUSER_RATE_SUCCESS,
                 payload: data
             })
+
+            const newrate = {
+                salonid: ratedata.salonid,
+                personname,
+                rate: ratedata.ratingscore,
+                daterated
+            }
+
+            await api.post(`/${endpoint2}`, newrate, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            alert("Thank you for your feedback!")
         }
     } catch (error) {
         console.log(error)

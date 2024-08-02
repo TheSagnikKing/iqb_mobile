@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -43,7 +43,7 @@ const SalonInfo = () => {
   } = useSelector(state => state.getsalonsdetailsbyId);
 
   // console.log("Response Salon Info ", saloninforesponse?.Response)
-  // console.log("Response User Info ", currentUserInfo)
+  console.log("Response User Info ", currentUserInfo)
 
   // console.log("The currentsalon info ", currentSalonInfo?.[0]?.id)
 
@@ -63,6 +63,12 @@ const SalonInfo = () => {
 
   // console.log("Salon Info barbers are ", response)
 
+  useEffect(() => {
+    if(currentUserInfo.length > 0){
+      setRating(currentUserInfo?.[0]?.RatingScore)
+    }
+  },[currentUserInfo])
+
   const [rating, setRating] = useState(0);
 
   function formatDate(date) {
@@ -80,24 +86,21 @@ const SalonInfo = () => {
     const ratedata = {
       salonid: saloninforesponse?.Response?.id,
       username: currentUserInfo?.[0]?.UserName,
-      ratesystem: "true",
+      ratesystem: "Y",
       ratingscore: rating,
-      daterated: formattedDate
     }
 
-    iqbuserrateAction(ratedata, dispatch, "iqbuserrate.php")
+    iqbuserrateAction(ratedata, dispatch, "iqueueuserrate.php", formattedDate, `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`, "iqbuserrate.php")
   }
 
   const iqbuserrate = useSelector(state => state.iqbuserrate)
 
   const {
-    response:iqbuserrateResponse
+    loading: ratingLoader
   } = iqbuserrate
 
-  console.log("Iqb user rate response ", iqbuserrate)
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView style={{
         backgroundColor: "#fff",
         paddingHorizontal: 15
@@ -201,7 +204,12 @@ const SalonInfo = () => {
                 shadowRadius: 12, boxShadow: '0px 6px 12px rgba(0,0,0,0.4)'
               }}
               onPress={userRatePressed}
-            ><Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
+            >
+              {
+                ratingLoader ?
+                  <ActivityIndicator size={20} color={"#fff"} /> :
+                  <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
+              }
             </Pressable>
           </View>
 

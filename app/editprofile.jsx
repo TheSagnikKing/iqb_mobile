@@ -1,4 +1,4 @@
-import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
@@ -9,9 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomerDetailsByCustomeridAction, iqueueupdatecustomerdetailsAction } from '../redux/Actions/ProfileAction';
 import Toast from 'react-native-toast-message';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 const editprofile = () => {
-    
+
     const [currentUserInfo, setCurrentUserInfo] = useState([])
 
     useEffect(() => {
@@ -36,28 +37,28 @@ const editprofile = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(currentUserInfo.length > 0){
+        if (currentUserInfo.length > 0) {
             dispatch(getCustomerDetailsByCustomeridAction(currentUserInfo?.[0]?.SalonId, currentUserInfo?.[0]?.UserName, "GetCustomerDetailsByCustomerId.php"))
             setPassword(currentUserInfo?.[0]?.Password)
             setMarketingemails(currentUserInfo?.[0]?.MaketingEmails == 1 ? true : false)
         }
-    },[dispatch,currentUserInfo])
+    }, [dispatch, currentUserInfo])
 
     const getCustomerDetailsByCustomerid = useSelector(state => state.getCustomerDetailsByCustomerid)
 
     const {
         loading,
-        response:customerdetailsdata
+        response: customerdetailsdata
     } = getCustomerDetailsByCustomerid
 
     useEffect(() => {
-        if(customerdetailsdata){
+        if (customerdetailsdata) {
             setFullName(`${customerdetailsdata?.CustomerFName} ${customerdetailsdata?.CustomerLName}`)
             setEmail(customerdetailsdata?.CustomerEmail)
             setPhoneNumber(customerdetailsdata?.CustomerPhone)
             setDateofbirth(customerdetailsdata?.CustomerDOB)
         }
-    },[customerdetailsdata])
+    }, [customerdetailsdata])
 
 
     // console.log("Get Customer details ", customerdetailsdata)
@@ -68,7 +69,7 @@ const editprofile = () => {
             firstname: fullName.split(" ")[0],
             lastname: fullName.split(" ")[1],
             email,
-            dob:dateofbirth,
+            dob: dateofbirth,
             password,
             mobile: phoneNumber,
             maketingemails: maketingemails ? 1 : 0,
@@ -79,17 +80,24 @@ const editprofile = () => {
 
         Alert.alert('Update Profile', 'Are you sure ?', [
             {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
             },
-            {text: 'OK', onPress: () =>  dispatch(iqueueupdatecustomerdetailsAction(editprofiledata, "iqueueupdatecustomerdetails.php", router, currentUserInfo))},
+            { text: 'OK', onPress: () => dispatch(iqueueupdatecustomerdetailsAction(editprofiledata, "iqueueupdatecustomerdetails.php", router, currentUserInfo)) },
         ]);
     }
 
+
+    const [showModal, setShowModal] = useState(false)
+
+    // const [selected, setSelected] = useState('');
+
+    console.log("Selected Date of birth ", dateofbirth)
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <Toast/>
+            <Toast />
             <ScrollView style={{ flex: 1 }}>
                 <View style={styles.editprofile_header_container}>
                     <View style={{
@@ -122,14 +130,84 @@ const editprofile = () => {
 
                     <View>
                         <Text style={{ textAlign: "left", fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Date of Birth</Text>
-                        <TextInput
+                        {/* <TextInput
                             editable
                             placeholder='DD-MM-YYYY'
                             style={styles.input}
                             onChangeText={text => setDateofbirth(text)}
                             value={dateofbirth}
-                        />
+                        /> */}
+                        <Pressable
+                            onPress={() => setShowModal(true)}
+                            style={{
+                                height: 40,
+                                marginBottom: 15,
+                                borderBottomColor: Colors.PRIMARY,
+                                borderBottomWidth: 2,
+                                outlineStyle: "none",
+                                fontFamily: "montserrat-medium",
+                                fontSize: 16,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <Text style={{ textAlign: "left", fontFamily: "montserrat-medium", fontSize: 16 }} >{dateofbirth}</Text>
+                            <View><AntDesign name="calendar" size={22} color="black" /></View>
+                        </Pressable>
                     </View>
+
+                    {
+                        showModal && <Modal style={{
+                            padding: 10,
+                        }}>
+                            <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: 20, marginTop: 20 }}>Select Your Birth Date</Text>
+                            <View style={{
+                                flex: 1,
+                                padding: 20
+                            }}>
+                            <Pressable
+                                onPress={() => setShowModal(false)}
+                                style={{
+                                    backgroundColor: "red",
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 8,
+                                    borderRadius: 10,
+                                    width: 200,
+                                    width: 45,
+                                    height: 45,
+                                    borderRadius: 50,
+                                    marginBottom: 20,
+                                    marginLeft: "auto",
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}
+                            ><Entypo name="cross" size={24} color="#fff" /></Pressable>
+                            <Calendar
+                                onDayPress={day => {
+                                    setDateofbirth(() => {
+                                        const dayarray = day.dateString.split("-")
+                                        setShowModal(false)
+                                        return dayarray.reverse().join("-")
+                                    });
+                                }}
+                                style={{
+                                    marginTop: 10,
+                                    width: "95%",
+                                    marginHorizontal: "auto",
+                                    borderRadius: 10,
+                                    borderWidth: 1,
+                                    borderColor: "#000",
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 6 },
+                                    shadowOpacity: 0.4,
+                                    shadowRadius: 12,
+                                    elevation: 5,
+                                }}
+                            />
+                            </View>
+                        </Modal>
+                    }
 
                     <View>
                         <Text style={{ textAlign: "left", fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARY }}>Phone Number</Text>
@@ -186,7 +264,7 @@ const editprofile = () => {
                 onPress={() => editProfilePressed()}>
                 <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>Update</Text>
             </Pressable>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 

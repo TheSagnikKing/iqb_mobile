@@ -1,26 +1,46 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Redirect } from 'expo-router'
+import { Redirect, useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const index = () => {
-
-  const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+const Index = () => {
+  const [currentSalonInfo, setCurrentSalonInfo] = useState(null)
+  const router = useRouter()
 
   useEffect(() => {
-    const getloginsalonuserdata = async () => {
-      const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
-      setCurrentSalonInfo(JSON.parse(saloninfodata))
+    const getLoginSalonUserData = async () => {
+      try {
+        const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+        if (saloninfodata) {
+          setCurrentSalonInfo(JSON.parse(saloninfodata))
+        } else {
+          setCurrentSalonInfo([])
+        }
+      } catch (error) {
+        console.log("Error retrieving salon info:", error)
+      }
     }
 
-    getloginsalonuserdata()
+    getLoginSalonUserData()
   }, [])
 
+  useEffect(() => {
+    if (currentSalonInfo !== null) {
+      if (currentSalonInfo.length > 0) {
+        router.push("/signin")
+      } else {
+        router.push("/changelocation")
+      }
+    }
+  }, [currentSalonInfo, router])
+
   return (
-    currentSalonInfo.length > 0 ? <Redirect href={"/signin"} /> : <Redirect href="/changelocation" />
+    <>
+      <Text>Index Page</Text>
+    </>
   )
 }
 
-export default index
+export default Index
 
 const styles = StyleSheet.create({})

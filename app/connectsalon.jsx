@@ -33,10 +33,14 @@ const ConnectSalon = () => {
     } = useSelector(state => state.iqbSalons)
 
     const connectPressed = async () => {
-        if (salonInfodata) {
-            await AsyncStorage.removeItem('user-saloninfo');
-            await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
-            router.push("/signin")
+        try {
+            if (salonInfodata) {
+                await AsyncStorage.removeItem('user-saloninfo');
+                await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
+                router.push("/signin")
+            }
+        } catch (error) {
+            console.error("Failed to save salon info to AsyncStorage", error);
         }
     }
 

@@ -10,7 +10,7 @@ import { getsalonsdetailsbyIdAction } from '../redux/Actions/HomeAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { getbarberbysalonidAction, iqbuserrateAction } from '../redux/Actions/SalonAction';
-import StarRating from 'react-native-star-rating-widget';
+// import StarRating from 'react-native-star-rating-widget';
 
 const SalonInfo = () => {
   const router = useRouter()
@@ -64,10 +64,10 @@ const SalonInfo = () => {
   // console.log("Salon Info barbers are ", response)
 
   useEffect(() => {
-    if(currentUserInfo.length > 0){
+    if (currentUserInfo.length > 0) {
       setRating(currentUserInfo?.[0]?.RatingScore)
     }
-  },[currentUserInfo])
+  }, [currentUserInfo])
 
   const [rating, setRating] = useState(0);
 
@@ -122,7 +122,8 @@ const SalonInfo = () => {
           </Pressable>
 
         </View>
-        <View style={{ height: 330 }}>
+        <View style={{ height: "auto" }}>
+          {/* height was with rating is 330 */}
           <View
             style={{
               backgroundColor: Colors.PRIMARY,
@@ -158,7 +159,7 @@ const SalonInfo = () => {
             }}
           >{saloninforesponse?.Response?.SalonName}</Text>
 
-          <View style={{
+          {/* <View style={{
             borderColor: "rgba(0,0,0,0.4)",
             borderWidth: 1,
             borderRadius: 5,
@@ -211,7 +212,7 @@ const SalonInfo = () => {
                   <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
               }
             </Pressable>
-          </View>
+          </View> */}
 
 
         </View>
@@ -231,7 +232,6 @@ const SalonInfo = () => {
                     alignItems: "center",
                     gap: 10,
                     borderRadius: 5,
-                    width: 100,
                     height: 45,
                     paddingHorizontal: 5,
                     boxShadow: '0px 6px 12px rgba(0,0,0,0.4)',

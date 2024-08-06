@@ -14,7 +14,7 @@ export const signinAction = (email, password, salonid, router, endpoint) => asyn
         const params = {
             email,
             password,
-            salonid: 127,
+            salonid,
             devicetoken: "",
             deviceType: "iOs"
         }

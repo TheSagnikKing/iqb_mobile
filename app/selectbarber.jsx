@@ -31,35 +31,32 @@ const SelectBarber = () => {
 
 
   const {
+    error,
     loading,
     response: barberlist
   } = useSelector(state => state.iqueuebarberSelect)
 
   const router = useRouter()
 
-  const qlistdata = [
-    {
-      _id: 1,
-    },
-    {
-      _id: 2,
-    },
-    {
-      _id: 3
-    },
-    {
-      _id: 4,
-    },
-    {
-      _id: 5
-    }
-  ]
+  console.log("currentSalonInfo ", currentSalonInfo)
+
+  console.log("error ", error)
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={{
         flex: 1,
         paddingHorizontal: 15,
       }}>
+        {
+          barberlist.length ? <Text
+          style={{
+            lineHeight: 60,
+            textAlign: 'center',
+            color: Colors.PRIMARY,
+            fontFamily: "montserrat-semibold",
+            fontSize: 16
+          }}
+        >{barberlist.length} Barbers Available</Text> :
         <Text
           style={{
             lineHeight: 60,
@@ -68,107 +65,111 @@ const SelectBarber = () => {
             fontFamily: "montserrat-semibold",
             fontSize: 16
           }}
-        >2 Barbers Available</Text>
+        >No Barbers Available</Text>
+        }
+        
 
         {
           loading ?
             <View><ActivityIndicator size={20} color={"#000"} /></View> :
             barberlist.length == 0 ?
               <View><Text>No Barbers Available</Text></View> :
-              <FlatList
-                data={barberlist}
-                renderItem={({ item }) => <View style={{
-                  backgroundColor: "#efefef",
-                  height: 130,
-                  marginBottom: 20,
-                  borderRadius: 10,
-                  borderColor: "rgba(0,0,0,0.4)",
-                  borderWidth: 1,
-                }}>
+              error ?
+                <View><Text>No Barbers Available</Text></View> :
+                <FlatList
+                  data={barberlist}
+                  renderItem={({ item }) => <View style={{
+                    backgroundColor: "#efefef",
+                    height: 130,
+                    marginBottom: 20,
+                    borderRadius: 10,
+                    borderColor: "rgba(0,0,0,0.4)",
+                    borderWidth: 1,
+                  }}>
 
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      borderBottomColor: "rgba(0,0,0,0.4)",
-                      borderBottomWidth: 1
-                    }}
-                  >
-                    <View style={{ flex: 2, paddingHorizontal: 10, flexDirection: "row", alignItems: "center", gap: 15, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1 }}>
-                      <View style={{
-                        justifyContent: "center",
-                        alignItems: "center"
-                      }}><Image
-                          source={require("../assets/images/profile.webp")}
-                          style={{
-                            width: 50,
-                            height: 50,
-                            borderRadius: 50,
-                            borderColor: "rgba(0,0,0,0.4)",
-                            borderWidth: 1
-                          }}
-                        /></View>
-                      <Text style={{
-                        fontFamily: "montserrat-semibold",
-                        fontSize: 16
-                      }}>{item.BarberName}</Text>
-                    </View>
-
-                    <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: "center", alignItems: "center" }}>
-                      <Text style={{
-                        fontFamily: "montserrat-semibold",
-                        fontSize: 16
-                      }}>Queuing</Text>
-                      <Text style={{
-                        fontFamily: "montserrat-semibold",
-                        fontSize: 16,
-                        color: Colors.PRIMARY
-                      }}>{item.TotalQueue}</Text>
-                    </View>
-                  </View>
-
-
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      paddingHorizontal: 10,
-                    }}
-                  >
-                    <View>
-                      <Text style={{ marginBottom: 5, fontFamily: "montserrat-medium", fontSize: 16 }}>Estimated Time: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.EWT}</Text></Text>
-                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Next Available Position: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{Number(item.TotalQueue) + 1}</Text></Text>
-                    </View>
-
-                    <Pressable
+                    <View
                       style={{
-                        backgroundColor: Colors.PRIMARY,
-                        width: 60,
-                        height: 40,
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 6 },
-                        shadowOpacity: 0.4,
-                        shadowRadius: 12,
-                        elevation: 12,
+                        flex: 1,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        borderBottomColor: "rgba(0,0,0,0.4)",
+                        borderBottomWidth: 1
                       }}
-                      onPress={() => router.push({ pathname: "/selectservices", params: { BarberId: item.BarberId, SalonId:item.SalonId, BarberName: item.BarberName, EWT: item.EWT } })}
                     >
-                      <Text style={{
-                        fontFamily: "montserrat-medium", fontSize: 14,
-                        color: Colors.PRIMARYTEXT,
-                      }}>Join</Text>
-                    </Pressable>
-                  </View>
-                </View>}
-                keyExtractor={item => item.id}
-                showsVerticalScrollIndicator={false}
-              />
+                      <View style={{ flex: 2, paddingHorizontal: 10, flexDirection: "row", alignItems: "center", gap: 15, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1 }}>
+                        <View style={{
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}><Image
+                            source={require("../assets/images/profile.webp")}
+                            style={{
+                              width: 50,
+                              height: 50,
+                              borderRadius: 50,
+                              borderColor: "rgba(0,0,0,0.4)",
+                              borderWidth: 1
+                            }}
+                          /></View>
+                        <Text style={{
+                          fontFamily: "montserrat-semibold",
+                          fontSize: 16
+                        }}>{item.BarberName}</Text>
+                      </View>
+
+                      <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: "center", alignItems: "center" }}>
+                        <Text style={{
+                          fontFamily: "montserrat-semibold",
+                          fontSize: 16
+                        }}>Queuing</Text>
+                        <Text style={{
+                          fontFamily: "montserrat-semibold",
+                          fontSize: 16,
+                          color: Colors.PRIMARY
+                        }}>{item.TotalQueue}</Text>
+                      </View>
+                    </View>
+
+
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <View>
+                        <Text style={{ marginBottom: 5, fontFamily: "montserrat-medium", fontSize: 16 }}>Estimated Time: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.EWT}</Text></Text>
+                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Next Available Position: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{Number(item.TotalQueue) + 1}</Text></Text>
+                      </View>
+
+                      <Pressable
+                        style={{
+                          backgroundColor: Colors.PRIMARY,
+                          width: 60,
+                          height: 40,
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          shadowColor: '#000',
+                          shadowOffset: { width: 0, height: 6 },
+                          shadowOpacity: 0.4,
+                          shadowRadius: 12,
+                          elevation: 12,
+                        }}
+                        onPress={() => router.push({ pathname: "/selectservices", params: { BarberId: item.BarberId, SalonId: item.SalonId, BarberName: item.BarberName, EWT: item.EWT } })}
+                      >
+                        <Text style={{
+                          fontFamily: "montserrat-medium", fontSize: 14,
+                          color: Colors.PRIMARYTEXT,
+                        }}>Join</Text>
+                      </Pressable>
+                    </View>
+                  </View>}
+                  keyExtractor={item => item.id}
+                  showsVerticalScrollIndicator={false}
+                />
         }
 
 

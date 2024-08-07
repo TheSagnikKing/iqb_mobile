@@ -28,7 +28,8 @@ export const queueListReducer = (state = {
 }
 
 export const iqueuebarberSelectReducer = (state = {
-    response:[]
+    response:[],
+    error: ""
 }, action) => {
     switch (action.type) {
         case IQUEUE_BARBER_SELECT_REQ: {
@@ -41,13 +42,15 @@ export const iqueuebarberSelectReducer = (state = {
             return {
                 ...state,
                 loading: false,
-                response: action.payload
+                response: action.payload,
+                error: "",
             }
         case IQUEUE_BARBER_SELECT_FAIL:
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: action.payload,
+                response: []
             }
         default:
             return state;
@@ -55,7 +58,8 @@ export const iqueuebarberSelectReducer = (state = {
 }
 
 export const getservicesbybarberIdsalonIdReducer = (state = {
-    response:[]
+    response:[],
+    StatusMessage: ""
 }, action) => {
     switch (action.type) {
         case GETSERVICES_BY_BARBERID_SALONID_REQ: {
@@ -68,7 +72,8 @@ export const getservicesbybarberIdsalonIdReducer = (state = {
             return {
                 ...state,
                 loading: false,
-                response: action.payload
+                response: action.payload,
+                StatusMessage: action.StatusMessage
             }
         case GETSERVICES_BY_BARBERID_SALONID_FAIL:
             return {

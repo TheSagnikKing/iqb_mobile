@@ -32,7 +32,7 @@ const Autojoin = () => {
 
   useEffect(() => {
     if (currentSalonInfo.length > 0) {
-      dispatch(getservicesbybarberIdsalonIdAction({ BarberId: 777777, SalonId: 127 }, "GetServicesByBarberIdSalonId.php"))
+      dispatch(getservicesbybarberIdsalonIdAction({ BarberId: 777777, SalonId: currentSalonInfo?.[0]?.id }, "GetServicesByBarberIdSalonId.php"))
     }
   }, [dispatch, currentSalonInfo])
 
@@ -40,8 +40,11 @@ const Autojoin = () => {
 
   const {
     loading,
+    StatusMessage: ServiceStatusMessage,
     response: serviceslist
   } = getservicesbybarberIdsalonId
+
+  console.log("Service Status Message ", ServiceStatusMessage)
 
   // console.log("Service list from auto join ", serviceslist)
 
@@ -123,7 +126,7 @@ const Autojoin = () => {
       is_single_join: "",
     }
 
-    console.log("Auto join join queue ",joinqueuedata)
+    console.log("Auto join join queue ", joinqueuedata)
 
     Alert.alert('Join Queue', 'Are you sure ?', [
       {
@@ -167,7 +170,7 @@ const Autojoin = () => {
                 }}
               /></View>
             <View>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>John</Text>
+              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 5 }}>Any Barber</Text>
               <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>Estimated wait time: 0hrs: 0mins</Text>
             </View>
           </View>
@@ -184,79 +187,17 @@ const Autojoin = () => {
             <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
           </View>
 
-          {/* <FlatList
-          data={servicesdata}
-          renderItem={({ item }) => <View style={{
-            height: 80,
-            backgroundColor: "#efefef",
-            marginTop: 5,
-            paddingHorizontal: 10,
-            justifyContent: "center",
-            borderRadius: 5,
-            borderColor: "rgba(0,0,0,0.4)",
-            borderWidth: 1,
-          }}>
-            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Test Spa</Text>
-
-              {
-                selectedServices.find((ser) => ser._id == item._id) ?
-                  <Pressable
-                    style={{
-                      width: 30,
-                      height: 30,
-                      backgroundColor: "red",
-                      borderRadius: 50,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 6 },
-                      shadowOpacity: 0.4,
-                      shadowRadius: 12,
-                      elevation:12,
-                    }}
-                    onPress={() => deleteServiceClicked(item)}
-                  ><MaterialIcons name="delete" size={20} color="#fff" /></Pressable> :
-                  <Pressable
-                    style={{
-                      width: 30,
-                      height: 30,
-                      backgroundColor: Colors.PRIMARY,
-                      borderRadius: 50,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 6 },
-                      shadowOpacity: 0.4,
-                      shadowRadius: 12,
-                      elevation:12,
-                    }}
-                    onPress={() => addServiceClicked(item)}
-                  ><AntDesign name="plus" size={18} color="#fff" /></Pressable>
-
-              }
-            </View>
-
-            <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>$14.00</Text>
-              <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>0 hrs: 0 mins</Text>
-            </View>
-
-          </View>}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item._id}
-        /> */}
-
           {
             loading ?
               <View style={{
                 paddingVertical: 10
               }}><ActivityIndicator size={20} color={"#000"} /></View> :
-              serviceslist.length == 0 ?
+              serviceslist.length == 0 && ServiceStatusMessage == "No Barber Is Online" ?
                 <View style={{
                   paddingVertical: 10
-                }}><Text>No Barbers Available</Text></View> :
-                <FlatList
+                }}><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }} >{ServiceStatusMessage}</Text></View> :
+                serviceslist.length > 0 && ServiceStatusMessage == "Success" &&
+                < FlatList
                   data={serviceslist}
                   renderItem={({ item }) => <View style={{
                     height: 80,

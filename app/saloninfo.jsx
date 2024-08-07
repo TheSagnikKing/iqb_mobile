@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList, ActivityIndicator, Linking, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -10,6 +10,7 @@ import { getsalonsdetailsbyIdAction } from '../redux/Actions/HomeAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { getbarberbysalonidAction, iqbuserrateAction } from '../redux/Actions/SalonAction';
+
 // import StarRating from 'react-native-star-rating-widget';
 
 const SalonInfo = () => {
@@ -42,8 +43,8 @@ const SalonInfo = () => {
     response: saloninforesponse
   } = useSelector(state => state.getsalonsdetailsbyId);
 
-  // console.log("Response Salon Info ", saloninforesponse?.Response)
-  console.log("Response User Info ", currentUserInfo)
+  console.log("Response Salon Info ", saloninforesponse?.Response)
+  // console.log("Response User Info ", currentUserInfo)
 
   // console.log("The currentsalon info ", currentSalonInfo?.[0]?.id)
 
@@ -52,7 +53,7 @@ const SalonInfo = () => {
     if (currentSalonInfo?.[0]?.id) {
       dispatch(getbarberbysalonidAction(currentSalonInfo?.[0]?.id, "GetBarberBySalonId.php"))
     }
-  }, [dispatch])
+  }, [dispatch,currentSalonInfo])
 
   const getbarberbysalonid = useSelector(state => state.getbarberbysalonid)
 
@@ -98,6 +99,21 @@ const SalonInfo = () => {
   const {
     loading: ratingLoader
   } = iqbuserrate
+
+  const makeCall = (number) => {
+    const url = `tel:${number}`;
+    Linking.openURL(url).catch((err) => console.error('Error:', err));
+  }
+
+  const handleOpenLink = async (url) => {
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -298,7 +314,7 @@ const SalonInfo = () => {
               <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>{saloninforesponse?.Response?.county}</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, width: "50%" }]}>
-              <View style={{
+              <Pressable style={{
                 width: 50,
                 height: 50,
                 backgroundColor: Colors.PRIMARY,
@@ -311,7 +327,9 @@ const SalonInfo = () => {
                 shadowOpacity: 0.4,
                 shadowRadius: 12,
                 elevation: 12
-              }}><Feather name="phone-call" size={24} color="#fff" /></View>
+              }}
+                onPress={() => makeCall(saloninforesponse?.Response?.ContactTel)}
+              ><Feather name="phone-call" size={24} color="#fff" /></Pressable>
               <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{saloninforesponse?.Response?.ContactTel}</Text>
             </View>
             <View style={[styles.saloninfo_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, width: "50%" }]}>
@@ -350,17 +368,22 @@ const SalonInfo = () => {
               alignItems: "center",
               gap: 5
             }}>
-              <Pressable style={{ backgroundColor: "#1DA1F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}>
-                <View><FontAwesome name="twitter" size={16} color="#fff" /></View>
+              <Pressable style={{ backgroundColor: "#1DA1F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
+                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response.SalonTwitter}`)}>
+                <View><FontAwesome6 name="x-twitter" size={16} color="#fff" /></View>
                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Twitter</Text>
               </Pressable>
 
-              <Pressable style={{ backgroundColor: "#1877F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}>
+              <Pressable style={{ backgroundColor: "#1877F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
+                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response.SalonFacebook}`)}
+              >
                 <View><FontAwesome name="facebook-f" size={16} color="#fff" /></View>
                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Facebook</Text>
               </Pressable>
 
-              <Pressable style={{ backgroundColor: "#E1306C", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}>
+              <Pressable style={{ backgroundColor: "#E1306C", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
+                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response.SalonInstagram}`)}
+              >
                 <View><FontAwesome name="instagram" size={16} color="#fff" /></View>
                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Instagram</Text>
               </Pressable>

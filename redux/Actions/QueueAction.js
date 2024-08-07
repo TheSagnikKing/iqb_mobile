@@ -112,6 +112,7 @@ export const getservicesbybarberIdsalonIdAction = (params, endpoint) => async (d
             dispatch({
                 type: GETSERVICES_BY_BARBERID_SALONID_SUCCESS,
                 payload: data.Response,
+                StatusMessage: data.StatusMessage
             });
 
             // console.log("servicessss ", data)

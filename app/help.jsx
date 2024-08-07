@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Linking, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -6,6 +6,11 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const help = () => {
+
+    const makeCall = (number) => {
+        const url = `tel:${number}`;
+        Linking.openURL(url).catch((err) => console.error('Error:', err));
+    }
 
     return (
         <ScrollView style={{
@@ -24,7 +29,7 @@ const help = () => {
                     alignItems: "center",
                     height: 100
                 }}>
-                    <View style={{
+                    <Pressable style={{
                         width: 50,
                         height: 50,
                         backgroundColor: Colors.PRIMARY,
@@ -37,7 +42,9 @@ const help = () => {
                         shadowOpacity: 0.4,
                         shadowRadius: 12,
                         elevation: 12
-                    }}><Feather name="phone-call" size={24} color="#fff" /></View>
+                    }}
+                    onPress={() => makeCall("01473845472")}
+                    ><Feather name="phone-call" size={24} color="#fff" /></Pressable>
                     <Text style={{ fontFamily: "montserrat-semibold", fontSize: 12 }}>01473845472</Text>
                 </View>
 

@@ -8,16 +8,7 @@ const Salonbarberservices = () => {
 
     const params = useLocalSearchParams();
 
-    console.log("Connect Salon Barber SALON INFO ++++++++", params)
-
-    const servicesdata = [
-        {
-            _id: 1
-        },
-        {
-            _id: 2
-        }
-    ]
+    console.log("Salon Barber SALON INFO ++++++++", params)
 
     const dispatch = useDispatch()
 
@@ -31,22 +22,29 @@ const Salonbarberservices = () => {
 
     const {
         loading,
-        response
+        response: serviceslist,
+        StatusMessage: ServiceStatusMessage,
     } = getservicesbybarberidsalonid
 
-    console.log("The current barber services are SALONINFO++++++", response)
+    console.log("The current barber services are SALONINFO++++++", serviceslist)
 
     return (
         <View style={{ backgroundColor: "#fff", flex: 1, paddingHorizontal: 10, paddingVertical: 20 }}>
             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 20 }}>Barber Services</Text>
-            {
-                loading ?
-                    <ActivityIndicator size={20} color={"#000"} /> :
-                    response.length == 0 ?
-                        <Text>No Services available</Text> :
-                        <FlatList
-                            data={response}
-                            renderItem={({ item }) => <View style={{
+            <View>
+                {loading ? (
+                    <ActivityIndicator size={20} color={"#000"} />
+                ) : serviceslist.length === 0 && ServiceStatusMessage === "Barber Is Not Online" ? (
+                    <View style={{ paddingVertical: 10 }}>
+                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, fontWeight: 500 }}>
+                            {ServiceStatusMessage}
+                        </Text>
+                    </View>
+                ) : serviceslist.length > 0 && ServiceStatusMessage === "Success" ? (
+                    <FlatList
+                        data={serviceslist}
+                        renderItem={({ item }) => (
+                            <View style={{
                                 height: 80,
                                 backgroundColor: "#efefef",
                                 marginTop: 5,
@@ -56,22 +54,43 @@ const Salonbarberservices = () => {
                                 borderColor: "rgba(0,0,0,0.4)",
                                 borderWidth: 1,
                             }}>
-                                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>{item.ServiceName}</Text>
-
+                                <View style={{
+                                    flex: 1,
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center"
+                                }}>
+                                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>
+                                        {item.ServiceName}
+                                    </Text>
                                 </View>
 
-                                <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
-                                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}mins</Text>
+                                <View style={{
+                                    flex: 1,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 10
+                                }}>
+                                    <Text style={{
+                                        fontFamily: "montserrat-medium",
+                                        fontSize: 16,
+                                        borderRightColor: "rgba(0,0,0,0.4)",
+                                        borderRightWidth: 1,
+                                        paddingRight: 10
+                                    }}>
+                                        ${item.ServicePrice}
+                                    </Text>
+                                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>
+                                        {item.Estimated_wait_time}mins
+                                    </Text>
                                 </View>
-
-                            </View>}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={item => item.serviceid}
-                        />
-            }
-
+                            </View>
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        keyExtractor={item => item.serviceid}
+                    />
+                ) : null}
+            </View>
         </View>
     )
 }

@@ -11,8 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { getbarberbysalonidAction, iqbuserrateAction } from '../redux/Actions/SalonAction';
 
-// import StarRating from 'react-native-star-rating-widget';
-
 const SalonInfo = () => {
   const router = useRouter()
 
@@ -53,7 +51,7 @@ const SalonInfo = () => {
     if (currentSalonInfo?.[0]?.id) {
       dispatch(getbarberbysalonidAction(currentSalonInfo?.[0]?.id, "GetBarberBySalonId.php"))
     }
-  }, [dispatch,currentSalonInfo])
+  }, [dispatch, currentSalonInfo])
 
   const getbarberbysalonid = useSelector(state => state.getbarberbysalonid)
 
@@ -69,6 +67,8 @@ const SalonInfo = () => {
       setRating(currentUserInfo?.[0]?.RatingScore)
     }
   }, [currentUserInfo])
+
+  console.log("Current User Info RATING ", currentUserInfo)
 
   const [rating, setRating] = useState(0);
 
@@ -100,6 +100,8 @@ const SalonInfo = () => {
     loading: ratingLoader
   } = iqbuserrate
 
+  // console.log("rating ",rating)
+
   const makeCall = (number) => {
     const url = `tel:${number}`;
     Linking.openURL(url).catch((err) => console.error('Error:', err));
@@ -114,6 +116,7 @@ const SalonInfo = () => {
       Alert.alert(`Don't know how to open this URL: ${url}`);
     }
   };
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -175,7 +178,7 @@ const SalonInfo = () => {
             }}
           >{saloninforesponse?.Response?.SalonName}</Text>
 
-          {/* <View style={{
+          <View style={{
             borderColor: "rgba(0,0,0,0.4)",
             borderWidth: 1,
             borderRadius: 5,
@@ -196,13 +199,19 @@ const SalonInfo = () => {
                 alignItems: "center"
               }}
             ><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Please Rate Us</Text></View>
-            <View style={{ height: 60, flexDirection: "row", marginHorizontal: "auto", alignItems: "center", gap: 10 }}>
-              <StarRating
-                rating={rating}
-                onChange={setRating}
-                enableHalfStar={false}
-                color={"orangered"}
-              />
+            <View style={{ height: 70, flexDirection: "row", marginHorizontal: "auto", alignItems: "center", gap: 10 }}>
+              <View style={styles.container}>
+                {Array.from({ length: 5 }, (_, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => setRating(index + 1)}
+                  >
+                    <Text style={index < rating ? styles.starSelected : styles.star}>
+                      ★
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
             </View>
 
             <Pressable
@@ -228,7 +237,9 @@ const SalonInfo = () => {
                   <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: Colors.PRIMARYTEXT }}>Submit</Text>
               }
             </Pressable>
-          </View> */}
+          </View>
+
+
 
 
         </View>
@@ -413,5 +424,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomColor: "rgba(0,0,0,0.2)",
     borderBottomWidth: 1
+  },
+
+  container: {
+    flexDirection: 'row',
+  },
+  star: {
+    fontSize: 35,
+    color: '#e1e1e1', 
+  },
+  starSelected: {
+    fontSize: 35,
+    color: 'orangered', 
   },
 })

@@ -28,7 +28,8 @@ export const getbarberbysalonidReducer = (state = {
 }
 
 export const getservicesbybarberidsalonidReducer = (state = {
-    response: []
+    response: [],
+    StatusMessage: ""
 }, action) => {
     switch (action.type) {
         case GET_SERVICES_BY_BARBERID_SALONID_REQ: {
@@ -41,7 +42,8 @@ export const getservicesbybarberidsalonidReducer = (state = {
             return {
                 ...state,
                 loading: false,
-                response: action.payload
+                response: action.payload,
+                StatusMessage: action.StatusMessage
             }
         case GET_SERVICES_BY_BARBERID_SALONID_FAIL:
             return {

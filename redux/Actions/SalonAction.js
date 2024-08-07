@@ -68,6 +68,7 @@ export const getservicesbybarberidsalonidAction = (servicesdata, endpoint) => as
             dispatch({
                 type: GET_SERVICES_BY_BARBERID_SALONID_SUCCESS,
                 payload: data.Response,
+                StatusMessage: data.StatusMessage
             });
         }
 

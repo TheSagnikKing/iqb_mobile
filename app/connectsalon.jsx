@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { iqbSalonsAction } from '../redux/Actions/LocationAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getbarberbysalonidAction } from '../redux/Actions/SalonAction';
-import StarRating from 'react-native-star-rating-widget';
 import { getsalonsdetailsbyIdAction } from '../redux/Actions/HomeAction';
 
 const ConnectSalon = () => {

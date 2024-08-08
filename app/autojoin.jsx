@@ -26,7 +26,7 @@ const Autojoin = () => {
     getloginsalonuserdata()
   }, [])
 
-  // console.log("Current Salon Info ", currentSalonInfo)
+  console.log("Current User Info Auto", currentUserInfo)
 
   const dispatch = useDispatch()
 
@@ -43,10 +43,6 @@ const Autojoin = () => {
     StatusMessage: ServiceStatusMessage,
     response: serviceslist
   } = getservicesbybarberIdsalonId
-
-  console.log("Service Status Message ", ServiceStatusMessage)
-
-  // console.log("Service list from auto join ", serviceslist)
 
   const params = useLocalSearchParams();
 
@@ -157,7 +153,7 @@ const Autojoin = () => {
             borderRadius: 5,
           }}>
             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 18, color: Colors.PRIMARYTEXT }}>Select Service</Text>
-            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>2 Service(s) Available</Text>
+            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, marginTop: 5, color: Colors.PRIMARYTEXT }}>{serviceslist.length} Service(s) Available</Text>
           </View>
 
           {
@@ -224,7 +220,7 @@ const Autojoin = () => {
                     </View>
 
                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
+                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>{currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}</Text>
                       <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}{" "}mins</Text>
                     </View>
 

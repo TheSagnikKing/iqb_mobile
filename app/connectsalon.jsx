@@ -169,7 +169,7 @@ const ConnectSalon = () => {
                                         boxShadow: '0px 6px 12px rgba(0,0,0,0.4)',
                                         marginRight: 10
                                     }}
-                                        onPress={() => router.push({ pathname: "/connectsalonbarberservices", params: { BarberId: item.BarberId, SalonId: params.SalonId } })}
+                                        // onPress={() => router.push({ pathname: "/connectsalonbarberservices", params: { BarberId: item.BarberId, SalonId: params.SalonId } })}
                                     >
                                         <Image
                                             source={{ uri: item.BarberPic }}

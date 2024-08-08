@@ -5,8 +5,20 @@ import { Colors } from '../constants/Colors'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { getservicesbybarberIdsalonIdAction } from '../redux/Actions/QueueAction'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Joingroupservices = () => {
+
+    const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async () => {
+            const userinfodata = await AsyncStorage.getItem('user-logininfo')
+            setCurrentUserInfo(JSON.parse(userinfodata))
+        }
+
+        getloginsalonuserdata()
+    }, [])
 
     const params = useLocalSearchParams()
     // console.log("The params of joingroupservice ", params)
@@ -109,7 +121,7 @@ const Joingroupservices = () => {
                                 </View>
 
                                 <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>${item.ServicePrice}</Text>
+                                    <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>{currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}</Text>
                                     <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>0 hrs: 0 mins</Text>
                                 </View>
 

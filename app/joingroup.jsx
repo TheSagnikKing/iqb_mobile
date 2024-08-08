@@ -411,7 +411,7 @@ const Joingroup = () => {
                                 fontSize: 14,
                                 marginBottom: 5,
                                 color: Colors.PRIMARY
-                            }}>${groupjointemplate?.price}</Text>
+                            }}>{currentUserInfo?.[0]?.Currency}{" "}{groupjointemplate?.price}</Text>
                         </View>
                     </View>
 

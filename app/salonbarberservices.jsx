@@ -1,10 +1,22 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux';
 import { getservicesbybarberidsalonidAction } from '../redux/Actions/SalonAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Salonbarberservices = () => {
+
+    const [currentUserInfo, setCurrentUserInfo] = useState([])
+
+    useEffect(() => {
+        const getloginsalonuserdata = async () => {
+            const userinfodata = await AsyncStorage.getItem('user-logininfo')
+            setCurrentUserInfo(JSON.parse(userinfodata))
+        }
+
+        getloginsalonuserdata()
+    }, [])
 
     const params = useLocalSearchParams();
 
@@ -78,7 +90,7 @@ const Salonbarberservices = () => {
                                         borderRightWidth: 1,
                                         paddingRight: 10
                                     }}>
-                                        ${item.ServicePrice}
+                                        {currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}
                                     </Text>
                                     <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>
                                         {item.Estimated_wait_time}mins

@@ -7,10 +7,9 @@ import { Entypo } from '@expo/vector-icons'
 
 const Saloninfogallery = () => {
 
-
     const params = useLocalSearchParams()
 
-    console.log("Salon id from connect salon gallery ", params)
+    // console.log("Salon id from connect salon gallery ", params)
 
     const dispatch = useDispatch()
 
@@ -27,7 +26,7 @@ const Saloninfogallery = () => {
         response
     } = getsalonimagelist
 
-    console.log("Salon list from CONECT SALON GALLERY ", response)
+    // console.log("Salon list from CONECT SALON GALLERY ", response)
 
     const [imageurl, setImageurl] = useState("")
 

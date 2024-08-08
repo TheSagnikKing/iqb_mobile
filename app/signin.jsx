@@ -15,13 +15,13 @@ const Signin = () => {
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])
 
     useEffect(() => {
-        const getloginsalonuserdata = async() => {
+        const getloginsalonuserdata = async () => {
             const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
             setCurrentSalonInfo(JSON.parse(saloninfodata))
         }
 
         getloginsalonuserdata()
-    },[])
+    }, [])
 
     const router = useRouter()
 
@@ -41,37 +41,37 @@ const Signin = () => {
 
     const signinClicked = async () => {
 
-        if(email == "" && password == ""){
+        if (email == "" && password == "") {
             Toast.show({
                 type: 'error',
                 text1: "Please fill all the fields",
                 position: "bottom",
                 bottomOffset: 0,
             });
-        }else if (!validateEmail(email)) {
+        } else if (!validateEmail(email)) {
             Toast.show({
                 type: 'error',
                 text1: "Invalid email format",
                 position: "bottom",
                 bottomOffset: 0,
             });
-        }else if (password.length < 6) {
+        } else if (password.length < 6) {
             Toast.show({
                 type: 'error',
                 text1: "Password length must be 6 charecters",
                 position: "bottom",
                 bottomOffset: 0,
             });
-        }else if(currentSalonInfo.length == 0){
+        } else if (currentSalonInfo.length == 0) {
             Toast.show({
                 type: 'error',
                 text1: "Please select a salon!",
                 position: "bottom",
                 bottomOffset: 0,
             });
-        }else{
+        } else {
             dispatch(signinAction(email, password, currentSalonInfo?.[0]?.id, router, "iqueuelogin.php"))
-        }        
+        }
     }
 
     return (
@@ -170,7 +170,7 @@ const Signin = () => {
                     >
                         {
                             loading ?
-                                <ActivityIndicator size={20} color={"#fff"}/> :
+                                <ActivityIndicator size={20} color={"#fff"} /> :
                                 <Text
                                     style={{
                                         color: Colors.PRIMARYTEXT,
@@ -226,6 +226,8 @@ const Signin = () => {
                         href="/signup"
                         style={{ color: Colors.PRIMARY }}
                     >Sign up</Link></Text>
+
+                    {/* <Pressable onPress={() => router.push("/googlemap")}><Text>Google Map</Text></Pressable> */}
                 </View>
             </ScrollView>
         </SafeAreaView>

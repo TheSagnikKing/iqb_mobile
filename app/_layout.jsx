@@ -162,6 +162,13 @@ const _layout = () => {
             headerShown: false
           }}
         />
+
+        <Stack.Screen name="googlemap"
+          options={{
+            headerShown: true
+          }}
+        />
+
       </Stack>
     </Provider>
   )

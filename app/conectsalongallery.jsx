@@ -26,7 +26,7 @@ const Conectsalongallery = () => {
         response
     } = getsalonimagelist
 
-    // console.log("Salon list from CONECT SALON GALLERY ", response)
+    console.log("Salon list from CONECT SALON GALLERY ", response)
     const [imageurl, setImageurl] = useState("")
 
     const [openImage, setOpenImage] = useState(false)
@@ -36,6 +36,13 @@ const Conectsalongallery = () => {
         setImageurl(url)
 
     }
+
+    const getHttpsUrl = (url) => {
+        if (url.startsWith('http:')) {
+            return url.replace('http:', 'https:');
+        }
+        return url;
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: "#fff", padding: 10 }}>
@@ -50,10 +57,10 @@ const Conectsalongallery = () => {
                                 data={response}
                                 renderItem={({ item }) => <Pressable
                                     style={styles.image}
-                                    onPress={() => imagePressed(item.ImagePath)}
+                                    onPress={() => imagePressed(getHttpsUrl(item.ImagePath))}
                                 >
                                     <Image
-                                        source={{ uri: item.ImagePath }}
+                                        source={{ uri: getHttpsUrl(item.ImagePath) }}
                                         style={{
                                             height: "100%",
                                             width: "100%",

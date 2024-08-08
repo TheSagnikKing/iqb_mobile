@@ -44,7 +44,8 @@ const selectservices = () => {
 
   const {
     loading,
-    response: serviceslist
+    response: serviceslist,
+    StatusMessage: ServiceStatusMessage,
   } = getservicesbybarberIdsalonId
 
   // console.log("The Selected Services are ", serviceslist)
@@ -52,7 +53,7 @@ const selectservices = () => {
   const [selectedServices, setSelectedServices] = useState([])
 
   const addServiceClicked = (service) => {
-    if(selectedServices.length < 1){
+    if (selectedServices.length < 1) {
       setSelectedServices([...selectedServices, service])
     }
   }
@@ -95,7 +96,7 @@ const selectservices = () => {
       is_single_join: "yes",
     }
 
-    console.log("Single joinqueuedata ",joinqueuedata)
+    console.log("Single joinqueuedata ", joinqueuedata)
 
     Alert.alert('Join Queue', 'Are you sure ?', [
       {
@@ -103,13 +104,13 @@ const selectservices = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php",router))  },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
     ]);
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Toast/>
+      <Toast />
       <View style={{
         backgroundColor: "#fff",
         flex: 1,
@@ -159,11 +160,11 @@ const selectservices = () => {
             <View style={{
               paddingVertical: 10
             }}><ActivityIndicator size={20} color={"#000"} /></View> :
-            serviceslist.length == 0 ?
+            serviceslist.length == 0 && ServiceStatusMessage == "Barber Is Not Online" ?
               <View style={{
                 paddingVertical: 10
-              }}><Text>No Barbers Available</Text></View> :
-              <FlatList
+              }}><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }} >{ServiceStatusMessage}</Text></View> :
+              serviceslist.length > 0 && ServiceStatusMessage == "Success" && <FlatList
                 data={serviceslist}
                 renderItem={({ item }) => <View style={{
                   height: 80,
@@ -226,7 +227,7 @@ const selectservices = () => {
                 keyExtractor={item => item.serviceid}
               />
         }
-        
+
       </View>
       <Pressable
         style={{

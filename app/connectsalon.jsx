@@ -281,20 +281,20 @@ const ConnectSalon = () => {
                             gap: 5
                         }}>
                             <Pressable style={{ backgroundColor: "#1DA1F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
-                                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response?.SalonTwitter}`)}>
+                                onPress={() => handleOpenLink(`https://www.${saloninforesponse?.Response?.SalonTwitter}`)}>
                                 <View><FontAwesome6 name="x-twitter" size={16} color="#fff" /></View>
                                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Twitter</Text>
                             </Pressable>
 
                             <Pressable style={{ backgroundColor: "#1877F2", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
-                                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response?.SalonFacebook}`)}
+                                onPress={() => handleOpenLink(`https://www.${saloninforesponse?.Response?.SalonFacebook}`)}
                             >
                                 <View><FontAwesome name="facebook-f" size={16} color="#fff" /></View>
                                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Facebook</Text>
                             </Pressable>
 
                             <Pressable style={{ backgroundColor: "#E1306C", flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", height: 40, gap: 10 }}
-                                onPress={() => handleOpenLink(`https://${saloninforesponse?.Response?.SalonInstagram}`)}
+                                onPress={() => handleOpenLink(`https://www.${saloninforesponse?.Response?.SalonInstagram}`)}
                             >
                                 <View><FontAwesome name="instagram" size={16} color="#fff" /></View>
                                 <Text style={{ fontFamily: "montserrat-medium", fontSize: 12, color: Colors.PRIMARYTEXT }}>Instagram</Text>

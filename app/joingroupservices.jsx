@@ -31,7 +31,8 @@ const Joingroupservices = () => {
 
     const {
         loading,
-        response: serviceslist
+        response: serviceslist,
+        StatusMessage: ServiceStatusMessage,
     } = getservicesbybarberIdsalonId
 
     const [timejoinedq, setTimejoinedq] = useState("")
@@ -86,9 +87,11 @@ const Joingroupservices = () => {
             {
                 loading ?
                     <View><ActivityIndicator size={20} color={"#000"} /></View> :
-                    serviceslist.length == 0 ?
-                        <View><Text>No Barbers Available</Text></View> :
-                        <FlatList
+                    serviceslist.length == 0 && ServiceStatusMessage == "Barber Is Not Online" ?
+                    <View style={{
+                      paddingVertical: 10
+                    }}><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }} >{ServiceStatusMessage}</Text></View> :
+                    serviceslist.length > 0 && ServiceStatusMessage == "Success" && <FlatList
                             data={serviceslist}
                             renderItem={({ item }) => <View style={{
                                 height: 80,

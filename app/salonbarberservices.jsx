@@ -43,7 +43,7 @@ const Salonbarberservices = () => {
     return (
         <View style={{ backgroundColor: "#fff", flex: 1, paddingHorizontal: 10, paddingVertical: 20 }}>
             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, marginBottom: 20 }}>Barber Services</Text>
-            <View>
+            <View style={{ flex: 1}}>
                 {loading ? (
                     <ActivityIndicator size={20} color={"#000"} />
                 ) : serviceslist.length === 0 && ServiceStatusMessage !== "" ? (
@@ -54,6 +54,7 @@ const Salonbarberservices = () => {
                     </View>
                 ) : serviceslist.length > 0 && ServiceStatusMessage === "Success" ? (
                     <FlatList
+                        // style={{ flex: 1}}
                         data={serviceslist}
                         renderItem={({ item }) => (
                             <View style={{

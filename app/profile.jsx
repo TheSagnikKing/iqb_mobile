@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Linking } from 'react-native'
 import React, { useEffect } from 'react'
 import { Colors } from '../constants/Colors'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -105,6 +105,11 @@ const profile = () => {
       console.error('Upload failed:', error);
     }
   };
+
+  const makeCall = (number) => {
+    const url = `tel:${number}`;
+    Linking.openURL(url).catch((err) => console.error('Error:', err));
+}
 
   
   return (
@@ -214,7 +219,7 @@ const profile = () => {
           marginBottom: 10
         }}>{customerdetailsdata?.CustomerDOB}</Text>
 
-        <View style={{
+        <Pressable style={{
           width: 60,
           height: 60,
           borderRadius: 50,
@@ -228,7 +233,9 @@ const profile = () => {
           elevation: 12,
           justifyContent: "center",
           alignItems: "center",
-        }}><Feather name="phone-call" size={24} color="#fff" /></View>
+        }}
+        onPress={() => makeCall(customerdetailsdata?.CustomerPhone)}
+        ><Feather name="phone-call" size={24} color="#fff" /></Pressable>
 
         <Text style={{
           fontFamily: "montserrat-semibold",

@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors'
@@ -42,7 +42,7 @@ const Joingroupbarbers = () => {
     response: barberlistdata
   } = useSelector(state => state.iqueuebarberSelect)
 
-  // console.log("The join queue barbers ", barberlistdata)
+  console.log("The join queue barbers ", barberlistdata)
 
   const barberPressed = (BarberName, BarberId) => {
     dispatch({
@@ -96,7 +96,16 @@ const Joingroupbarbers = () => {
                   alignItems: "center",
                   gap: 20,
                 }}>
-                  <View style={{ width: 45, height: 45, borderColor: `${Colors.PRIMARY}`, borderWidth: 3, borderRadius: 50 }}></View>
+                  <Image
+                      source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
+                      style={{
+                        width: 45,
+                        height: 45,
+                        borderRadius: 50,
+                        borderColor: `${Colors.PRIMARY}`, 
+                        borderWidth: 1
+                      }}
+                    />
                   <Text style={{
                     fontFamily: "montserrat-semibold",
                     fontSize: 14

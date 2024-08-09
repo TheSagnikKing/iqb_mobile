@@ -163,12 +163,6 @@ const _layout = () => {
           }}
         />
 
-        <Stack.Screen name="googlemap"
-          options={{
-            headerShown: true
-          }}
-        />
-
       </Stack>
     </Provider>
   )

@@ -49,25 +49,25 @@ const SelectBarber = () => {
       }}>
         {
           barberlist.length ? <Text
-          style={{
-            lineHeight: 60,
-            textAlign: 'center',
-            color: Colors.PRIMARY,
-            fontFamily: "montserrat-semibold",
-            fontSize: 16
-          }}
-        >{barberlist.length} Barbers Available</Text> :
-        <Text
-          style={{
-            lineHeight: 60,
-            textAlign: 'center',
-            color: Colors.PRIMARY,
-            fontFamily: "montserrat-semibold",
-            fontSize: 16
-          }}
-        >No Barbers Available</Text>
+            style={{
+              lineHeight: 60,
+              textAlign: 'center',
+              color: Colors.PRIMARY,
+              fontFamily: "montserrat-semibold",
+              fontSize: 16
+            }}
+          >{barberlist.length} Barbers Available</Text> :
+            <Text
+              style={{
+                lineHeight: 60,
+                textAlign: 'center',
+                color: Colors.PRIMARY,
+                fontFamily: "montserrat-semibold",
+                fontSize: 16
+              }}
+            >No Barbers Available</Text>
         }
-        
+
 
         {
           loading ?
@@ -101,12 +101,12 @@ const SelectBarber = () => {
                           justifyContent: "center",
                           alignItems: "center"
                         }}><Image
-                            source={require("../assets/images/profile.webp")}
+                            source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
                             style={{
-                              width: 50,
-                              height: 50,
+                              width: 45,
+                              height: 45,
                               borderRadius: 50,
-                              borderColor: "rgba(0,0,0,0.4)",
+                              borderColor: `${Colors.PRIMARY}`,
                               borderWidth: 1
                             }}
                           /></View>

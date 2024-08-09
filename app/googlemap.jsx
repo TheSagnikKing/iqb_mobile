@@ -131,7 +131,7 @@ const GoogleMap = () => {
   const params = useLocalSearchParams()
 
   const [region, setRegion] = useState({
-    latitude: 0, 
+    latitude: 0,
     longitude: 0,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -139,36 +139,41 @@ const GoogleMap = () => {
 
 
   useEffect(() => {
-    if(params){
+    if (params) {
       const searchPlaces = async () => {
-          
+
         const googleApisUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-  
-        const url = `${googleApisUrl}?query=${params?.county}&key=AIzaSyCc0rrgXw7WkdvKOqS5YeD6IWHKvl1OJa0`
-  
+
+        // Encode the search query to handle special characters
+        const encodedQuery = encodeURIComponent(params?.Address || params?.city || params?.county || "")
+
+        // const url = `${googleApisUrl}?query=${params?.county}&key=AIzaSyCc0rrgXw7WkdvKOqS5YeD6IWHKvl1OJa0`
+
+        const url = `${googleApisUrl}?query=${encodedQuery}&key=AIzaSyCc0rrgXw7WkdvKOqS5YeD6IWHKvl1OJa0`
+
         try {
           const resp = await fetch(url)
           const json = await resp.json()
-  
-          if(json){
+
+          if (json) {
             console.log("Search Places ", json?.results?.[0]?.geometry)
-  
+
             setRegion({
-              latitude: json?.results?.[0]?.geometry?.location?.lat, 
-              longitude: json?.results?.[0]?.geometry?.location?.lng,
+              latitude: json?.results?.[0]?.geometry?.location?.lat || 0,
+              longitude: json?.results?.[0]?.geometry?.location?.lng || 0,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             })
           }
-          
+
         } catch (error) {
-          console.log("Google Map Error ",error)
+          console.log("Google Map Error ", error)
         }
       }
-  
+
       searchPlaces()
     }
-    
+
   }, [])
 
 
@@ -180,7 +185,7 @@ const GoogleMap = () => {
         showsUserLocation={true}
       >
         <Marker
-          coordinate={region} 
+          coordinate={region}
         />
 
       </MapView>

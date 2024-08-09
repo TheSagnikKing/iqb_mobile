@@ -210,7 +210,7 @@ const ConnectSalon = () => {
                             }}><FontAwesome name="photo" size={24} color="#fff" /></View>
                             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Image Gallery</Text>
                         </Pressable>
-                        <View style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
+                        <Pressable onPress={() => router.push({pathname:"/googlemap", params: {county: saloninforesponse?.Response.county}})} style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
                             <View style={{
                                 width: 50,
                                 height: 50,
@@ -226,7 +226,7 @@ const ConnectSalon = () => {
                                 elevation: 12
                             }}><FontAwesome6 name="location-dot" size={24} color="#fff" /></View>
                             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, textAlign: "center", width: "85%" }}>{salonInfodata?.[0]?.County}</Text>
-                        </View>
+                        </Pressable>
                         <View style={[styles.saloninfo_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, width: "50%" }]}>
                             <Pressable style={{
                                 width: 50,

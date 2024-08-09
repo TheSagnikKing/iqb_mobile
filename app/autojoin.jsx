@@ -161,7 +161,7 @@ const Autojoin = () => {
               <View style={{
                 paddingVertical: 10
               }}><ActivityIndicator size={20} color={"#000"} /></View> :
-              serviceslist.length == 0 && ServiceStatusMessage == "Barber Is Not Online" ?
+              serviceslist.length == 0 && ServiceStatusMessage !== "" ?
                 <View style={{
                   paddingVertical: 10
                 }}><Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }} >{ServiceStatusMessage}</Text></View> :

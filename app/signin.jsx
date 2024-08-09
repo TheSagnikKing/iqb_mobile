@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
@@ -226,8 +226,6 @@ const Signin = () => {
                         href="/signup"
                         style={{ color: Colors.PRIMARY }}
                     >Sign up</Link></Text>
-
-                    {/* <Pressable onPress={() => router.push("/googlemap")}><Text>Google Map</Text></Pressable> */}
                 </View>
             </ScrollView>
         </SafeAreaView>

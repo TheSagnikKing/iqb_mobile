@@ -87,6 +87,25 @@ const ConnectSalon = () => {
     };
 
 
+    const openGoogle = (address, city) => {
+        // const url = 'https://www.google.com';
+
+        const query = `${address}, ${city}`;
+
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (supported) {
+                    return Linking.openURL(url);
+                } else {
+                    Alert.alert(`Don't know how to open this URL: ${url}`);
+                }
+            })
+            .catch((err) => console.error('An error occurred', err));
+    };
+
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
@@ -210,7 +229,9 @@ const ConnectSalon = () => {
                             }}><FontAwesome name="photo" size={24} color="#fff" /></View>
                             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Image Gallery</Text>
                         </Pressable>
-                        <Pressable onPress={() => router.push({ pathname: "/googlemap", params: { Address: saloninforesponse?.Response?.Address, city: saloninforesponse?.Response?.city, county: saloninforesponse?.Response.county } })} style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
+                        <Pressable
+                            onPress={() => openGoogle(saloninforesponse?.Response?.Address , saloninforesponse?.Response?.city)}
+                            style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
                             <View style={{
                                 width: 50,
                                 height: 50,

@@ -117,22 +117,37 @@ const SalonInfo = () => {
     }
   };
 
-  const openGoogle = (address, city) => {
+  // const openGoogle = (address, city) => {
+  //   const query = `${address}, ${city}`;
+
+  //   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+  //   Linking.canOpenURL(url)
+  //     .then((supported) => {
+  //       if (supported) {
+  //         return Linking.openURL(url);
+  //       } else {
+  //         Alert.alert(`Don't know how to open this URL: ${url}`);
+  //       }
+  //     })
+  //     .catch((err) => console.error('An error occurred', err));
+  // };
+
+
+  const openGoogle = async (address, city) => {
     const query = `${address}, ${city}`;
-
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (supported) {
-          return Linking.openURL(url);
-        } else {
-          Alert.alert(`Don't know how to open this URL: ${url}`);
-        }
-      })
-      .catch((err) => console.error('An error occurred', err));
+    const encodedQuery = encodeURIComponent(query);
+    const url = `geo:0,0?q=${encodedQuery}`; // Replace 0,0 with actual coordinates if needed
+  
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      // Fallback to web maps if the native app isn't available
+      const webUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+      Linking.openURL(webUrl);
+    }
   };
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

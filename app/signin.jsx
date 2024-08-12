@@ -103,7 +103,7 @@
 //         const enabled =
 //           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
 //           authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-      
+
 //         if (enabled) {
 //           console.log('Authorization status:', authStatus);
 //         }
@@ -472,7 +472,7 @@
 //     const enabled =
 //       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
 //       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
+
 //     if (enabled) {
 //       console.log('Authorization status:', authStatus);
 //     }
@@ -502,7 +502,7 @@
 // Platform, PermissionsAndroid
 
 
-import { StyleSheet, Text, View,  TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
+import { StyleSheet, Text, View, Platform, PermissionsAndroid, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
@@ -513,6 +513,8 @@ import { signinAction } from '../redux/Actions/AuthAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
+
+import messaging from '@react-native-firebase/messaging';
 
 
 const Signin = () => {
@@ -601,6 +603,28 @@ const Signin = () => {
     // ====== Notification ===============
 
 
+    async function requestUserPermission() {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+            console.log('Authorization status:', authStatus);
+        }
+    }
+
+    const getToken = async () => {
+        const token = await messaging().getToken()
+        console.log("Token = ", token)
+    }
+
+    useEffect(() => {
+        requestUserPermission()
+        getToken()
+    }, [])
+
+
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])
 
     useEffect(() => {
@@ -666,7 +690,7 @@ const Signin = () => {
     return (
         <SafeAreaView style={styles.signin_container}>
             <Toast />
-             <ScrollView style={styles.signin_content_container}>
+            {/* <ScrollView style={styles.signin_content_container}>
                 <View style={styles.signin_content_top}>
                     <View
                         style={{
@@ -816,7 +840,16 @@ const Signin = () => {
                         style={{ color: Colors.PRIMARY }}
                     >Sign up</Link></Text>
                 </View>
-            </ScrollView> 
+            </ScrollView>  */}
+
+            <View style={{ flex: 1, backgroundColor: "#fff" }}>
+                <Text> Hello  There ! Sagnik</Text>
+
+                <View>
+                    <Text>FCM CODE</Text>
+                    <StatusBar style='auto' />
+                </View>
+            </View>
 
         </SafeAreaView>
     )

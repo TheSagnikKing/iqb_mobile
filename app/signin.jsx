@@ -502,6 +502,26 @@
 // Platform, PermissionsAndroid
 
 
+/// Firebase secret key =============
+
+// fir-fcm-98905-firebase-adminsdk-61k86-0123fcf3c8.json
+// {
+//     "type": "service_account",
+//     "project_id": "fir-fcm-98905",
+//     "private_key_id": "0123fcf3c8db7da87bfaac06e4d53011a96c6cbd",
+//     "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCdTNhRyoZmYPv6\n2bBhPqPCfYWUnMXmMP/G/3J5brptPN8IpXVvJ+8XEM0zCAqgpuFTyQOBrfifi8fx\nHJjRwm6ZGZPLuwQSMuJt4cE0Tzm8dqRW1iKG6fV6HxuIN7aCHsNOcI7SKXKLreQ/\n7M9whJfLuq/4RYxJFa2Ja3+ghQPma/v85CoMxLemb4aSZAvzM9Ymwuq04G7AJ6yL\nJAL3p+ZhiY+xxP6VGEHkaQ0qhrv7e5zAVA63qHFR7m+k8Lm+yhTcM+sAmIDHoAzb\nvSc2ljfTKQnWVAeL+r196mpnK+M6Wl6mWLXBkW0fVKxU098DnU9ZbWodqBUYg9XJ\nRFj/nnmBAgMBAAECggEABGPRoa66Q38vaRfMMVqTLWldYgFiEIOLj90vL65ka4oI\nW3Bqr5h4trcUUvlFeqhNn437mBHn32QCR3tZ1HjNp14sXsIwYeWjphdn0fLoFJdn\nDLlbK1K6NBdMKGgNouIC51yCz+CyPq2ysgoE3AoHRntGT/J48M03E5+5ZxxvOG39\n2dYNhSaBBJ+3dKPaFiDJygKT21k5mgzHvKGNwV3jSHdSJDNjwuIj+brBswuBON9w\nOHaxqHmWxpXYtqWUBVlx1t8ha4mfMCFDN2rGmTJHBPNr3JeDjktT9EkMEvrB64t0\nbtrL3lcthXMMrhshUQjPQL2atQu+5l7EiCGUFkRrcQKBgQDTs+UriiEf1NHowXbi\nXPLA4PLCnNN8nSQVCVxXX7agvyFFxBVx2HV1d3XEOdVIKcqCgKUcVswtZQHPtuO3\nt0rISgPwdtchSphiTymOWjigWtQzJVLaogZunBZHrPYNyt4kSJHCifo+vpzJtPmg\ne7S8RSCGxqvO9n3aLf1aS8TclQKBgQC+NtBV0kbpQwa4f/t6NfludcVB/4t7r6Cq\nNHo23zxX66pogh3ZZpHh29eC6hYNK5knswc/wa7hgQ/+nl5gGO2RHFbZRbm2lS5j\nfZnkuhdMRpTUczn7QJw75pZcHDX83SrFK6MEafjlyXlNQfYJ4VRy8yXqG2+dUPV6\n/aipWBnCPQKBgQC8B/9XcaNEI4GhaxxNp+LRH7te0W4iM2xV5u+Gh3OtSLWjwqqN\naIXDJKyL8hYWt0+wI9UC27ET7K/0LuwJRBp+1Qa0sMkZP6kjQE6Xqli7TJFHMDJs\nEBcIbUh4tw4AaBxwO6iDEowa6LBXk49YVCfORNPEAXeeJl7Xx5tMdRnQFQKBgFpo\n11FTZx0MHK+pNTB7YxlbpOyft/6MFcOQud5G8PmhLBgMcH+avxApXB//f4e3B07V\nS0bEmojYvW96esUWVCS64ZTYDVN5SNlFI9aRlO1ORwNL2W1Q4nGeQi15wzdzMBcT\njKJWdFVUE/Hivj0n+unAJG9Hpx+REXzqADath2DJAoGAUtkXG38cyTSgvlD9JUcv\nd3u9lj9QyzBx2Po/qrITkQWsTU3sxcgpmKw2Up8ZDKmXeoyUw4rxrFqzNVPoff/A\nTynBAdiHTPhprXp8X2LkRmNWey3b7xcFdbH4uCcT4daKEwnvTyJmKoxcuI1cTcL+\nrwoPtIMRQfo5q8RfZc9+w+Y=\n-----END PRIVATE KEY-----\n",
+//     "client_email": "firebase-adminsdk-61k86@fir-fcm-98905.iam.gserviceaccount.com",
+//     "client_id": "113302170450037874885",
+//     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+//     "token_uri": "https://oauth2.googleapis.com/token",
+//     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+//     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-61k86%40fir-fcm-98905.iam.gserviceaccount.com",
+//     "universe_domain": "googleapis.com"
+//   }
+
+// =============
+
+
 import { StyleSheet, Text, View, Platform, PermissionsAndroid, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'

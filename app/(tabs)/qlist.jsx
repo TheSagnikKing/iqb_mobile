@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { queueListAction } from '../../redux/Actions/QueueAction';
 import { AntDesign } from '@expo/vector-icons';
+import api from '../../redux/Api/Api';
 
 const QList = () => {
 
@@ -60,9 +61,9 @@ const QList = () => {
 
   const nextqlist = () => {
     const newPageno = pageno + 1;
-      setPageno(newPageno);
-      dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: newPageno }, "iqueuechecklist.php"));
-      setLastRefreshTime(new Date().toLocaleTimeString());
+    setPageno(newPageno);
+    dispatch(queueListAction({ salonid: currentSalonInfo?.[0]?.id, page_no: newPageno }, "iqueuechecklist.php"));
+    setLastRefreshTime(new Date().toLocaleTimeString());
   }
 
   const prevqlist = () => {
@@ -74,7 +75,35 @@ const QList = () => {
     }
   }
 
-  console.log("This salon QUEUE LIST ARE ", qlistdata)
+  // console.log("This salon QUEUE LIST ARE ", qlistdata)
+
+  // const [savestate, setSavestate] = useState([])
+
+  // useEffect(() => {
+  //   if (currentSalonInfo.length > 0) {
+  //     const qfnc = async () => {
+  //       const body = {
+  //         salonid: currentSalonInfo?.[0]?.id,
+  //         page_no: 2
+  //       }
+
+  //       const { data, status } = await api.post(`/iqueuechecklist.php`, body, {
+  //         headers: {
+  //           'Content-Type': 'application/x-www-form-urlencoded'
+  //         }
+  //       });
+
+  //       // console.log("QFNC LIST ", data)
+  //       setSavestate([...savestate, ...data])
+  //     }
+
+  //     qfnc()
+
+  //   }
+  // }, [currentSalonInfo])
+
+  // console.log("Save State ", savestate)
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -178,7 +207,7 @@ const QList = () => {
             height: 45,
             gap: 20
           }}>
-            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16}}>Page No. <Text>{pageno}</Text></Text>
+            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16 }}>Page No. <Text>{pageno}</Text></Text>
 
             <Pressable style={{
               marginLeft: "auto",
@@ -194,7 +223,7 @@ const QList = () => {
               justifyContent: "center",
               alignItems: "center"
             }}
-            onPress={prevqlist}
+              onPress={prevqlist}
             ><AntDesign name="caretleft" size={15} color={Colors.PRIMARYTEXT} /></Pressable>
             <Pressable
               style={{
@@ -243,3 +272,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#efefef"
   }
 })
+

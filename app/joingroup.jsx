@@ -297,9 +297,6 @@ const Joingroup = () => {
 
     };
 
-
-
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <View style={styles.header_container}>

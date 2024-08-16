@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { groupjoinReducer,customerGroupJoinReducer, groupjoinqueueReducer, groupjoinsendReducer } from "./Reducers/groupjoinReducer";
 import { activatedAccountReducer, activatedResendEmailReducer, iqueuesendEmailReducer, mapUserSalonReducer, signinReducer, signupCheckEmailReducer, signupReducer } from "./Reducers/AuthReducer";
 import { iqbSalonsReducer, placesApiReducer, retrieveSalonListReducer } from "./Reducers/LocationReducer"
-import { adminRet2Reducer, getsalonsdetailsbyIdReducer } from "./Reducers/HomeReducer"
+import { adminRet2Reducer, getsalonsdetailsbyIdReducer, iqueuedeleteJoinqReducer } from "./Reducers/HomeReducer"
 import { getservicesbybarberIdsalonIdReducer, groupiqueuejoinedSelectReducer, iqueuebarberSelectReducer, iqueuecheckpositionReducer, iqueueinsertjoinqReducer, iqueuejoinedSelectReducer, queueListReducer } from "./Reducers/QueueReducer";
 import { forgotcheckemailReducer, forgotSendPasswordReducer, getCustomerDetailsByCustomeridReducer, iqueueupdatecustomerdetailsReducer } from "./Reducers/ProfileReducer";
 import { getbarberbysalonidReducer, getsalonimagelistReducer, getservicesbybarberidsalonidReducer, iqbuserrateReducer } from "./Reducers/SalonReducer";
@@ -46,6 +46,8 @@ const rootReducer = combineReducers({
     getservicesbybarberidsalonid: getservicesbybarberidsalonidReducer,
     getsalonimagelist: getsalonimagelistReducer,
     iqbuserrate: iqbuserrateReducer,
+
+    iqueuedeleteJoinq:iqueuedeleteJoinqReducer,
 })
 
 const initialState = {};

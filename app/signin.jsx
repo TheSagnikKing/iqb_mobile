@@ -12,23 +12,55 @@ import Toast from 'react-native-toast-message';
 const Signin = () => {
 
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+    const [currentUserInfo, setCurrentUserInfo] = useState([])
 
     useEffect(() => {
         const getloginsalonuserdata = async () => {
             const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
             setCurrentSalonInfo(JSON.parse(saloninfodata))
+            const userinfodata = await AsyncStorage.getItem('user-logininfo')
+            setCurrentUserInfo(JSON.parse(userinfodata))
         }
 
         getloginsalonuserdata()
     }, [])
+
+    console.log("Current USER INF0 ",currentUserInfo)
 
     const router = useRouter()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const [rememberme, setRememberme] = useState(false)
-    const toggleSwitch = () => setRememberme(previousState => !previousState);
+    const [rememberme, setRememberme] = useState(false);
+
+    useEffect(() => {
+        const asyncremember = async () => {
+            const value = await AsyncStorage.getItem('remember');
+            setRememberme(value === "true");
+        };
+
+        asyncremember();
+    }, []);
+
+    const toggleSwitch = async () => {
+        setRememberme(previousState => {
+            const newState = !previousState;
+            AsyncStorage.setItem("remember", newState ? "true" : "false");
+            return newState;
+        });
+    };
+
+    useEffect(() => {
+        if (rememberme) {
+            setEmail(currentUserInfo?.[0]?.Email || "");
+            setPassword(currentUserInfo?.[0]?.Password || "");
+        } else {
+            setEmail("");
+            setPassword("");
+        }
+    }, [rememberme, currentUserInfo]);
+
 
     const dispatch = useDispatch()
 

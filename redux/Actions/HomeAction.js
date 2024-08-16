@@ -1,6 +1,7 @@
 import Toast from "react-native-toast-message";
 import api from "../Api/Api";
-import { ADMIN_MERGE_RET2_FAIL, ADMIN_MERGE_RET2_REQ, ADMIN_MERGE_RET2_SUCCESS, GET_SALON_DETAILSBYID_FAIL, GET_SALON_DETAILSBYID_REQ, GET_SALON_DETAILSBYID_SUCCESS } from "../Constants/HomeConstant";
+import { ADMIN_MERGE_RET2_FAIL, ADMIN_MERGE_RET2_REQ, ADMIN_MERGE_RET2_SUCCESS, GET_SALON_DETAILSBYID_FAIL, GET_SALON_DETAILSBYID_REQ, GET_SALON_DETAILSBYID_SUCCESS, IQUEUE_DELETE_JOINQ_FAIL, IQUEUE_DELETE_JOINQ_REQ, IQUEUE_DELETE_JOINQ_SUCCESS } from "../Constants/HomeConstant";
+import { Alert } from "react-native";
 
 export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
     try {
@@ -9,8 +10,8 @@ export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
         });
 
         const params = {
-            username:homedata.username,
-            salonid:homedata.salonid,
+            username: homedata.username,
+            salonid: homedata.salonid,
             type: "ioS",
             gcCode: "",
             token: "",
@@ -79,6 +80,60 @@ export const getsalonsdetailsbyIdAction = (SalonId, endpoint) => async (dispatch
                 type: GET_SALON_DETAILSBYID_SUCCESS,
                 payload: data,
             });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+
+export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, dispatch) => {
+    try {
+        dispatch({
+            type: IQUEUE_DELETE_JOINQ_REQ
+        });
+
+        const body = {
+            salonid,
+            checkUsername
+        }
+
+        const { data } = await api.post(`/${endpoint}`, body, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        if (data.StatusCode == 201) {
+            dispatch({
+                type: IQUEUE_DELETE_JOINQ_FAIL,
+                payload: data.StatusMessage
+            });
+
+
+            Toast.show({
+                type: 'error',
+                text1: data.StatusMessage,
+                position: "bottom",
+                bottomOffset: 0,
+            });
+
+        } else if (data.StatusCode == 200) {
+            dispatch({
+                type: IQUEUE_DELETE_JOINQ_SUCCESS,
+                payload: data,
+            });
+
+            Alert.alert('Success', `Booking cancelled successfully`, [
+                {
+                    text: 'OK', onPress: async () => dispatch(adminRet2Action({
+                        username: checkUsername,
+                        salonid: salonid,
+                        type: "ioS",
+                    }, "adminMergedRet2.php"))
+                },
+            ]);
         }
 
     } catch (error) {

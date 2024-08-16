@@ -113,7 +113,8 @@ const SalonInfo = () => {
     if (supported) {
       await Linking.openURL(url);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
+      // Alert.alert(`Don't know how to open this URL: ${url}`);
+      Linking.openURL(url);
     }
   };
 

@@ -43,6 +43,8 @@ const Home = () => {
     response
   } = admiMergeRet2
 
+  console.log("Admin Merge Ret 2 Response ", response)
+
   const router = useRouter()
   const [join, setJoin] = useState(false)
 
@@ -74,6 +76,22 @@ const Home = () => {
     <SafeAreaView style={{ flex: 1, position: "relative", backgroundColor: "#fff" }}>
       <Header />
       <ScrollView style={styles.home_container}>
+
+        <View style={{
+          borderBottomColor: "rgba(0,0,0,0.4)",
+          borderBottomWidth: 2,
+          paddingBottom: 10
+        }}>
+          <Text
+            style={{
+              fontFamily: "montserrat-semibold",
+              textAlign: "center",
+              marginBottom: 30,
+              fontSize: 16
+            }}
+          >Information</Text>
+          <Text style={{ fontFamily: "montserrat-medium" }}>{response?.SalonText}</Text>
+        </View>
 
         <View style={styles.queue_status_container}>
           <View style={[styles.queue_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 2, height: 200 }]}>
@@ -161,7 +179,9 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
-      <View style={{
+
+      {/* This is the join icons view */}
+      {/* <View style={{
         position: "absolute",
         right: 15,
         bottom: 15
@@ -196,16 +216,9 @@ const Home = () => {
               top: -160,
               right: 3,
               backgroundColor: "#fff",
-              // shadowColor: '#000',
-              // shadowOffset: { width: 0, height: 6 },
-              // shadowOpacity: 0.4,
-              // shadowRadius: 12,
-              // elevation: 12,
               borderRadius: 10,
               padding: 10,
               flexDirection: "column",
-              // marginBottom: 10
-
             }}
           >
 
@@ -220,33 +233,44 @@ const Home = () => {
                 marginBottom: 5,
                 animationdelay: 300
               }}>
-                <Text style={{
-                  lineHeight: 30,
-                  backgroundColor: "#efefef",
-                  paddingHorizontal: 15,
-                  borderRadius: 15,
-                  fontFamily: "montserrat-semibold",
-                  fontSize: 14,
-                  borderColor: Colors.PRIMARY,
-                  borderWidth: 1
-                }}>{item.name}</Text>
                 <Pressable
                   onPress={() => {
                     router.push(item.url)
                     setJoin(false)
                   }}
+
                   style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: "#efefef",
-                    borderColor: Colors.PRIMARY,
-                    borderWidth: 1,
-                    borderRadius: 50,
                     display: "flex",
-                    justifyContent: "center",
+                    flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 10
                   }}
-                >{item.icon}</Pressable>
+                >
+                  <Text style={{
+                    lineHeight: 30,
+                    backgroundColor: "#efefef",
+                    paddingHorizontal: 15,
+                    borderRadius: 15,
+                    fontFamily: "montserrat-semibold",
+                    fontSize: 14,
+                    borderColor: Colors.PRIMARY,
+                    borderWidth: 1
+                  }}>{item.name}</Text>
+                  <View
+                    style={{
+                      width: 40,
+                      height: 40,
+                      backgroundColor: "#efefef",
+                      borderColor: Colors.PRIMARY,
+                      borderWidth: 1,
+                      borderRadius: 50,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >{item.icon}</View>
+                </Pressable>
               </View>
               }
               keyExtractor={item => item._id}
@@ -254,6 +278,89 @@ const Home = () => {
 
           </View>
         }
+      </View> */}
+
+      {/* This is the queue status code after successful joining */}
+      <View>
+        <Text style={{
+          textAlign: "center",
+          fontFamily: "montserrat-bold",
+          marginVertical: 20,
+          fontSize: 16
+        }}>Queue Status</Text>
+        <View>
+          <View style={{
+            width: "90%",
+            height: 60,
+            backgroundColor: Colors.PRIMARY,
+            marginHorizontal: "auto",
+            zIndex: 2,
+            borderRadius: 5,
+            padding: 10,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20
+            }}>
+              <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>5</Text>
+              <View>
+                <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: Ady Jacinto</Text>
+                <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: Bilal</Text>
+              </View>
+            </View>
+            <View style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20
+            }}>
+              <View style={{
+                backgroundColor: "#000",
+                height: 30,
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+                borderColor: "#fff",
+                borderWidth: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>02:00</Text></View>
+
+              <Pressable style={{
+                width: 30,
+                height: 30,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#fff",
+                borderRadius: 50,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+                elevation: 5,
+
+              }}
+                onPress={() => alert("Alert")}
+              ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
+            </View>
+          </View>
+          <View
+            style={{
+              width: "25%",
+              height: 40,
+              backgroundColor: Colors.PRIMARY,
+              marginHorizontal: "auto",
+              marginBottom: 10,
+              zIndex: 2,
+              padding: 10
+            }}
+          ><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Q Status</Text>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   )

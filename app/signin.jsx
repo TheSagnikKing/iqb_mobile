@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert, Switch, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
@@ -8,9 +8,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { signinAction } from '../redux/Actions/AuthAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-
-// "scheme": "myapp",
-//   "bundleIdentifier": "com.sumeath.iqb_mobile"
 
 const Signin = () => {
 
@@ -29,6 +26,9 @@ const Signin = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const [rememberme, setRememberme] = useState(false)
+    const toggleSwitch = () => setRememberme(previousState => !previousState);
 
     const dispatch = useDispatch()
 
@@ -76,12 +76,14 @@ const Signin = () => {
         }
     }
 
+    console.log("Current Salon Info ", currentSalonInfo)
+
     return (
         <SafeAreaView style={styles.signin_container}>
             <Toast />
             <ScrollView style={styles.signin_content_container}>
                 <View style={styles.signin_content_top}>
-                    <View
+                    {/* <View
                         style={{
                             width: 55,
                             height: 55,
@@ -102,7 +104,36 @@ const Signin = () => {
                             name="scissors"
                             size={30}
                             color={Colors.PRIMARYTEXT}
-                        /></View>
+                        /></View> */}
+
+                    <View
+                        style={{
+                            backgroundColor: Colors.PRIMARY,
+                            width: 75,
+                            height: 75,
+                            borderRadius: 50,
+                            marginHorizontal: "auto",
+                            marginTop: 20,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.4,
+                            shadowRadius: 12,
+                            marginBottom: 30
+                        }}>
+                        {
+                            currentSalonInfo?.[0]?.SalonAppIcon && <Image
+                                source={{ uri: `https://server.iqueuebarbers.com/~iqueue/SalonAppIcons/${currentSalonInfo?.[0]?.SalonAppIcon}` }}
+                                style={{
+                                    width: 70,
+                                    height: 70,
+                                    borderRadius: 50
+                                }}
+                            />
+                        }
+
+                    </View>
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",
@@ -140,14 +171,33 @@ const Signin = () => {
                         style={{
                             display: "flex",
                             flexDirection: "row",
-                            justifyContent: "flex-end",
+                            justifyContent: "space-between",
+                            alignItems: "center"
                         }}
                     >
+                        <View style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 10
+                        }}>
+                            <Switch
+                                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                thumbColor={rememberme ? '#f5dd4b' : '#f4f3f4'}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleSwitch}
+                                value={rememberme}
+                            />
+                            <Text style={{
+                                fontFamily: "montserrat-semibold",
+                                fontSize: 12
+                            }}>Remember me login</Text>
+                        </View>
                         <Pressable
                             onPress={() => router.push("/forgot")}
                         ><Text style={{
-                            fontFamily: "montserrat-medium",
-                            fontSize: 14
+                            fontFamily: "montserrat-semibold",
+                            fontSize: 12,
+                            color: Colors.PRIMARY
                         }}>Forgot Password ?</Text></Pressable>
                     </View>
                 </View>
@@ -229,7 +279,7 @@ const Signin = () => {
                         style={{ color: Colors.PRIMARY }}
                     >Sign up</Link></Text>
                 </View>
-            </ScrollView> 
+            </ScrollView>
 
         </SafeAreaView>
     )

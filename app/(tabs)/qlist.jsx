@@ -124,9 +124,9 @@ const QList = () => {
             alignItems: "center",
             justifyContent: "space-around"
           }}>
-            <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Q-Position</Text>
-            <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Name</Text>
-            <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Barber</Text>
+            <Text style={{ flex: 0.6, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Q-Position</Text>
+            <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Name</Text>
+            <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12, color: Colors.PRIMARYTEXT }} numberOfLines={1} ellipsizeMode="tail">Barber</Text>
           </View>
         </View>
 
@@ -161,9 +161,9 @@ const QList = () => {
                     borderBottomColor: "rgba(0,0,0,0.2)",
                     borderBottomWidth: 1
                   }}>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.FirstLastName}</Text>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 16 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
+                    <Text style={{ flex: 0.6, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.FirstLastName}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
                   </View>
                 )}
                 keyExtractor={item => item.id}

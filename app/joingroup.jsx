@@ -75,7 +75,7 @@ const Joingroup = () => {
 
     const groupjoin = useSelector(state => state.groupjoin)
 
-    // console.log("JoinId", groupjoin.joinid)
+    console.log("GROUP JOIN ===========", groupjoin.ServiceStatusMessage)
 
     useEffect(() => {
         setJoinquearray({
@@ -298,6 +298,8 @@ const Joingroup = () => {
     };
 
 
+
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <View style={styles.header_container}>
@@ -503,17 +505,22 @@ const Joingroup = () => {
                 />
 
             </View>
-            <Pressable
-                style={{
-                    height: 50,
-                    backgroundColor: Colors.PRIMARY,
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}
-                onPress={() => groupjoinpressed()}
-            >
-                <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
-            </Pressable>
+
+            {
+                groupjoin.ServiceStatusMessage == "Success" &&
+                <Pressable
+                    style={{
+                        height: 50,
+                        backgroundColor: Colors.PRIMARY,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+                    onPress={() => groupjoinpressed()}
+                >
+                    <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
+                </Pressable>
+            }
+
         </SafeAreaView>
     )
 }

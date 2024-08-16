@@ -229,17 +229,20 @@ const selectservices = () => {
         }
 
       </View>
-      <Pressable
-        style={{
-          height: 50,
-          backgroundColor: Colors.PRIMARY,
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-        onPress={joinqueuepressed}
-      >
-        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
-      </Pressable>
+      {
+        ServiceStatusMessage == "Success" && <Pressable
+          style={{
+            height: 50,
+            backgroundColor: Colors.PRIMARY,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={joinqueuepressed}
+        >
+          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
+        </Pressable>
+      }
+
     </View>
   )
 }

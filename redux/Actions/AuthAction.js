@@ -49,11 +49,6 @@ export const signinAction = (email, password, salonid, router, endpoint) => asyn
                 await AsyncStorage.setItem('user-logininfo', JSON.stringify(data.Response));
                 router.push("/home")
             }
-
-            // await AsyncStorage.setItem('user-login', JSON.stringify(data));
-            
-
-            // router.push("/activationcode")
         }
 
     } catch (error) {

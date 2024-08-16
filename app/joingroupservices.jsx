@@ -35,6 +35,15 @@ const Joingroupservices = () => {
         StatusMessage: ServiceStatusMessage,
     } = getservicesbybarberIdsalonId
 
+    useEffect(() => {
+        if(ServiceStatusMessage !== ""){
+            dispatch({
+                type: "SET_SERVICE_STATUS_MESSAGE",
+                payload: ServiceStatusMessage
+            })
+        }
+    },[ServiceStatusMessage])
+
     const [timejoinedq, setTimejoinedq] = useState("")
     const [rdatejoinedq, setRdatejoinedq] = useState("")
 

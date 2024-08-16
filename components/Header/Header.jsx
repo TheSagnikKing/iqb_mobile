@@ -42,11 +42,12 @@ const Header = () => {
   const router = useRouter()
 
   const logoutPressed = async () => {
-    await AsyncStorage.removeItem('user-logininfo');
+    // await AsyncStorage.removeItem('user-logininfo');
+    await AsyncStorage.setItem("remember", "false")
     router.push("/signin")
   }
 
-  console.log("The customerdetailsdata from header ssss",customerdetailsdata)
+  // console.log("The customerdetailsdata from header ssss",customerdetailsdata)
 
   return (
     <View style={styles.header_container}>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList, Linking } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, FlatList, Linking, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from "../constants/Colors"
@@ -82,28 +82,27 @@ const ConnectSalon = () => {
         if (supported) {
             await Linking.openURL(url);
         } else {
-            Alert.alert(`Don't know how to open this URL: ${url}`);
+            // Alert.alert(`Don't know how to open this URL: ${url}`);
+            Linking.openURL(url);
         }
     };
 
 
-    const openGoogle = (address, city) => {
+    const openGoogle = async (address, city) => {
         const query = `${address}, ${city}`;
+        const encodedQuery = encodeURIComponent(query);
+        const url = `geo:0,0?q=${encodedQuery}`; 
+      
+        const supported = await Linking.canOpenURL(url);
+        if (supported) {
+          await Linking.openURL(url);
+        } else {
+          const webUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+          Linking.openURL(webUrl);
+        }
+      };
 
-        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-
-        Linking.canOpenURL(url)
-            .then((supported) => {
-                if (supported) {
-                    return Linking.openURL(url);
-                } else {
-                    Alert.alert(`Don't know how to open this URL: ${url}`);
-                }
-            })
-            .catch((err) => console.error('An error occurred', err));
-    };
-
-
+      
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{

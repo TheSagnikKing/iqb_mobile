@@ -1,7 +1,7 @@
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-export const groupjoinReducer = (state = { joinid: 0, customerName: "", barberName: "", services: {} }, action) => {
+export const groupjoinReducer = (state = { joinid: 0, customerName: "", barberName: "", services: {}, ServiceStatusMessage: "" }, action) => {
     switch (action.type) {
         case "CUSTOMER_NAME": {
             return {
@@ -26,6 +26,13 @@ export const groupjoinReducer = (state = { joinid: 0, customerName: "", barberNa
                 ...state,
                 services: service
             }
+        case "SET_SERVICE_STATUS_MESSAGE": {
+            const ServiceStatusMessage = action.payload
+            return {
+                ...state,
+                ServiceStatusMessage: ServiceStatusMessage
+            }
+        }
         default:
             return state;
     }

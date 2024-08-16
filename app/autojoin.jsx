@@ -231,7 +231,8 @@ const Autojoin = () => {
           }
 
         </View>
-        <Pressable
+        {
+          ServiceStatusMessage == "Success" && <Pressable
           style={{
             height: 50,
             backgroundColor: Colors.PRIMARY,
@@ -242,6 +243,8 @@ const Autojoin = () => {
         >
           <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
         </Pressable>
+        }
+        
       </View>
     </>
   )

@@ -1,4 +1,4 @@
-import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View , ActivityIndicator} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AntDesign, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors'
@@ -194,7 +194,7 @@ const Joingroup = () => {
 
     // };
 
-    const insertjoinq = async (joinqdata, endpoint) => {
+    const insertjoinq = async (joinqdata, endpoint, setJoinqueueloading) => {
         try {
             const url = `/${endpoint}`;
 
@@ -203,12 +203,14 @@ const Joingroup = () => {
             };
 
             const { data, status } = await api.post(url, joinqdata, { headers });
+
         } catch (error) {
             console.log(error)
+            setJoinqueueloading(false)
         }
     }
 
-    const checkpostion = async (salonid, joinqueuedata, endpoint) => {
+    const checkpostion = async (salonid, joinqueuedata, endpoint, setJoinqueueloading) => {
         try {
             const body = {
                 salonid
@@ -223,15 +225,18 @@ const Joingroup = () => {
             });
 
             if (data.StatusCode == 200) {
-                await insertjoinq({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php")
+                await insertjoinq({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", setJoinqueueloading)
             }
         } catch (error) {
             console.log(error)
+            setJoinqueueloading(false)
         }
     }
 
-    const groupjoinselect = async (iqueuecheckdata, updatedGroupJoinSend, endpoint) => {
+    const groupjoinselect = async (iqueuecheckdata, updatedGroupJoinSend, endpoint, setJoinqueueloading) => {
         try {
+            setJoinqueueloading(true)
+            
             const body = iqueuecheckdata;
 
             const url = `/${endpoint}`;
@@ -244,8 +249,10 @@ const Joingroup = () => {
 
             if (data.StatusCode == 201) {
                 for (const queue of updatedGroupJoinSend) {
-                    await checkpostion(iqueuecheckdata.salonid, queue, "iqueuecheckposition_v2.php")
+                    await checkpostion(iqueuecheckdata.salonid, queue, "iqueuecheckposition_v2.php", setJoinqueueloading)
                 }
+
+                setJoinqueueloading(false)
 
                 router.push("/home")
 
@@ -258,11 +265,14 @@ const Joingroup = () => {
                 })
             } else if (data.StatusCode == 200) {
                 alert("User already in the queue")
+                setJoinqueueloading(false)
             }
         } catch (error) {
             console.log(error)
         }
     }
+
+    const [joinqueueloading, setJoinqueueloading] = useState(false)
 
     const groupjoinpressed = async () => {
         const generateRandomCode = () => {
@@ -292,13 +302,13 @@ const Joingroup = () => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
-            { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php") },
+            { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", setJoinqueueloading) },
         ]);
 
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", position:"relative" }}>
             <View style={styles.header_container}>
                 <View style={{
                     flexDirection: "row",
@@ -516,6 +526,20 @@ const Joingroup = () => {
                 >
                     <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
                 </Pressable>
+            }
+
+            {
+                joinqueueloading && <View style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    flex: 1,
+                    backgroundColor: "rgba(0,0,0,0.8)",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}><ActivityIndicator size={32} color={`${Colors.PRIMARYTEXT}`} /></View>
             }
 
         </SafeAreaView>

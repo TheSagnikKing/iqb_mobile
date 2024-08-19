@@ -88,54 +88,99 @@ export const getsalonsdetailsbyIdAction = (SalonId, endpoint) => async (dispatch
 };
 
 
-export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, dispatch) => {
+export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, dispatch, gcCode) => {
     try {
         dispatch({
             type: IQUEUE_DELETE_JOINQ_REQ
         });
 
-        const body = {
-            salonid,
-            checkUsername
-        }
-
-        const { data } = await api.post(`/${endpoint}`, body, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+        if(gcCode == "N/A"){
+            const body = {
+                salonid,
+                checkUsername
             }
-        });
 
-        if (data.StatusCode == 201) {
-            dispatch({
-                type: IQUEUE_DELETE_JOINQ_FAIL,
-                payload: data.StatusMessage
+            const { data } = await api.post(`/${endpoint}`, body, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             });
+    
+            if (data.StatusCode == 201) {
+                dispatch({
+                    type: IQUEUE_DELETE_JOINQ_FAIL,
+                    payload: data.StatusMessage
+                });
+    
+    
+                Toast.show({
+                    type: 'error',
+                    text1: data.StatusMessage,
+                    position: "bottom",
+                    bottomOffset: 0,
+                });
+    
+            } else if (data.StatusCode == 200) {
+                dispatch({
+                    type: IQUEUE_DELETE_JOINQ_SUCCESS,
+                    payload: data,
+                });
+    
+                Alert.alert('Success', `Booking cancelled successfully`, [
+                    {
+                        text: 'OK', onPress: async () => dispatch(adminRet2Action({
+                            username: checkUsername,
+                            salonid: salonid,
+                            type: "ioS",
+                        }, "adminMergedRet2.php"))
+                    },
+                ]);
+            }
+        }else{
+            const body = {
+                salonid,
+                checkUsername,
+                gcCode
+            }
 
-
-            Toast.show({
-                type: 'error',
-                text1: data.StatusMessage,
-                position: "bottom",
-                bottomOffset: 0,
+            const { data } = await api.post(`/${endpoint}`, body, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             });
-
-        } else if (data.StatusCode == 200) {
-            dispatch({
-                type: IQUEUE_DELETE_JOINQ_SUCCESS,
-                payload: data,
-            });
-
-            Alert.alert('Success', `Booking cancelled successfully`, [
-                {
-                    text: 'OK', onPress: async () => dispatch(adminRet2Action({
-                        username: checkUsername,
-                        salonid: salonid,
-                        type: "ioS",
-                    }, "adminMergedRet2.php"))
-                },
-            ]);
+    
+            if (data.StatusCode == 201) {
+                dispatch({
+                    type: IQUEUE_DELETE_JOINQ_FAIL,
+                    payload: data.StatusMessage
+                });
+    
+    
+                Toast.show({
+                    type: 'error',
+                    text1: data.StatusMessage,
+                    position: "bottom",
+                    bottomOffset: 0,
+                });
+    
+            } else if (data.StatusCode == 200) {
+                dispatch({
+                    type: IQUEUE_DELETE_JOINQ_SUCCESS,
+                    payload: data,
+                });
+    
+                Alert.alert('Success', `Booking cancelled successfully`, [
+                    {
+                        text: 'OK', onPress: async () => dispatch(adminRet2Action({
+                            username: checkUsername,
+                            salonid: salonid,
+                            type: "ioS",
+                        }, "adminMergedRet2.php"))
+                    },
+                ]);
+            }
         }
-
+        
     } catch (error) {
         console.log(error)
     }

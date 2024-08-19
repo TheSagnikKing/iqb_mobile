@@ -36,7 +36,7 @@ const _layout = () => {
         />
         <Stack.Screen name="signin"
           options={{
-            headerShown: false
+            headerShown: false,
           }}
         />
         <Stack.Screen name="signup"

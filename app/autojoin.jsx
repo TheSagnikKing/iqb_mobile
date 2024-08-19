@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator, Alert } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator, Alert, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -77,6 +77,8 @@ const Autojoin = () => {
 
   const router = useRouter()
 
+  const [joinqueueloading, setJoinqueueloading] = useState(false)
+
   const autojoinPressed = () => {
     const iqueuecheckdata = {
       checkUsername: currentUserInfo?.[0]?.UserName,
@@ -103,14 +105,14 @@ const Autojoin = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router, setJoinqueueloading)) },
     ]);
   }
 
   return (
     <>
       <Toast />
-      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{ flex: 1, backgroundColor: "#fff", position:"relative" }}>
 
         <View style={{
           backgroundColor: "#fff",
@@ -233,16 +235,30 @@ const Autojoin = () => {
         </View>
         {
           ServiceStatusMessage == "Success" && <Pressable
-          style={{
-            height: 50,
-            backgroundColor: Colors.PRIMARY,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-          onPress={() => autojoinPressed()}
-        >
-          <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
-        </Pressable>
+            style={{
+              height: 50,
+              backgroundColor: Colors.PRIMARY,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            onPress={() => autojoinPressed()}
+          >
+            <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
+          </Pressable>
+        }
+
+        {
+          joinqueueloading && <View style={{
+            position:"absolute",
+            top:0,
+            left:0,
+            right:0,
+            bottom:0,
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.8)",
+            justifyContent:"center",
+            alignItems:"center"
+          }}><ActivityIndicator size={32} color={`${Colors.PRIMARYTEXT}`} /></View>
         }
         
       </View>

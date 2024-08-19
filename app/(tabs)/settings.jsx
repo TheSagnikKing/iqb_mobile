@@ -15,12 +15,12 @@ const settingsMenu = [
     icon: <MaterialIcons name="mobile-friendly" size={24} color="#fff" />,
     url: "/appinfo"
   },
-  {
-    _id: 2,
-    title: "Delete Account",
-    icon: <MaterialCommunityIcons name="delete-sweep" size={24} color="#fff" />,
-    url: "/deleteaccount"
-  },
+  // {
+  //   _id: 2,
+  //   title: "Delete Account",
+  //   icon: <MaterialCommunityIcons name="delete-sweep" size={24} color="#fff" />,
+  //   url: "/deleteaccount"
+  // },
   {
     _id: 3,
     title: "Change Location",

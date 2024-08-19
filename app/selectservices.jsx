@@ -78,6 +78,8 @@ const selectservices = () => {
 
   const router = useRouter()
 
+  const [joinqueueloading, setJoinqueueloading] = useState(false)
+
   const joinqueuepressed = () => {
     const iqueuecheckdata = {
       checkUsername: currentUserInfo?.[0]?.UserName,
@@ -104,12 +106,12 @@ const selectservices = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router)) },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router, setJoinqueueloading)) },
     ]);
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#fff", position: "relative" }}>
       <Toast />
       <View style={{
         backgroundColor: "#fff",
@@ -241,6 +243,20 @@ const selectservices = () => {
         >
           <Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, color: Colors.PRIMARYTEXT }}>+JOIN QUEUE</Text>
         </Pressable>
+      }
+
+      {
+        joinqueueloading && <View style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.8)",
+          justifyContent: "center",
+          alignItems: "center"
+        }}><ActivityIndicator size={32} color={`${Colors.PRIMARYTEXT}`} /></View>
       }
 
     </View>

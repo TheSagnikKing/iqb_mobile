@@ -25,7 +25,7 @@ const Signin = () => {
         getloginsalonuserdata()
     }, [])
 
-    console.log("Current USER INF0 ",currentUserInfo)
+    // console.log("Current USER INF0 ",currentUserInfo)
 
     const router = useRouter()
 
@@ -108,7 +108,7 @@ const Signin = () => {
         }
     }
 
-    console.log("Current Salon Info ", currentSalonInfo)
+    // console.log("Current Salon Info ", currentSalonInfo)
 
     return (
         <SafeAreaView style={styles.signin_container}>

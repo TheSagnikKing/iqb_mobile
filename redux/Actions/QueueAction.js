@@ -3,6 +3,42 @@ import api from "../Api/Api";
 import Toast from "react-native-toast-message";
 import { Alert } from "react-native";
 
+// export const queueListAction = (queuelistdata, endpoint) => async (dispatch) => {
+//     try {
+//         dispatch({
+//             type: IQUEUE_CHECKLIST_REQ
+//         });
+
+//         const body = {
+//             salonid: queuelistdata.salonid,
+//             page_no: queuelistdata.page_no
+//         }
+
+//         const { data, status } = await api.post(`/${endpoint}`, body, {
+//             headers: {
+//                 'Content-Type': 'application/x-www-form-urlencoded'
+//             }
+//         });
+
+//         if (status == 200) {
+
+//             const sorteddata = [...data].sort((a, b) => {
+//                 return a.QPosition - b.QPosition;
+//             });
+
+//             dispatch({
+//                 type: IQUEUE_CHECKLIST_SUCCESS,
+//                 payload: sorteddata,
+//             });
+//         }
+
+//     } catch (error) {
+//         console.log(error)
+//     }
+// };
+
+
+
 export const queueListAction = (queuelistdata, endpoint) => async (dispatch) => {
     try {
         dispatch({
@@ -26,7 +62,6 @@ export const queueListAction = (queuelistdata, endpoint) => async (dispatch) => 
                 return a.QPosition - b.QPosition;
             });
 
-
             dispatch({
                 type: IQUEUE_CHECKLIST_SUCCESS,
                 payload: sorteddata,
@@ -37,6 +72,7 @@ export const queueListAction = (queuelistdata, endpoint) => async (dispatch) => 
         console.log(error)
     }
 };
+
 
 export const iqueuebarberSelectAction = (salonid, endpoint) => async (dispatch) => {
     try {
@@ -123,7 +159,7 @@ export const getservicesbybarberIdsalonIdAction = (params, endpoint) => async (d
     }
 };
 
-const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch) => {
+const iqueueinsertjoinqAction = (joinqdata, endpoint, router, setJoinqueueloading) => async (dispatch) => {
     try {
         dispatch({
             type: IQUEUE_INSERTJOINQ_REQ
@@ -150,26 +186,16 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch
                 bottomOffset: 0,
             });
 
+            setJoinqueueloading(false)
+
         } else if (data.StatusCode == 200) {
             dispatch({
                 type: IQUEUE_INSERTJOINQ_SUCCESS,
                 payload: data.Response
             })
 
-            // console.log("Finally iqueue insert joinq ", data);
+            setJoinqueueloading(false)
             router.push("/home")
-
-
-            // This is for group join data
-            // dispatch({
-            //     type: "RESET_SEND_GROUP"
-            // })
-
-            // dispatch({
-            //     type: "RESET_CUSTOMER_GROUP",
-            // })
-
-            // console.log("DONE")
         }
 
     } catch (error) {
@@ -177,7 +203,7 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router) => async (dispatch
     }
 };
 
-const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => async (dispatch) => {
+const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router, setJoinqueueloading) => async (dispatch) => {
     try {
         dispatch({
             type: IQUEUE_CHECK_POSITON_REQ
@@ -200,13 +226,15 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => 
                 type: IQUEUE_CHECK_POSITON_FAIL,
                 payload: data.Response
             })
+
+            setJoinqueueloading(false)
         } else if (data.StatusCode == 200) {
             dispatch({
                 type: IQUEUE_CHECK_POSITON_SUCCESS,
                 payload: data.Response
             })
 
-            dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router))
+            dispatch(iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router, setJoinqueueloading))
         }
 
     } catch (error) {
@@ -214,8 +242,11 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router) => 
     }
 };
 
-export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router) => async (dispatch) => {
+export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router, setJoinqueueloading) => async (dispatch) => {
     try {
+
+        setJoinqueueloading(true)
+
         dispatch({
             type: IQUEUE_JOINED_SELECT_REQ
         });
@@ -241,15 +272,10 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
                 payload: data.Response
             })
 
-            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition_v2.php", router))
+            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition_v2.php", router, setJoinqueueloading))
         } else if (data.StatusCode == 200) {
-            // Toast.show({
-            //     type: 'error',
-            //     text1: "User already in the queue",
-            //     position: "bottom",
-            //     bottomOffset: 0,
-            // });
             alert("User already in the queue")
+            setJoinqueueloading(false)
         }
 
     } catch (error) {

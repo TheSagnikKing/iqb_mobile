@@ -25,14 +25,14 @@ const Home = () => {
     getloginsalonuserdata()
   }, [])
 
-  console.log("User Info ", currentUserInfo)
+  // console.log("User Info ", currentUserInfo)
   // console.log("Salon Info ", currentSalonInfo)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (currentUserInfo.length > 0) {
-      dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType }, "adminMergedRet2.php"))
+      dispatch(adminRet2Action({ username: currentUserInfo?.[0]?.UserName, salonid: currentUserInfo?.[0]?.SalonId, type: currentUserInfo?.[0]?.serviceDeviceType }, "adminMergedRet3.php"))
     }
   }, [dispatch, currentUserInfo])
 
@@ -43,7 +43,7 @@ const Home = () => {
     response
   } = admiMergeRet2
 
-  console.log("Admin Merge Ret 2 Response ", response)
+  // console.log("Admin Merge Ret 2 Response ", response)
 
   const router = useRouter()
   const [join, setJoin] = useState(false)
@@ -79,7 +79,7 @@ const Home = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: async () => await iqueuedeleteJoinqAction(UserName, salonid, endpoint, dispatch) },
+      { text: 'OK', onPress: async () => await iqueuedeleteJoinqAction(UserName, salonid, endpoint, dispatch, response?.gcCode) },
     ]);
   }
   return (
@@ -191,7 +191,7 @@ const Home = () => {
       </ScrollView>
 
       {
-        response?.QStatusList == 0 ? (<View style={{
+        response?.QStatusList?.length == 0 ? (<View style={{
           position: "absolute",
           right: 15,
           bottom: 15
@@ -293,14 +293,21 @@ const Home = () => {
 
             </View>
           }
-        </View>) : response?.QStatusList?.length > 0 && (<View>
+        </View>) : response?.QStatusList?.length > 0 && (<View style={{
+          borderTopWidth: 1,
+          borderTopColor: "rgba(0,0,0,0.4)",
+          backgroundColor: "#efefef"
+          // paddingTop: 10
+        }}>
           <Text style={{
             textAlign: "center",
             fontFamily: "montserrat-bold",
             marginVertical: 20,
-            fontSize: 16
+            fontSize: 16,
           }}>Queue Status</Text>
-          <View>
+          <View style={{
+            marginBottom: 20
+          }}>
             <View style={{
               width: "90%",
               height: 60,
@@ -360,7 +367,7 @@ const Home = () => {
                 ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
               </View>
             </View>
-            <View
+            {/* <View
               style={{
                 width: "25%",
                 height: 40,
@@ -371,198 +378,11 @@ const Home = () => {
                 padding: 10
               }}
             ><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Q Status</Text>
-            </View>
+            </View> */}
           </View>
         </View>)
       }
 
-      {/* This is the join icons view */}
-      {/* <View style={{
-        position: "absolute",
-        right: 15,
-        bottom: 15
-      }}>
-        <Pressable
-          style={{
-            width: 45,
-            height: 45,
-            backgroundColor: Colors.PRIMARY,
-            borderRadius: 50,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.4,
-            shadowRadius: 12,
-            elevation: 12,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={() => setJoin((prev) => !prev)}
-        >{
-            join ? <Entypo name="cross" size={24} color="#fff" /> : <MaterialIcons name="person-add-alt-1" size={24} color="#fff" />
-          }
-        </Pressable>
-
-        {
-          join && <View
-            style={{
-              height: "auto",
-              width: 220,
-              position: "absolute",
-              top: -160,
-              right: 3,
-              backgroundColor: "#fff",
-              borderRadius: 10,
-              padding: 10,
-              flexDirection: "column",
-              shadowColor: '#fff',
-              shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.4,
-              shadowRadius: 12,
-              elevation: 5,
-            }}
-          >
-
-            <FlatList
-              data={menulistdata}
-              renderItem={({ item }) => <View style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                gap: 10,
-                marginBottom: 5,
-                animationdelay: 300
-              }}>
-                <Pressable
-                  onPress={() => {
-                    router.push(item.url)
-                    setJoin(false)
-                  }}
-
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 10
-                  }}
-                >
-                  <Text style={{
-                    lineHeight: 30,
-                    backgroundColor: "#efefef",
-                    paddingHorizontal: 15,
-                    borderRadius: 15,
-                    fontFamily: "montserrat-semibold",
-                    fontSize: 14,
-                    borderColor: Colors.PRIMARY,
-                    borderWidth: 1,
-                  }}>{item.name}</Text>
-                  <View
-                    style={{
-                      width: 40,
-                      height: 40,
-                      backgroundColor: "#efefef",
-                      borderColor: Colors.PRIMARY,
-                      borderWidth: 1,
-                      borderRadius: 50,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >{item.icon}</View>
-                </Pressable>
-              </View>
-              }
-              keyExtractor={item => item._id}
-            />
-
-          </View>
-        }
-      </View> */}
-
-      {/* This is the queue status code after successful joining */}
-      {/* <View>
-        <Text style={{
-          textAlign: "center",
-          fontFamily: "montserrat-bold",
-          marginVertical: 20,
-          fontSize: 16
-        }}>Queue Status</Text>
-        <View>
-          <View style={{
-            width: "90%",
-            height: 60,
-            backgroundColor: Colors.PRIMARY,
-            marginHorizontal: "auto",
-            zIndex: 2,
-            borderRadius: 5,
-            padding: 10,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
-            <View style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 20
-            }}>
-              <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>5</Text>
-              <View>
-                <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: Ady Jacinto</Text>
-                <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: Bilal</Text>
-              </View>
-            </View>
-            <View style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 20
-            }}>
-              <View style={{
-                backgroundColor: "#000",
-                height: 30,
-                paddingVertical: 5,
-                paddingHorizontal: 10,
-                borderColor: "#fff",
-                borderWidth: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>02:00</Text></View>
-
-              <Pressable style={{
-                width: 30,
-                height: 30,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#fff",
-                borderRadius: 50,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.4,
-                shadowRadius: 12,
-                elevation: 5,
-
-              }}
-                onPress={() => alert("Alert")}
-              ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
-            </View>
-          </View>
-          <View
-            style={{
-              width: "25%",
-              height: 40,
-              backgroundColor: Colors.PRIMARY,
-              marginHorizontal: "auto",
-              marginBottom: 10,
-              zIndex: 2,
-              padding: 10
-            }}
-          ><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Q Status</Text>
-          </View>
-        </View>
-      </View> */}
     </SafeAreaView>
   )
 }

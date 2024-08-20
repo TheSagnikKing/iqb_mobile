@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View, ScrollView, FlatList, TextInput, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { Colors } from '../constants/Colors'
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -13,17 +13,39 @@ const ChangeLocation = () => {
 
     const router = useRouter()
 
+    // const [search, setSearch] = useState("")
+
+    // const dispatch = useDispatch()
+
+    // const searchPlaceApiPressed = () => {
+    //     if (search.length < 2) {
+    //         alert("Atleast 2 charecters needed for search")
+    //     } else {
+    //         dispatch(placesApiAction(search))
+    //     }
+    // }
+
     const [search, setSearch] = useState("")
+    const [countryTimeout, setCountryTimeout] = useState(null);
+
 
     const dispatch = useDispatch()
 
-    const searchPlaceApiPressed = () => {
-        if (search.length < 2) {
-            alert("Atleast 2 charecters needed for search")
-        } else {
-            dispatch(placesApiAction(search))
+    const debounceSearch = (value) => {
+        if (countryTimeout) {
+          clearTimeout(countryTimeout);
         }
-    }
+        setSearch(value)
+    
+        setCountryTimeout(setTimeout(() => {
+            dispatch(placesApiAction(value))
+        }, 500));
+      };
+    
+      const searchCountryHandler = (text) => {
+        const searchTerm = text;
+        debounceSearch(searchTerm);
+      }
 
     const placesApi = useSelector(state => state.placesApi)
 
@@ -42,6 +64,9 @@ const ChangeLocation = () => {
             alert("Atleast 2 charecters needed for search")
         } else {
             router.push({ pathname: "/locationsalonlist", params: { city: search } })
+            dispatch({
+                type: "RESET_PLACE"
+            })
         }  
     }
 
@@ -87,11 +112,10 @@ const ChangeLocation = () => {
                             editable
                             placeholder='Search'
                             style={styles.input}
-                            onChangeText={text => setSearch(text)}
+                            onChangeText={text => searchCountryHandler(text)}
                             value={search}
                         />
                         <Pressable
-                            onPress={searchPlaceApiPressed}
                             style={{
                                 backgroundColor: Colors.PRIMARY,
                                 height: 35,

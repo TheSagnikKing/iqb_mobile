@@ -35,6 +35,7 @@ const ConnectSalon = () => {
     const connectPressed = async () => {
         try {
             if (salonInfodata) {
+                // await AsyncStorage.removeItem("remember");
                 await AsyncStorage.removeItem('user-saloninfo');
                 await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
                 router.push("/signin")
@@ -57,7 +58,7 @@ const ConnectSalon = () => {
         response
     } = getbarberbysalonid
 
-    console.log("SALON INFO ", salonInfodata)
+    // console.log("SALON INFO ", salonInfodata)
 
     const makeCall = (number) => {
         const url = `tel:${number}`;
@@ -74,7 +75,7 @@ const ConnectSalon = () => {
         response: saloninforesponse
     } = useSelector(state => state.getsalonsdetailsbyId);
 
-    console.log("Response Salon Info from Connect Salon ", saloninforesponse?.Response)
+    // console.log("Response Salon Info from Connect Salon ", saloninforesponse?.Response)
 
     const handleOpenLink = async (url) => {
         const supported = await Linking.canOpenURL(url);

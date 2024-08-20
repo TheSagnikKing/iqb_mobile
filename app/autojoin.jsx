@@ -222,7 +222,7 @@ const Autojoin = () => {
                     </View>
 
                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>{currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}</Text>
+                      <Text style={{ fontFamily: "montserrat-medium", fontSize: 16, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1, paddingRight: 10 }}>{currentUserInfo?.[0]?.Currency == "Â£" ? "£" : currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}</Text>
                       <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>{item.Estimated_wait_time}{" "}mins</Text>
                     </View>
 

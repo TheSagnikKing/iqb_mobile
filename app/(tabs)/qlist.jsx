@@ -252,13 +252,25 @@ import api from '../../redux/Api/Api';
 
 const QList = () => {
 
+  const queuebarberNames = useSelector(state => state.queuebarberNames)
+
+  const {
+    response:barberNamesArr 
+  } = queuebarberNames
+
+  console.log("ALL THE BARBER NAMES ARE ", barberNamesArr)
+
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
+  const [currentUserInfo, setCurrentUserInfo] = useState([])
+
   const [lastRefreshTime, setLastRefreshTime] = useState(null);
 
   useEffect(() => {
     const getloginsalonuserdata = async () => {
       const saloninfodata = await AsyncStorage.getItem('user-saloninfo')
+      const userinfodata = await AsyncStorage.getItem('user-logininfo')
       setCurrentSalonInfo(JSON.parse(saloninfodata))
+      setCurrentUserInfo(JSON.parse(userinfodata))
     }
 
     getloginsalonuserdata()
@@ -272,7 +284,9 @@ const QList = () => {
     const initialFetch = async () => {
       setQueueloading(true)
       const data = await fetchallqueue(1);
-      const sortedData = data.sort((a, b) => a.QPosition - b.QPosition);
+
+      const filteredData = data.filter((que) => barberNamesArr.includes(que.BarberName));
+      const sortedData = filteredData.sort((a, b) => a.QPosition - b.QPosition);
       
       setQueueloading(false)
       setAllqueuestate(sortedData);
@@ -301,7 +315,9 @@ const QList = () => {
 
     setLastRefreshTime(new Date().toLocaleTimeString());
 
-    return data;
+    const filteredData = data.filter((que) => barberNamesArr.includes(que.BarberName))
+
+    return filteredData;
   };
 
   // Initial fetch on component mount or when currentSalonInfo changes
@@ -319,20 +335,6 @@ const QList = () => {
       initialFetch();
     }
   }, [currentSalonInfo]);
-
-  // Fetch and merge new page data when newpgno changes
-  // useEffect(() => {
-  //   if (newpgno > 1) {
-  //     const fetchAndMerge = async () => {
-  //       const data = await fetchallqueue(newpgno);
-  //       const mergedData = [...allqueuestate, ...data];
-  //       const sortedData = mergedData.sort((a, b) => a.QPosition - b.QPosition);
-  //       setAllqueuestate(sortedData);
-  //     };
-
-  //     fetchAndMerge();
-  //   }
-  // }, [newpgno, currentSalonInfo]);
 
 
   // Fetch and merge new page data when newpgno changes
@@ -377,8 +379,9 @@ const QList = () => {
   };
 
 
-  console.log("All Queue State are ", allqueuestate);
+  // console.log("All Queue State are ", allqueuestate);
 
+  // console.log("Current User Info ",currentUserInfo)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -466,7 +469,7 @@ const QList = () => {
                     borderBottomWidth: 1
                   }}>
                     <Text style={{ flex: 0.6, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.QPosition}</Text>
-                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.FirstLastName}</Text>
+                    <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.Username.includes(currentUserInfo?.[0]?.id) ? item.FirstLastName : "Client"}</Text>
                     <Text style={{ flex: 1, textAlign: "center", paddingHorizontal: 10, fontFamily: "montserrat-semibold", fontSize: 12 }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
                   </View>
                 )}

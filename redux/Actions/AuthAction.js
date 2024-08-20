@@ -46,6 +46,7 @@ export const signinAction = (email, password, salonid, router, endpoint) => asyn
             if(data?.Response[0]?.Activated == "N"){
                 router.push({ pathname: "/activationcode", params: data?.Response[0] })
             }else if(data?.Response[0]?.Activated == "Y"){
+                await AsyncStorage.removeItem('user-logininfo');
                 await AsyncStorage.setItem('user-logininfo', JSON.stringify(data.Response));
                 router.push("/home")
             }

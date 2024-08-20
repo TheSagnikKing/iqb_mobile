@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, FlatList, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Header from '../../components/Header/Header'
 import { Fontisto, MaterialIcons, Entypo, Ionicons, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors'
@@ -9,7 +9,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminRet2Action, iqueuedeleteJoinqAction } from '../../redux/Actions/HomeAction';
 
+import { BackHandler, ToastAndroid } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
 const Home = () => {
+
+  const [backPressCount, setBackPressCount] = useState(0);
+
+  const handleBackPress = useCallback(() => {
+    if (backPressCount === 0) {
+      ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+      setBackPressCount(1);
+
+      const timer = setTimeout(() => setBackPressCount(0), 2000);
+      return true;
+    } else if (backPressCount === 1) {
+      BackHandler.exitApp();
+    }
+    return true;
+  }, [backPressCount]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+      return () => {
+        backHandler.remove();
+      };
+    }, [handleBackPress])
+  );
 
   const [currentUserInfo, setCurrentUserInfo] = useState([])
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
@@ -25,8 +53,6 @@ const Home = () => {
     getloginsalonuserdata()
   }, [])
 
-  // console.log("User Info ", currentUserInfo)
-  // console.log("Salon Info ", currentSalonInfo)
 
   const dispatch = useDispatch()
 
@@ -36,6 +62,27 @@ const Home = () => {
     }
   }, [dispatch, currentUserInfo])
 
+  useFocusEffect(
+    useCallback(() => {
+      if (currentUserInfo.length > 0) {
+        const interval = setInterval(() => {
+          dispatch(adminRet2Action(
+            {
+              username: currentUserInfo?.[0]?.UserName,
+              salonid: currentUserInfo?.[0]?.SalonId,
+              type: currentUserInfo?.[0]?.serviceDeviceType
+            },
+            "adminMergedRet3.php"
+          ));
+        }, 30000);
+
+        return () => clearInterval(interval);
+      }
+    }, [dispatch, currentUserInfo])
+  );
+
+  // console.log("THE CURRENT USERNAME ", currentUserInfo?.[0]?.UserName)
+
   const admiMergeRet2 = useSelector(state => state.adminRet2)
 
   const {
@@ -43,7 +90,7 @@ const Home = () => {
     response
   } = admiMergeRet2
 
-  // console.log("Admin Merge Ret 2 Response ", response)
+  console.log("Admin Merge Ret 2 Response ", response)
 
   const router = useRouter()
   const [join, setJoin] = useState(false)
@@ -72,14 +119,26 @@ const Home = () => {
     }
   ]
 
-  const cancelQueue = (UserName, salonid, endpoint, dispatch) => {
+  const cancelQueue = (UserName, salonid, endpoint, dispatch, loggedinUsername) => {
     Alert.alert('Delete', `Are you sure you want to cancel booking of ${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName} ?`, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: async () => await iqueuedeleteJoinqAction(UserName, salonid, endpoint, dispatch, response?.gcCode) },
+      { text: 'OK', onPress: async () => await iqueuedeleteJoinqAction(UserName, salonid, endpoint, dispatch, "N/A", loggedinUsername) },
+    ]);
+  }
+
+
+  const cancelAllqueue = (UserName, salonid, endpoint, dispatch, loggedinUsername) => {
+    Alert.alert('Delete', `Are you sure you want to cancel booking of ${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName} ?`, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: async () => await iqueuedeleteJoinqAction(UserName, salonid, endpoint, dispatch, response?.gcCode, loggedinUsername) },
     ]);
   }
   return (
@@ -190,8 +249,9 @@ const Home = () => {
         </View>
       </ScrollView>
 
-      {
-        response?.QStatusList?.length == 0 ? (<View style={{
+
+      {/* {
+        response?.QStatusList?.length == 0  ? (<View style={{
           position: "absolute",
           right: 15,
           bottom: 15
@@ -297,88 +357,290 @@ const Home = () => {
           borderTopWidth: 1,
           borderTopColor: "rgba(0,0,0,0.4)",
           backgroundColor: "#efefef"
-          // paddingTop: 10
         }}>
-          <Text style={{
-            textAlign: "center",
-            fontFamily: "montserrat-bold",
-            marginVertical: 20,
-            fontSize: 16,
-          }}>Queue Status</Text>
           <View style={{
-            marginBottom: 20
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 20
           }}>
-            <View style={{
-              width: "90%",
-              height: 60,
-              backgroundColor: Colors.PRIMARY,
-              marginHorizontal: "auto",
-              zIndex: 2,
-              borderRadius: 5,
-              padding: 10,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between"
-            }}>
-              <View style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 20
-              }}>
-                <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{response?.QStatusList?.[0]?.SlNo}</Text>
-                <View>
-                  <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: {response?.QStatusList?.[0]?.Name}</Text>
-                  <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: {response?.QStatusList?.[0]?.Barber}</Text>
-                </View>
-              </View>
-              <View style={{
+            <Text style={{
+              textAlign: "center",
+              fontFamily: "montserrat-bold",
+              marginVertical: 20,
+              fontSize: 16,
+            }}>Queue Status</Text>
+
+            <Pressable onPress={() => cancelAllqueue(currentUserInfo?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}>
+              <Text style={{ color: "red", fontWeight: 500 }}>Cancel All queues</Text>
+            </Pressable>
+          </View>
+          <View style={{
+            marginBottom: 20,
+            height: 150
+          }}>
+            <FlatList
+              data={response?.QStatusList}
+              renderItem={({ item }) => <View style={{
+                width: "90%",
+                height: 60,
+                backgroundColor: Colors.PRIMARY,
+                marginHorizontal: "auto",
+                zIndex: 2,
+                borderRadius: 5,
+                padding: 10,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 20
+                justifyContent: "space-between",
+                marginBottom: 10
               }}>
                 <View style={{
-                  backgroundColor: "#000",
-                  height: 30,
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  borderColor: "#fff",
-                  borderWidth: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{response?.QStatusList?.[0]?.TimeData}</Text></View>
-
-                <Pressable style={{
-                  width: 30,
-                  height: 30,
-                  justifyContent: "center",
+                  flexDirection: "row",
                   alignItems: "center",
-                  backgroundColor: "#fff",
-                  borderRadius: 50,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 6 },
-                  shadowOpacity: 0.4,
-                  shadowRadius: 12,
-                  elevation: 5,
+                  gap: 20
+                }}>
+                  <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.SlNo}</Text>
+                  <View>
+                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: {item?.Name}</Text>
+                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: {item?.Barber}</Text>
+                  </View>
+                </View>
+                <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 20
+                }}>
+                  <View style={{
+                    backgroundColor: "#000",
+                    height: 30,
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    borderColor: "#fff",
+                    borderWidth: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.TimeData}</Text></View>
 
-                }}
-                  onPress={() => cancelQueue(response?.QStatusList?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch)}
-                ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
-              </View>
-            </View>
-            {/* <View
+                  <Pressable style={{
+                    width: 30,
+                    height: 30,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#fff",
+                    borderRadius: 50,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.4,
+                    shadowRadius: 12,
+                    elevation: 5,
+
+                  }}
+                    onPress={() => cancelQueue(item.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}
+                  ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
+                </View>
+              </View>}
+              keyExtractor={item => item.UserName}
+            />
+          </View>
+        </View>)
+      } */}
+
+      {
+        response?.QStatusList?.length == 0 ? (<View style={{
+          position: "absolute",
+          right: 15,
+          bottom: 15,
+          display: response?.SystemStatus === true ? "flex" : "none"
+        }}>
+          <Pressable
+            style={{
+              width: 45,
+              height: 45,
+              backgroundColor: Colors.PRIMARY,
+              borderRadius: 50,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.4,
+              shadowRadius: 12,
+              elevation: 12,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => setJoin((prev) => !prev)}
+          >{
+              join ? <Entypo name="cross" size={24} color="#fff" /> : <MaterialIcons name="person-add-alt-1" size={24} color="#fff" />
+            }
+          </Pressable>
+
+          {
+            join && <View
               style={{
-                width: "25%",
-                height: 40,
+                height: "auto",
+                width: 220,
+                position: "absolute",
+                top: -160,
+                right: 3,
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                padding: 10,
+                flexDirection: "column",
+                shadowColor: '#fff',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+                elevation: 5,
+              }}
+            >
+
+              <FlatList
+                data={menulistdata}
+                renderItem={({ item }) => <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                  marginBottom: 5,
+                  animationdelay: 300
+                }}>
+                  <Pressable
+                    onPress={() => {
+                      router.push(item.url)
+                      setJoin(false)
+                    }}
+
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 10
+                    }}
+                  >
+                    <Text style={{
+                      lineHeight: 30,
+                      backgroundColor: "#efefef",
+                      paddingHorizontal: 15,
+                      borderRadius: 15,
+                      fontFamily: "montserrat-semibold",
+                      fontSize: 14,
+                      borderColor: Colors.PRIMARY,
+                      borderWidth: 1,
+                    }}>{item.name}</Text>
+                    <View
+                      style={{
+                        width: 40,
+                        height: 40,
+                        backgroundColor: "#efefef",
+                        borderColor: Colors.PRIMARY,
+                        borderWidth: 1,
+                        borderRadius: 50,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >{item.icon}</View>
+                  </Pressable>
+                </View>
+                }
+                keyExtractor={item => item._id}
+              />
+
+            </View>
+          }
+        </View>) : response?.QStatusList?.length > 0 && (<View style={{
+          borderTopWidth: 1,
+          borderTopColor: "rgba(0,0,0,0.4)",
+          backgroundColor: "#efefef"
+        }}>
+          <View style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 20
+          }}>
+            <Text style={{
+              textAlign: "center",
+              fontFamily: "montserrat-bold",
+              marginVertical: 20,
+              fontSize: 16,
+            }}>Queue Status</Text>
+
+            <Pressable onPress={() => cancelAllqueue(currentUserInfo?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}>
+              <Text style={{ color: "red", fontWeight: 500 }}>Cancel All queues</Text>
+            </Pressable>
+          </View>
+          <View style={{
+            marginBottom: 20,
+            height: 150
+          }}>
+            <FlatList
+              data={response?.QStatusList}
+              renderItem={({ item }) => <View style={{
+                width: "90%",
+                height: 60,
                 backgroundColor: Colors.PRIMARY,
                 marginHorizontal: "auto",
-                marginBottom: 10,
                 zIndex: 2,
-                padding: 10
-              }}
-            ><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Q Status</Text>
-            </View> */}
+                borderRadius: 5,
+                padding: 10,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: 10
+              }}>
+                <View style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 20
+                }}>
+                  <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.SlNo}</Text>
+                  <View>
+                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: {item?.Name}</Text>
+                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: {item?.Barber}</Text>
+                  </View>
+                </View>
+                <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 20
+                }}>
+                  <View style={{
+                    backgroundColor: "#000",
+                    height: 30,
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    borderColor: "#fff",
+                    borderWidth: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.TimeData}</Text></View>
+
+                  <Pressable style={{
+                    width: 30,
+                    height: 30,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#fff",
+                    borderRadius: 50,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.4,
+                    shadowRadius: 12,
+                    elevation: 5,
+
+                  }}
+                    onPress={() => cancelQueue(item.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}
+                  ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
+                </View>
+              </View>}
+              keyExtractor={item => item.UserName}
+            />
           </View>
         </View>)
       }

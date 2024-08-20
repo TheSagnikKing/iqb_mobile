@@ -91,7 +91,7 @@ const Salonbarberservices = () => {
                                         borderRightWidth: 1,
                                         paddingRight: 10
                                     }}>
-                                        {currentUserInfo?.[0]?.Currency}{" "}{item.ServicePrice}
+                                        {currentUserInfo?.[0]?.Currency == "Â£" ? "£" : currentUserInfo?.[0]?.Currency }{" "}{item.ServicePrice}
                                     </Text>
                                     <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>
                                         {item.Estimated_wait_time}mins

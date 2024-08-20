@@ -26,7 +26,7 @@ const Conectsalongallery = () => {
         response
     } = getsalonimagelist
 
-    console.log("Salon list from CONECT SALON GALLERY ", response)
+    // console.log("Salon list from CONECT SALON GALLERY ", response)
     const [imageurl, setImageurl] = useState("")
 
     const [openImage, setOpenImage] = useState(false)

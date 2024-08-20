@@ -42,6 +42,15 @@ export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
                     ...data.Response
                 },
             });
+
+            const barberNamesArry = data.Response.QStatusList.map((barber) => barber.Barber)
+
+            // console.log("ALl BArber NAMES ", barberNamesArry)
+
+            dispatch({
+                type: "ALL_BARBER_NAMES",
+                payload: barberNamesArry
+            })
         }
 
     } catch (error) {
@@ -88,13 +97,13 @@ export const getsalonsdetailsbyIdAction = (SalonId, endpoint) => async (dispatch
 };
 
 
-export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, dispatch, gcCode) => {
+export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, dispatch, gcCode, loggedinUsername) => {
     try {
         dispatch({
             type: IQUEUE_DELETE_JOINQ_REQ
         });
 
-        if(gcCode == "N/A"){
+        if (gcCode == "N/A") {
             const body = {
                 salonid,
                 checkUsername
@@ -105,38 +114,38 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
-    
+
             if (data.StatusCode == 201) {
                 dispatch({
                     type: IQUEUE_DELETE_JOINQ_FAIL,
                     payload: data.StatusMessage
                 });
-    
-    
+
+
                 Toast.show({
                     type: 'error',
                     text1: data.StatusMessage,
                     position: "bottom",
                     bottomOffset: 0,
                 });
-    
+
             } else if (data.StatusCode == 200) {
                 dispatch({
                     type: IQUEUE_DELETE_JOINQ_SUCCESS,
                     payload: data,
                 });
-    
+
                 Alert.alert('Success', `Booking cancelled successfully`, [
                     {
                         text: 'OK', onPress: async () => dispatch(adminRet2Action({
-                            username: checkUsername,
+                            username: loggedinUsername,
                             salonid: salonid,
                             type: "ioS",
-                        }, "adminMergedRet2.php"))
+                        }, "adminMergedRet3.php"))
                     },
                 ]);
             }
-        }else{
+        } else {
             const body = {
                 salonid,
                 checkUsername,
@@ -148,39 +157,39 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
-    
+
             if (data.StatusCode == 201) {
                 dispatch({
                     type: IQUEUE_DELETE_JOINQ_FAIL,
                     payload: data.StatusMessage
                 });
-    
-    
+
+
                 Toast.show({
                     type: 'error',
                     text1: data.StatusMessage,
                     position: "bottom",
                     bottomOffset: 0,
                 });
-    
+
             } else if (data.StatusCode == 200) {
                 dispatch({
                     type: IQUEUE_DELETE_JOINQ_SUCCESS,
                     payload: data,
                 });
-    
+
                 Alert.alert('Success', `Booking cancelled successfully`, [
                     {
-                        text: 'OK', onPress: async () => dispatch(adminRet2Action({
-                            username: checkUsername,
+                        text: 'OK', onPress: () => dispatch(adminRet2Action({
+                            username: loggedinUsername,
                             salonid: salonid,
                             type: "ioS",
-                        }, "adminMergedRet2.php"))
+                        }, "adminMergedRet3.php"))
                     },
                 ]);
             }
         }
-        
+
     } catch (error) {
         console.log(error)
     }

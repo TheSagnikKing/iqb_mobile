@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert, Switch, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
-import { Feather } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from "react-redux"
@@ -34,35 +33,29 @@ const Signin = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const [rememberme, setRememberme] = useState(false);
+    const [rememberdatatrue, setRememberdatatrue] = useState(false)
 
     useEffect(() => {
-        const asyncremember = async () => {
-            const value = await AsyncStorage.getItem('remember');
-            setRememberme(value === "true");
-        };
+        const getRememberdataInfo = async () => {
+            const rememberdatainfo = await AsyncStorage.getItem("rememberdata")
 
-        asyncremember();
-    }, []);
+            if (rememberdatainfo) {
+                const parsedata = JSON.parse(rememberdatainfo)
 
-    const toggleSwitch = async () => {
-        setRememberme(previousState => {
-            const newState = !previousState;
-            AsyncStorage.setItem("remember", newState ? "true" : "false");
-            return newState;
-        });
-    };
+                console.log("REMEMBER DATA ++++++++ ", parsedata)
 
-    useEffect(() => {
-        if (rememberme) {
-            setEmail(currentUserInfo?.[0]?.Email || "");
-            setPassword(currentUserInfo?.[0]?.Password || "");
-        } else {
-            setEmail("");
-            setPassword("");
+                if (Object.keys(parsedata).length > 0) {
+                    setRememberdatatrue(true)
+                    setEmail(parsedata?.email)
+                    setPassword(parsedata?.password)
+                }
+            }
         }
-    }, [rememberme, currentUserInfo]);
 
+        getRememberdataInfo()
+    }, [])
+
+    const toggleSwitch = () => setRememberdatatrue(previousState => !previousState);
 
     const dispatch = useDispatch()
 
@@ -106,7 +99,7 @@ const Signin = () => {
                 bottomOffset: 0,
             });
         } else {
-            dispatch(signinAction(email, password, currentSalonInfo?.[0]?.id, router, "iqueuelogin.php"))
+            dispatch(signinAction(email, password, currentSalonInfo?.[0]?.id, router, "iqueuelogin.php", rememberdatatrue))
         }
     }
 
@@ -214,12 +207,21 @@ const Signin = () => {
                             alignItems: "center",
                             gap: moderateScale(1)
                         }}>
-                            <Switch
+                            {/* <Switch
                                 trackColor={{ false: '#767577', true: '#81b0ff' }}
                                 thumbColor={rememberme ? '#f5dd4b' : '#f4f3f4'}
                                 ios_backgroundColor="#3e3e3e"
                                 onValueChange={toggleSwitch}
                                 value={rememberme}
+                            /> */}
+
+
+                            <Switch
+                                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                thumbColor={rememberdatatrue ? '#f5dd4b' : '#f4f3f4'}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleSwitch}
+                                value={rememberdatatrue}
                             />
                             <Text style={{
                                 fontFamily: "montserrat-semibold",

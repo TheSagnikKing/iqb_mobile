@@ -274,7 +274,7 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
 
             dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router, setJoinqueueloading))
         } else if (data.StatusCode == 200) {
-            alert("User already in the queue")
+            alert("Alert!, You cannot rejoin the queue today, due to a place cancellation.")
             setJoinqueueloading(false)
         }
 

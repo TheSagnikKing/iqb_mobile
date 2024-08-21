@@ -35,7 +35,7 @@ const ConnectSalon = () => {
     const connectPressed = async () => {
         try {
             if (salonInfodata) {
-                // await AsyncStorage.removeItem("remember");
+                await AsyncStorage.removeItem("rememberdata")
                 await AsyncStorage.removeItem('user-saloninfo');
                 await AsyncStorage.setItem('user-saloninfo', JSON.stringify(salonInfodata))
                 router.push("/signin")
@@ -92,18 +92,18 @@ const ConnectSalon = () => {
     const openGoogle = async (address, city) => {
         const query = `${address}, ${city}`;
         const encodedQuery = encodeURIComponent(query);
-        const url = `geo:0,0?q=${encodedQuery}`; 
-      
+        const url = `geo:0,0?q=${encodedQuery}`;
+
         const supported = await Linking.canOpenURL(url);
         if (supported) {
-          await Linking.openURL(url);
+            await Linking.openURL(url);
         } else {
-          const webUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
-          Linking.openURL(webUrl);
+            const webUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+            Linking.openURL(webUrl);
         }
-      };
+    };
 
-      
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView style={{
@@ -228,7 +228,7 @@ const ConnectSalon = () => {
                             <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14 }}>Image Gallery</Text>
                         </Pressable>
                         <Pressable
-                            onPress={() => openGoogle(saloninforesponse?.Response?.Address , saloninforesponse?.Response?.city)}
+                            onPress={() => openGoogle(saloninforesponse?.Response?.Address, saloninforesponse?.Response?.city)}
                             style={[styles.saloninfo_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, width: "50%" }]}>
                             <View style={{
                                 width: 50,

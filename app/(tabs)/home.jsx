@@ -164,41 +164,41 @@ const Home = () => {
         </View>
 
         <View style={styles.queue_status_container}>
-          <View style={[styles.queue_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: moderateScale(2), height: verticalScale(200) }]}>
+          <View style={[styles.queue_status_item, { borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 2, height: 200 }]}>
             <View style={styles.queue_status_item_icon}>
               <Fontisto name="scissors" size={moderateScale(24)} color="#fff" />
               <View style={[styles.statusonline, { backgroundColor: response?.SystemStatus ? "limegreen" : "red" }]}></View>
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: verticalScale(5) }}>System Status</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: 5 }}>System Status</Text>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: moderateScale(16) }}>{response?.SystemStatus ? "On" : "Off"}</Text>
             </View>
           </View>
-          <View style={[styles.queue_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, height: verticalScale(200) }]}>
+          <View style={[styles.queue_status_item, { borderBottomColor: "rgba(0,0,0,0.4)", borderBottomWidth: 2, height: 200 }]}>
             <View style={styles.queue_status_item_icon}>
               <MaterialCommunityIcons name="human-queue" size={moderateScale(26)} color="#fff" />
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: moderateScale(5) }}>Queuing</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: 5 }}>Queuing</Text>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: moderateScale(16) }}>{response?.Queuing}</Text>
             </View>
           </View>
 
-          <View style={[styles.queue_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: verticalScale(2), height: verticalScale(200) }]}>
+          <View style={[styles.queue_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, height:200 }]}>
             <View style={styles.queue_status_item_icon}>
               <FontAwesome6 name="person-circle-exclamation" size={moderateScale(24)} color="#fff" />
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: verticalScale(5) }}>Barbers On Duty</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom:5 }}>Barbers On Duty</Text>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: moderateScale(16) }}>{response?.BarbersOnDuty}</Text>
             </View>
           </View>
-          <View style={[styles.queue_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, height: verticalScale(200) }]}>
+          <View style={[styles.queue_status_item, { borderLeftColor: "rgba(0,0,0,0.4)", borderLeftWidth: 2, height: 200 }]}>
             <View style={styles.queue_status_item_icon}>
               <Ionicons name="person-add-sharp" size={moderateScale(24)} color="#fff" />
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: verticalScale(5) }}>Next In Queue</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: 5 }}>Next In Queue</Text>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: moderateScale(16) }}>{response?.NextPositionAvailable}</Text>
             </View>
           </View>

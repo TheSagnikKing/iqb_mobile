@@ -106,7 +106,8 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
         if (gcCode == "N/A") {
             const body = {
                 salonid,
-                checkUsername
+                checkUsername,
+                Cancelling: "Y"
             }
 
             const { data } = await api.post(`/${endpoint}`, body, {
@@ -149,7 +150,8 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
             const body = {
                 salonid,
                 checkUsername,
-                gcCode
+                gcCode,
+                Cancelling: "Y"
             }
 
             const { data } = await api.post(`/${endpoint}`, body, {

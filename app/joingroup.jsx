@@ -302,7 +302,7 @@
 //                 onPress: () => console.log('Cancel Pressed'),
 //                 style: 'cancel',
 //             },
-//             { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", setJoinqueueloading) },
+//             { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "ct2.php", setJoinqueueloading) },
 //         ]);
 
 //     };
@@ -890,7 +890,7 @@ const Joingroup = () => {
                 router.push("/home")
 
             } else if (data.StatusCode == 200) {
-                alert("User already in the queue")
+                alert("Alert!, You cannot rejoin the queue today, due to a place cancellation.")
                 setJoinqueueloading(false)
             }
         } catch (error) {
@@ -940,7 +940,7 @@ const Joingroup = () => {
     }
 
     // const groupjoin = useSelector(state => state.groupjoin)
-    
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", position: "relative" }}>
             <View style={styles.header_container}>

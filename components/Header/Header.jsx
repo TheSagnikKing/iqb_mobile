@@ -43,7 +43,6 @@ const Header = () => {
 
   const logoutPressed = async () => {
     // await AsyncStorage.removeItem('user-logininfo');
-    await AsyncStorage.setItem("remember", "false")
     router.push("/signin")
   }
 

@@ -474,6 +474,13 @@ const QList = () => {
                   </View>
                 )}
                 keyExtractor={item => item.id}
+                // ListFooterComponent={<Text style={{ marginVertical: 40}}>wvwevwev</Text>}
+                // onEndReached={() => {
+                //   if (!queueloading && allqueuestate.length > 0) {
+                //     nextqdata();
+                //   }
+                // }}
+                // onEndReachedThreshold={0.5}
               />
         }
 

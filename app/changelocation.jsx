@@ -9,8 +9,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { placesApiAction } from '../redux/Actions/LocationAction';
 import Toast from 'react-native-toast-message';
 
+
+import { BackHandler, ToastAndroid } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
 const ChangeLocation = () => {
 
+    const handleBackPress = useCallback(() => {
+        BackHandler.exitApp(); // Exit the app on a single back press
+        return true;
+      }, []);
+      
+      useFocusEffect(
+        useCallback(() => {
+          const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      
+          return () => {
+            backHandler.remove();
+          };
+        }, [handleBackPress])
+      );
+      
+    
     const router = useRouter()
 
     // const [search, setSearch] = useState("")
@@ -38,7 +58,7 @@ const ChangeLocation = () => {
         setSearch(value)
 
         setCountryTimeout(setTimeout(() => {
-            dispatch(placesApiAction(value))
+            dispatch(placesApiAction(value,setSelectedSearch))
         }, 500));
     };
 
@@ -49,6 +69,8 @@ const ChangeLocation = () => {
 
     const placesApi = useSelector(state => state.placesApi)
 
+    const [selectedsearch, setSelectedSearch] = useState("")
+
     const {
         error,
         loading,
@@ -57,6 +79,7 @@ const ChangeLocation = () => {
 
     const citySetdata = (search) => {
         setSearch(search.split(",")[0])
+        setSelectedSearch(search)
     }
 
     const searchSalonPressed = () => {
@@ -64,6 +87,7 @@ const ChangeLocation = () => {
             alert("Atleast 2 charecters needed for search")
         } else {
             router.push({ pathname: "/locationsalonlist", params: { city: search } })
+            setSelectedSearch("")
             dispatch({
                 type: "RESET_PLACE"
             })
@@ -150,15 +174,15 @@ const ChangeLocation = () => {
                                             paddingVertical: 10,
                                             paddingHorizontal: 20,
                                             marginBottom: 10,
-                                            backgroundColor: "#efefef",
+                                            backgroundColor: item.description == selectedsearch ? Colors.PRIMARY : "#efefef",
                                             borderColor: "rgba(0,0,0,0.4)",
                                             borderWidth: 2,
                                             borderRadius: 5
                                         }}
                                             onPress={() => citySetdata(item.description)}
                                         >
-                                            <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
-                                            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>{item.description}</Text>
+                                            <View><AntDesign name="rightcircleo" size={22} color={item.description == selectedsearch ? "#fff" : "#000"} /></View>
+                                            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14, color: item.description == selectedsearch ? "#fff" : "#000" }}>{item.description}</Text>
                                         </Pressable>}
                                         keyExtractor={item => item.place_id}
                                         showsVerticalScrollIndicator={false}

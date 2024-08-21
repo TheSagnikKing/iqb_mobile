@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert, Switch, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +10,27 @@ import Toast from 'react-native-toast-message';
 
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
+
+import { BackHandler, ToastAndroid } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
 const Signin = () => {
+
+    const handleBackPress = useCallback(() => {
+        BackHandler.exitApp(); // Exit the app on a single back press
+        return true;
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+            return () => {
+                backHandler.remove();
+            };
+        }, [handleBackPress])
+    );
+
 
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])
     const [currentUserInfo, setCurrentUserInfo] = useState([])

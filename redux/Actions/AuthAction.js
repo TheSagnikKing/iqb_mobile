@@ -315,7 +315,7 @@ export const signupAction = (signupdata, endpoint, router) => async (dispatch) =
             Toast.show({
                 type: 'error',
                 text1: data.StatusMessage,
-                position: "bottom",
+                position: "top",
                 bottomOffset: 0,
             });
 
@@ -382,8 +382,9 @@ export const signupCheckEmailAction = (signupdata, endpoint, router) => async (d
             Toast.show({
                 type: 'error',
                 text1: "User already exist",
-                position: "bottom",
+                position: "top",
                 bottomOffset: 0,
+                // zIndex: 10
             });
         }
 

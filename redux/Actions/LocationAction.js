@@ -3,7 +3,7 @@ import axios from "axios";
 import api from '../Api/Api';
 import Toast from "react-native-toast-message";
 
-export const placesApiAction = (search) => async (dispatch) => {
+export const placesApiAction = (search, setSelectedSearch) => async (dispatch) => {
     try {
         dispatch({
             type: PLACES_API_REQ
@@ -24,6 +24,7 @@ export const placesApiAction = (search) => async (dispatch) => {
             });
 
             console.log(data.predictions)
+            setSelectedSearch("")
         }
         
     } catch (error) {

@@ -67,13 +67,13 @@ const Index = () => {
               alignItems: "center",
               marginBottom: 25
             }}
-            onPress={() => router.push("/signin")}
+            onPress={() => router.push("/changelocation")}
             >
             <Text style={{
               color: Colors.PRIMARYTEXT,
               fontFamily: "montserrat-medium",
               fontSize: 16
-            }}>Go Signin</Text>
+            }}>Select Location</Text>
           </Pressable>
         </View>
       </View>

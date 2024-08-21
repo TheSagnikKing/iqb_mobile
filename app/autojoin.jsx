@@ -105,7 +105,7 @@ const Autojoin = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect2.php", router, setJoinqueueloading)) },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading)) },
     ]);
   }
 

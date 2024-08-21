@@ -141,7 +141,7 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                             username: loggedinUsername,
                             salonid: salonid,
                             type: "ioS",
-                        }, "adminMergedRet3.php"))
+                        }, "adminMergedRet2.php"))
                     },
                 ]);
             }
@@ -184,7 +184,7 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                             username: loggedinUsername,
                             salonid: salonid,
                             type: "ioS",
-                        }, "adminMergedRet3.php"))
+                        }, "adminMergedRet2.php"))
                     },
                 ]);
             }

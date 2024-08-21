@@ -272,7 +272,7 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
                 payload: data.Response
             })
 
-            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition_v2.php", router, setJoinqueueloading))
+            dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router, setJoinqueueloading))
         } else if (data.StatusCode == 200) {
             alert("User already in the queue")
             setJoinqueueloading(false)

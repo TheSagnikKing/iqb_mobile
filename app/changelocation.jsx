@@ -33,19 +33,19 @@ const ChangeLocation = () => {
 
     const debounceSearch = (value) => {
         if (countryTimeout) {
-          clearTimeout(countryTimeout);
+            clearTimeout(countryTimeout);
         }
         setSearch(value)
-    
+
         setCountryTimeout(setTimeout(() => {
             dispatch(placesApiAction(value))
         }, 500));
-      };
-    
-      const searchCountryHandler = (text) => {
+    };
+
+    const searchCountryHandler = (text) => {
         const searchTerm = text;
         debounceSearch(searchTerm);
-      }
+    }
 
     const placesApi = useSelector(state => state.placesApi)
 
@@ -67,7 +67,7 @@ const ChangeLocation = () => {
             dispatch({
                 type: "RESET_PLACE"
             })
-        }  
+        }
     }
 
     console.log("Error ", error)
@@ -137,31 +137,32 @@ const ChangeLocation = () => {
 
                     {
                         loading ?
-                            <View style={{ paddingTop: 20}}><ActivityIndicator size={24} color={"#000"}/></View> :
-                            error ? <View style={{ paddingTop: 20}}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center"}}>Oops no location found !</Text></View> :
-                            locationsdata.length == 0 ?
-                                <View style={{ paddingTop: 20}}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center"}}>Please search by location !</Text></View> :
-                                <FlatList
-                                    data={locationsdata}
-                                    renderItem={({ item }) => <Pressable style={{
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        gap: 20,
-                                        padding: 10,
-                                        marginBottom: 10,
-                                        backgroundColor: "#efefef",
-                                        borderColor: "rgba(0,0,0,0.4)",
-                                        borderWidth: 2,
-                                        borderRadius: 5
-                                    }}
-                                    onPress={() => citySetdata(item.description)}
-                                    >
-                                        <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
-                                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>{item.description}</Text>
-                                    </Pressable>}
-                                    keyExtractor={item => item.place_id}
-                                    showsVerticalScrollIndicator={false}
-                                />
+                            <View style={{ paddingTop: 20 }}><ActivityIndicator size={24} color={"#000"} /></View> :
+                            error ? <View style={{ paddingTop: 20 }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>Oops no location found !</Text></View> :
+                                locationsdata.length == 0 ?
+                                    <View style={{ paddingTop: 20 }}><Text style={{ fontFamily: "montserrat-semibold", fontSize: 16, textAlign: "center" }}>Please search by location !</Text></View> :
+                                    <FlatList
+                                        data={locationsdata}
+                                        renderItem={({ item }) => <Pressable style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            gap: 20,
+                                            paddingVertical: 10,
+                                            paddingHorizontal: 20,
+                                            marginBottom: 10,
+                                            backgroundColor: "#efefef",
+                                            borderColor: "rgba(0,0,0,0.4)",
+                                            borderWidth: 2,
+                                            borderRadius: 5
+                                        }}
+                                            onPress={() => citySetdata(item.description)}
+                                        >
+                                            <View><AntDesign name="rightcircleo" size={22} color="black" /></View>
+                                            <Text style={{ fontFamily: "montserrat-medium", fontSize: 14 }}>{item.description}</Text>
+                                        </Pressable>}
+                                        keyExtractor={item => item.place_id}
+                                        showsVerticalScrollIndicator={false}
+                                    />
                     }
 
                 </View>

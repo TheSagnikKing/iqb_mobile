@@ -23,10 +23,7 @@ export const placesApiAction = (search) => async (dispatch) => {
                 payload: data.predictions,
             });
 
-            dispatch({
-                type: PLACES_API_FAIL,
-                payload: false
-            })
+            console.log(data.predictions)
         }
         
     } catch (error) {

@@ -882,7 +882,7 @@ const Joingroup = () => {
 
             if (data.StatusCode == 201) {
                 for (const queue of updatedGroupJoinSend) {
-                    await checkpostion(iqueuecheckdata.salonid, queue, "iqueuecheckposition_v2.php", setJoinqueueloading)
+                    await checkpostion(iqueuecheckdata.salonid, queue, "iqueuecheckposition.php", setJoinqueueloading)
                 }
 
                 setJoinqueueloading(false)
@@ -932,7 +932,7 @@ const Joingroup = () => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect2.php", setJoinqueueloading) },
+                { text: 'OK', onPress: async () => await groupjoinselect(iqueuecheckdata, updatedGroupJoinSend, "iqueuejoinedqselect.php", setJoinqueueloading) },
             ]);
         } else {
             alert("You cannot join group with selected options")

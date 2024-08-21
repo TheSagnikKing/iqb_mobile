@@ -10,20 +10,7 @@ import { signupAction, signupCheckEmailAction } from '../redux/Actions/AuthActio
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// signup click -> check email 
-// if success -> go to agree page
-// if agree success -> iqueueregister api means signup api.
-// then a pop will open when press ok call MapUserSalon and IqueuesendEmail
-// after then again a ok popup will come. when press take me to login page
-
-
-//change location
-// in the changelocation atlease two letter when type will call (places apis).
-// then user choose a place and press search button. 
-// it will retrievesalonlist.php. filter api is not present 
-// when a salon is choosen then go to saloninfo.
-// there immediately call the iqbsalons.php (this api entire data to be saved in the async storage)
-// after that connect salon press save all the info into the async storage and then redirect to signin page
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 
 const Signup = () => {
@@ -40,6 +27,7 @@ const Signup = () => {
     const [maketingemails, setMarketingemails] = useState(false)
     // const [UserLevel, setUserLevel] = useState(0)
     const [IsBarber, setIsBarber] = useState(false)
+    
 
     const router = useRouter()
 
@@ -148,10 +136,10 @@ const Signup = () => {
                 <View style={styles.signup_content_top}>
                     <View
                         style={{
-                            width: 55,
-                            height: 55,
+                            width: scale(55),
+                            height: verticalScale(55),
                             backgroundColor: Colors.PRIMARY,
-                            borderRadius: 50,
+                            borderRadius: moderateScale(50),
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -161,7 +149,7 @@ const Signup = () => {
                             shadowRadius: 12,
                             elevation: 12,
                             marginHorizontal: "auto",
-                            marginBottom: 20
+                            marginBottom: verticalScale(20)
                         }}
                     ><Feather
                             name="scissors"
@@ -171,9 +159,9 @@ const Signup = () => {
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",
-                            fontSize: 15,
+                            fontSize: moderateScale(15),
                             textAlign: "center",
-                            marginBottom: 10
+                            marginBottom: verticalScale(10)
                         }}
                     >Register Now</Text>
                 </View>
@@ -182,14 +170,14 @@ const Signup = () => {
                         style={{
                             borderBottomColor: Colors.PRIMARY,
                             borderBottomWidth: 2,
-                            marginBottom: 15
+                            marginBottom: verticalScale(15)
                         }}
                     >
                         <Text style={{
                             lineHeight: 35,
                             textAlign: "center",
                             fontFamily: "montserrat-semibold",
-                            fontSize: 18
+                            fontSize: moderateScale(18)
                         }}>General</Text>
                     </View>
                     <TextInput
@@ -226,7 +214,7 @@ const Signup = () => {
                         style={{
                             display: "flex",
                             flexDirection: "row",
-                            gap: 12,
+                            gap: moderateScale(12),
                             alignItems: "center"
                         }}
                     >
@@ -235,19 +223,19 @@ const Signup = () => {
                             value={IsBarber}
                             onValueChange={(newValue) => setIsBarber(newValue)}
                             style={{
-                                width: 22,
-                                height: 22,
+                                width: scale(22),
+                                height: verticalScale(22),
                             }}
                         />
                         <Text
                             style={{
                                 fontFamily: "montserrat-medium",
-                                fontSize: 14
+                                fontSize: moderateScale(14)
                             }}
                         >I am also a barber</Text>
                     </View>
 
-                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, gap: 15 }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: verticalScale(20), gap: moderateScale(15) }}>
                         <Switch
                             trackColor={{ false: '#767577', true: '#81b0ff' }}
                             thumbColor={maketingemails ? '#f5dd4b' : '#f4f3f4'}
@@ -255,15 +243,15 @@ const Signup = () => {
                             onValueChange={toggleSwitch}
                             value={maketingemails}
                         />
-                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: 14, color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
+                        <Text style={{ fontFamily: "montserrat-semibold", fontSize: moderateScale(14), color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
                     </View>
                 </View>
                 <View style={styles.signup_content_bottom}>
                     <Pressable
                         style={{
                             backgroundColor: Colors.PRIMARY,
-                            paddingHorizontal: 25,
-                            paddingVertical: 10,
+                            paddingHorizontal: scale(25),
+                            paddingVertical: verticalScale(10),
                             borderRadius: 5,
                             shadowColor: '#000',
                             shadowOffset: { width: 0, height: 6 },
@@ -273,17 +261,17 @@ const Signup = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            marginBottom: 25
+                            marginBottom: verticalScale(25)
                         }}
                         onPress={signupClicked}
                     >
                         {
                             loading ?
-                                <ActivityIndicator size={20} color={"#fff"} /> :
+                                <ActivityIndicator size={moderateScale(20)} color={"#fff"} /> :
                                 <Text
                                     style={{
                                         color: Colors.PRIMARYTEXT,
-                                        fontSize: 16,
+                                        fontSize: moderateScale(16),
                                         fontFamily: "montserrat-medium"
                                     }}
                                 >Sign up</Text>
@@ -293,10 +281,10 @@ const Signup = () => {
 
                     <Text
                         style={{
-                            marginTop: 60,
+                            marginTop: verticalScale(10),
                             textAlign: "center",
                             fontFamily: 'montserrat-medium',
-                            fontSize: 16
+                            fontSize: moderateScale(16)
                         }}
                     >Already have an account ? <Link
                         href="/signin"
@@ -316,26 +304,26 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flex: 1
+        flex: 1,
     },
     signup_content_container: {
         width: "95%",
         height: "auto",
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        marginTop: 40
+        borderRadius: moderateScale(10),
+        paddingHorizontal: scale(10),
+        paddingVertical: verticalScale(10),
+        marginTop: verticalScale(40),
     },
     signup_content_top: {
         // backgroundColor: "red"
     },
     signup_content_medium: {
-        marginVertical: 20
+        marginVertical: verticalScale(20)
     },
     input: {
-        height: 40,
-        marginBottom: 15,
-        paddingHorizontal: 10,
+        height: verticalScale(40),
+        marginBottom: verticalScale(15),
+        paddingHorizontal: scale(10),
         borderBottomColor: Colors.PRIMARY,
         borderBottomWidth: 2,
         outlineStyle: "none",

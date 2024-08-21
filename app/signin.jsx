@@ -9,6 +9,8 @@ import { signinAction } from '../redux/Actions/AuthAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
 const Signin = () => {
 
     const [currentSalonInfo, setCurrentSalonInfo] = useState([])
@@ -141,26 +143,26 @@ const Signin = () => {
                     <View
                         style={{
                             backgroundColor: Colors.PRIMARY,
-                            width: 75,
-                            height: 75,
-                            borderRadius: 50,
+                            width: scale(75),
+                            height: verticalScale(75),
+                            borderRadius: moderateScale(50),
                             marginHorizontal: "auto",
-                            marginTop: 20,
+                            marginTop: moderateScale(20),
                             justifyContent: "center",
                             alignItems: "center",
                             shadowColor: '#000',
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
                             shadowRadius: 12,
-                            marginBottom: 30
+                            marginBottom: moderateScale(30)
                         }}>
                         {
                             currentSalonInfo?.[0]?.SalonAppIcon && <Image
                                 source={{ uri: `https://server.iqueuebarbers.com/~iqueue/SalonAppIcons/${currentSalonInfo?.[0]?.SalonAppIcon}` }}
                                 style={{
-                                    width: 70,
-                                    height: 70,
-                                    borderRadius: 50
+                                    width: scale(70),
+                                    height: verticalScale(70),
+                                    borderRadius: moderateScale(50)
                                 }}
                             />
                         }
@@ -169,17 +171,17 @@ const Signin = () => {
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",
-                            fontSize: 16,
+                            fontSize: moderateScale(16),
                             textAlign: "center",
-                            marginBottom: 10
+                            marginBottom: moderateScale(10)
                         }}
                     >Welcome To <Text>{currentSalonInfo?.[0]?.SalonName}</Text></Text>
                     <Text
                         style={{
                             fontFamily: "montserrat-semibold",
-                            fontSize: 15,
+                            fontSize: moderateScale(15),
                             textAlign: "center",
-                            marginBottom: 10
+                            marginBottom: moderateScale(10)
                         }}
                     >Enter your user ID & password to login</Text>
                 </View>
@@ -210,7 +212,7 @@ const Signin = () => {
                         <View style={{
                             flexDirection: "row",
                             alignItems: "center",
-                            gap: 10
+                            gap: moderateScale(1)
                         }}>
                             <Switch
                                 trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -221,14 +223,14 @@ const Signin = () => {
                             />
                             <Text style={{
                                 fontFamily: "montserrat-semibold",
-                                fontSize: 12
+                                fontSize: moderateScale(10)
                             }}>Remember me login</Text>
                         </View>
                         <Pressable
                             onPress={() => router.push("/forgot")}
                         ><Text style={{
                             fontFamily: "montserrat-semibold",
-                            fontSize: 12,
+                            fontSize: moderateScale(10),
                             color: Colors.PRIMARY
                         }}>Forgot Password ?</Text></Pressable>
                     </View>
@@ -237,9 +239,9 @@ const Signin = () => {
                     <Pressable
                         style={{
                             backgroundColor: Colors.PRIMARY,
-                            paddingHorizontal: 25,
-                            paddingVertical: 10,
-                            borderRadius: 5,
+                            paddingHorizontal: scale(25),
+                            paddingVertical: verticalScale(10),
+                            borderRadius: moderateScale(5),
                             shadowColor: '#000',
                             shadowOffset: { width: 0, height: 6 },
                             shadowOpacity: 0.4,
@@ -248,17 +250,17 @@ const Signin = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            marginBottom: 25
+                            marginBottom: moderateScale(25)
                         }}
                         onPress={signinClicked}
                     >
                         {
                             loading ?
-                                <ActivityIndicator size={20} color={"#fff"} /> :
+                                <ActivityIndicator size={moderateScale(20)} color={"#fff"} /> :
                                 <Text
                                     style={{
                                         color: Colors.PRIMARYTEXT,
-                                        fontSize: 16,
+                                        fontSize: moderateScale(16),
                                         fontFamily: "montserrat-medium"
                                     }}
                                 >Sign in</Text>
@@ -277,12 +279,12 @@ const Signin = () => {
                         <Pressable onPress={() => router.push("/changelocation")}><Text
                             style={{
                                 fontFamily: "montserrat-medium",
-                                fontSize: 14,
+                                fontSize: moderateScale(14),
                                 color: Colors.PRIMARY,
-                                borderRightWidth: 2,
+                                borderRightWidth: moderateScale(2),
                                 borderRightColor: Colors.PRIMARY,
-                                paddingRight: 8,
-                                lineHeight: 15
+                                paddingRight: moderateScale(8),
+                                lineHeight: moderateScale(15)
                             }}
                         >Change Location</Text>
                         </Pressable>
@@ -291,20 +293,20 @@ const Signin = () => {
                         ><Text
                             style={{
                                 fontFamily: "montserrat-medium",
-                                fontSize: 14,
+                                fontSize: moderateScale(14),
                                 color: Colors.PRIMARY,
-                                paddingLeft: 8,
-                                lineHeight: 15
+                                paddingLeft: moderateScale(8),
+                                lineHeight: moderateScale(15)
                             }}
                         >Help</Text></Pressable>
                     </View>
 
                     <Text
                         style={{
-                            marginTop: 60,
+                            marginTop: verticalScale(60),
                             textAlign: "center",
                             fontFamily: 'montserrat-medium',
-                            fontSize: 16
+                            fontSize: moderateScale(16)
                         }}
                     >Don't have an account ? <Link
                         href="/signup"
@@ -330,21 +332,21 @@ const styles = StyleSheet.create({
     signin_content_container: {
         width: "95%",
         height: "auto",
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        marginTop: 40
+        borderRadius: moderateScale(10),
+        paddingHorizontal: scale(10),
+        paddingVertical: verticalScale(10),
+        marginTop: verticalScale(40)
     },
     signin_content_top: {
         // backgroundColor: "red"
     },
     signin_content_medium: {
-        marginVertical: 20
+        marginVertical: verticalScale(20)
     },
     input: {
-        height: 40,
-        marginBottom: 15,
-        paddingHorizontal: 10,
+        height: verticalScale(40),
+        marginBottom: verticalScale(15),
+        paddingHorizontal: scale(10),
         borderBottomColor: Colors.PRIMARY,
         borderBottomWidth: 2,
         outlineStyle: "none",

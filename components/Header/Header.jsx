@@ -58,33 +58,43 @@ const Header = () => {
           gap: 10
         }}
       >
-        <Pressable onPress={() => router.push("/profile")}>
+        <Pressable 
 
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 10
+        }}
+        onPress={() => router.push("/profile")}>
+          <View style={{
+              width: 38,
+              height: 38,
+              borderRadius: 50,
+              borderColor: "rgba(0,0,0,0.4)",
+              borderWidth: 2,
+              justifyContent:"center",
+              alignItems:"center"
+            }}>
           {
-            customerdetailsdata ? <Image
-              source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}`}}
+            customerdetailsdata && <Image
+              source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}` }}
               style={{
                 width: 35,
                 height: 35,
                 borderRadius: 50,
-                borderColor: "rgba(0,0,0,0.4)",
-                borderWidth: 2
               }}
-            /> : <View style={{
-              width: 35,
-              height: 35,
-              borderRadius: 50,
-              borderColor: "rgba(0,0,0,0.4)",
-              borderWidth: 2
-            }}></View>
+            /> 
           }
+          </View>
+
+          <Text
+            style={{
+              fontFamily: "montserrat-semibold",
+              fontSize: 14
+            }}
+          >{`${currentUserInfo?.[0]?.FirstName}`}</Text>
         </Pressable>
-        <Text
-          style={{
-            fontFamily: "montserrat-semibold",
-            fontSize: 14
-          }}
-        >{`${currentUserInfo?.[0]?.FirstName}`}</Text>
+
       </View>
       <View
         style={{

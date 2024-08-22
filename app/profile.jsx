@@ -66,37 +66,37 @@ const profile = () => {
       console.error('Error picking an image', error);
     }
   };
-  
+
   const uploadImage = async (result, userId) => {
     try {
       const asset = result.assets[0];
       const response = await fetch(asset.uri);
       const blob = await response.blob();
-  
+
       const index = asset.fileName.lastIndexOf('.');
       const ext = asset.fileName.substring(index + 1);
       const fileName = `${userId}.${ext}`;
 
       console.log("The filename is ", fileName)
-       
+
       let formData = new FormData();
       formData.append('file', {
         name: fileName,
         type: blob.type,
         uri: asset.uri,
       });
-  
+
       const { data } = await api.post("/upload_profile_image.php", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       console.log("The success ", data);
 
-      if(data.StatusCode == 200){
+      if (data.StatusCode == 200) {
         router.push("/home")
-      }else if(data.StatusCode == 201){
+      } else if (data.StatusCode == 201) {
         alert(data.StatusMessage)
       }
 
@@ -109,9 +109,9 @@ const profile = () => {
   const makeCall = (number) => {
     const url = `tel:${number}`;
     Linking.openURL(url).catch((err) => console.error('Error:', err));
-}
+  }
 
-  
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.profile_header_container}>
@@ -150,20 +150,20 @@ const profile = () => {
           position: "relative",
           borderRadius: 50,
           marginTop: 10,
-          marginBottom: 20
+          marginBottom: 20,
+          borderColor: "rgba(0,0,0,0.4)",
+          borderWidth: 2
         }}>
-          {
-            customerdetailsdata && <Image
-              source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}` }}
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: 50,
-                borderColor: "rgba(0,0,0,0.4)",
-                borderWidth: 2
-              }}
-            />
-          }
+            {
+              customerdetailsdata && <Image
+                source={{ uri: `${customerdetailsdata?.CustomerImage}?${new Date().getTime()}` }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 50,
+                }}
+              />
+            }
 
           <Pressable style={{
             position: "absolute",
@@ -234,7 +234,7 @@ const profile = () => {
           justifyContent: "center",
           alignItems: "center",
         }}
-        onPress={() => makeCall(customerdetailsdata?.CustomerPhone)}
+          onPress={() => makeCall(customerdetailsdata?.CustomerPhone)}
         ><Feather name="phone-call" size={24} color="#fff" /></Pressable>
 
         <Text style={{

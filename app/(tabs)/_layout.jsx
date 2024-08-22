@@ -7,16 +7,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors'
 import { Text, View } from 'react-native';
 
-const TabItem = ({icon, title, focused}) => {
+const TabItem = ({ icon, title, focused }) => {
     return (
         <View style={{
-            flex:1,
-            display:"flex",
+            flex: 1,
+            display: "flex",
             flexDirection: "column",
             gap: 5,
-            justifyContent:"center",
-            alignItems:"center"
-            }}>
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
             <View>{icon}</View>
             <Text style={{
                 fontSize: 11,
@@ -38,8 +38,8 @@ const TabLayout = () => {
                     backgroundColor: "#fff",
                     height: 60,
                     paddingHorizontal: 10,
-                    display:"flex",
-                    flexDirection:"row",
+                    display: "flex",
+                    flexDirection: "row",
                     borderTopColor: "rgba(0,0,0,0.2)",
                     borderTopWidth: 1
                 },
@@ -58,19 +58,7 @@ const TabLayout = () => {
                     ),
                 }}
             />
-            <Tabs.Screen
-                name="settings"
-                options={{
-                    tabBarLabel: "Settings",
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabItem
-                            icon={<SimpleLineIcons name="settings" size={24} color={focused ? color : "#000"} />}
-                            title={"Settings"}
-                            focused={focused}
-                        />
-                    ),
-                }}
-            />
+
             <Tabs.Screen
                 name="qlist"
                 options={{
@@ -79,6 +67,20 @@ const TabLayout = () => {
                         <TabItem
                             icon={<Ionicons name="people-sharp" size={24} color={focused ? color : "#000"} />}
                             title={"QList"}
+                            focused={focused}
+                        />
+                    ),
+                }}
+            />
+
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    tabBarLabel: "Settings",
+                    tabBarIcon: ({ color, focused }) => (
+                        <TabItem
+                            icon={<SimpleLineIcons name="settings" size={24} color={focused ? color : "#000"} />}
+                            title={"Settings"}
                             focused={focused}
                         />
                     ),

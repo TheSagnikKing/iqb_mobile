@@ -210,7 +210,7 @@ const Signup = () => {
                         value={password}
                     />
 
-                    <View
+                    {/* <View
                         style={{
                             display: "flex",
                             flexDirection: "row",
@@ -233,9 +233,9 @@ const Signup = () => {
                                 fontSize: moderateScale(14)
                             }}
                         >I am also a barber</Text>
-                    </View>
+                    </View> */}
 
-                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: verticalScale(20), gap: moderateScale(15) }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: moderateScale(15) }}>
                         <Switch
                             trackColor={{ false: '#767577', true: '#81b0ff' }}
                             thumbColor={maketingemails ? '#f5dd4b' : '#f4f3f4'}
@@ -246,6 +246,7 @@ const Signup = () => {
                         <Text style={{ fontFamily: "montserrat-semibold", fontSize: moderateScale(14), color: Colors.PRIMARY }}>Receive salon updates/offer</Text>
                     </View>
                 </View>
+
                 <View style={styles.signup_content_bottom}>
                     <Pressable
                         style={{

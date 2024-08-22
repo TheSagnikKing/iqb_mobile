@@ -93,7 +93,34 @@ const editprofile = () => {
 
     // const [selected, setSelected] = useState('');
 
-    console.log("Selected Date of birth ", dateofbirth)
+    // console.log("Selected Date of birth ", dateofbirth)
+
+    const getCurrentDate = () => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    };
+
+    const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+
+    const goToNextYear = () => {
+        const currentYear = new Date(selectedDate).getFullYear();
+        const newYear = currentYear + 1;
+        const newDate = new Date(selectedDate);
+        newDate.setFullYear(newYear);
+        // console.log("sdvsdv", newDate.toISOString().split('T')[0])
+        setSelectedDate(newDate.toISOString().split('T')[0]);
+    };
+
+
+
+    const goToPreviousYear = () => {
+        const currentYear = new Date(selectedDate).getFullYear();
+        const newYear = currentYear - 1;
+        const newDate = new Date(selectedDate);
+        newDate.setFullYear(newYear);
+        // console.log("Previous Year:", newDate.toISOString().split('T')[0]);
+        setSelectedDate(newDate.toISOString().split('T')[0]);
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -166,45 +193,102 @@ const editprofile = () => {
                                 flex: 1,
                                 padding: 20
                             }}>
-                            <Pressable
-                                onPress={() => setShowModal(false)}
-                                style={{
-                                    backgroundColor: "red",
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 8,
-                                    borderRadius: 10,
-                                    width: 200,
-                                    width: 45,
-                                    height: 45,
-                                    borderRadius: 50,
-                                    marginBottom: 20,
-                                    marginLeft: "auto",
-                                    justifyContent: "center",
-                                    alignItems: "center"
-                                }}
-                            ><Entypo name="cross" size={24} color="#fff" /></Pressable>
-                            <Calendar
-                                onDayPress={day => {
-                                    setDateofbirth(() => {
-                                        const dayarray = day.dateString.split("-")
-                                        setShowModal(false)
-                                        return dayarray.reverse().join("-")
-                                    });
-                                }}
-                                style={{
-                                    marginTop: 10,
+                                <Pressable
+                                    onPress={() => setShowModal(false)}
+                                    style={{
+                                        backgroundColor: "red",
+                                        paddingHorizontal: 10,
+                                        paddingVertical: 8,
+                                        borderRadius: 10,
+                                        width: 200,
+                                        width: 45,
+                                        height: 45,
+                                        borderRadius: 50,
+                                        marginBottom: 20,
+                                        marginLeft: "auto",
+                                        justifyContent: "center",
+                                        alignItems: "center"
+                                    }}
+                                ><Entypo name="cross" size={24} color="#fff" /></Pressable>
+
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    // marginBottom: 20,
                                     width: "95%",
-                                    marginHorizontal: "auto",
-                                    borderRadius: 10,
-                                    borderWidth: 1,
-                                    borderColor: "#000",
-                                    shadowColor: '#000',
-                                    shadowOffset: { width: 0, height: 6 },
-                                    shadowOpacity: 0.4,
-                                    shadowRadius: 12,
-                                    elevation: 5,
-                                }}
-                            />
+                                    marginHorizontal: "auto"
+                                }}>
+                                    <Pressable onPress={goToPreviousYear}
+                                        style={{
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 8,
+                                            backgroundColor: Colors.PRIMARY,
+                                            borderRadius: 5,
+                                            shadowColor: '#000',
+                                            shadowOffset: { width: 0, height: 6 },
+                                            shadowOpacity: 0.4,
+                                            shadowRadius: 12,
+                                            elevation: 5,
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: Colors.PRIMARYTEXT,
+                                            fontSize: 13,
+                                            fontFamily: "montserrat-medium"
+                                        }}>Prev Year</Text>
+                                    </Pressable>
+
+                                    <Pressable onPress={goToNextYear}
+                                        style={{
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 8,
+                                            backgroundColor: Colors.PRIMARY,
+                                            borderRadius: 5,
+                                            shadowColor: '#000',
+                                            shadowOffset: { width: 0, height: 6 },
+                                            shadowOpacity: 0.4,
+                                            shadowRadius: 12,
+                                            elevation: 5,
+                                        }}
+                                    >
+                                        <Text style={{
+                                            color: Colors.PRIMARYTEXT,
+                                            fontSize: 13,
+                                            fontFamily: "montserrat-medium"
+                                        }}>Next Year</Text>
+                                    </Pressable>
+                                </View>
+
+                                <Calendar
+                                    initialDate={selectedDate}
+                                    onDayPress={day => {
+                                        setDateofbirth(() => {
+                                            const dayarray = day.dateString.split("-")
+                                            // console.log(dayarray)
+                                            setShowModal(false)
+                                            return dayarray.reverse().join("-")
+                                        });
+                                    }}
+
+                                    onMonthChange={month => {
+                                        console.log('month changed', month);
+                                    }}
+                                    style={{
+                                        marginTop: 10,
+                                        width: "95%",
+                                        marginHorizontal: "auto",
+                                        borderRadius: 10,
+                                        borderWidth: 1,
+                                        borderColor: "#000",
+                                        shadowColor: '#000',
+                                        shadowOffset: { width: 0, height: 6 },
+                                        shadowOpacity: 0.4,
+                                        shadowRadius: 12,
+                                        elevation: 5,
+                                    }}
+                                />
                             </View>
                         </Modal>
                     }

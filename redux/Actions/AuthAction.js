@@ -41,20 +41,25 @@ export const signinAction = (email, password, salonid, router, endpoint, remembe
                 payload: {
                     ...data
                 },
-            }); 
+            });
 
-            if(data?.Response[0]?.Activated == "N"){
+            if (data?.Response[0]?.Activated == "N") {
+                if (rememberdatatrue) {
+                    await AsyncStorage.setItem("rememberdata", JSON.stringify({ email, password }))
+                } else {
+                    await AsyncStorage.removeItem("rememberdata")
+                }
                 router.push({ pathname: "/activationcode", params: data?.Response[0] })
-            }else if(data?.Response[0]?.Activated == "Y"){
+            } else if (data?.Response[0]?.Activated == "Y") {
                 await AsyncStorage.removeItem('user-logininfo');
                 await AsyncStorage.setItem('user-logininfo', JSON.stringify(data.Response));
 
-                if(rememberdatatrue){
-                    await AsyncStorage.setItem("rememberdata", JSON.stringify({email,password}))
-                }else{
+                if (rememberdatatrue) {
+                    await AsyncStorage.setItem("rememberdata", JSON.stringify({ email, password }))
+                } else {
                     await AsyncStorage.removeItem("rememberdata")
                 }
-                
+
                 router.push("/home")
             }
         }
@@ -71,7 +76,7 @@ export const activatedAccountAction = (params, endpoint, router) => async (dispa
         });
 
         const body = {
-            "query":`UPDATE CustomersRegisteredTable set Activated='Y' WHERE Email='${params.Email}' AND SalonId=${params.SalonId}`
+            "query": `UPDATE CustomersRegisteredTable set Activated='Y' WHERE Email='${params.Email}' AND SalonId=${params.SalonId}`
         }
 
         const { data } = await api.post(`/${endpoint}`, body);
@@ -143,7 +148,7 @@ const iqueuesendEmailAction = (signupdata, endpoint, router) => async (dispatch)
             // Add any other headers as needed
         };
 
-        const  { data, status }  = await api.post(url, params, {
+        const { data, status } = await api.post(url, params, {
             headers
         });
 
@@ -151,7 +156,7 @@ const iqueuesendEmailAction = (signupdata, endpoint, router) => async (dispatch)
         // console.log("email", typeof(data))
         // console.log("status ", status)
 
-        if( status == 200){
+        if (status == 200) {
             dispatch({
                 type: IQUEUE_SENDEMAIL_SUCCESS,
                 payload: {
@@ -204,11 +209,11 @@ export const activatedResendEmailAction = (resenddata, endpoint, router) => asyn
             'Content-Type': 'application/x-www-form-urlencoded',
         };
 
-        const  { data, status }  = await api.post(url, body, {
+        const { data, status } = await api.post(url, body, {
             headers
         });
 
-        if( status == 200){
+        if (status == 200) {
             dispatch({
                 type: ACTIVATED_RESENDEMAIL_SUCCESS,
                 payload: {
@@ -269,7 +274,7 @@ const mapUserSalonAction = (signupdata, endpoint, router) => async (dispatch) =>
                 },
             });
 
-            dispatch(iqueuesendEmailAction(signupdata, "iqueuesendemail.php",router))
+            dispatch(iqueuesendEmailAction(signupdata, "iqueuesendemail.php", router))
 
             console.log("Map User salon success ")
         }
@@ -334,7 +339,7 @@ export const signupAction = (signupdata, endpoint, router) => async (dispatch) =
                     {
                         text: 'OK',
                         onPress: () => (
-                            dispatch(mapUserSalonAction({...signupdata, username: data.Response.USerName}, "MapUserSalon.php", router))
+                            dispatch(mapUserSalonAction({ ...signupdata, username: data.Response.USerName }, "MapUserSalon.php", router))
                         )
                     },
                 ],
@@ -373,12 +378,12 @@ export const signupCheckEmailAction = (signupdata, endpoint, router) => async (d
             });
 
             router.push({ pathname: "/agree", params: signupdata })
-        }else if(data.StatusCode == 200){
+        } else if (data.StatusCode == 200) {
             dispatch({
                 type: SIGNUP_CHECKEMAIL_FAIL,
                 payload: "User already exist"
             });
-            
+
             Toast.show({
                 type: 'error',
                 text1: "User already exist",

@@ -91,7 +91,7 @@ const Home = () => {
     response
   } = admiMergeRet2
 
-  console.log("Admin Merge Ret 2 Response ", response)
+  // console.log("Admin Merge Ret 2 Response ", response)
 
   const router = useRouter()
   const [join, setJoin] = useState(false)
@@ -120,8 +120,8 @@ const Home = () => {
     }
   ]
 
-  const cancelQueue = (UserName, salonid, endpoint, dispatch, loggedinUsername) => {
-    Alert.alert('Delete', `Are you sure you want to cancel booking of ${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName} ?`, [
+  const cancelQueue = (UserName, salonid, endpoint, dispatch, loggedinUsername, Name) => {
+    Alert.alert('Delete', `Are you sure you want to cancel booking of ${Name} ?`, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
@@ -133,7 +133,7 @@ const Home = () => {
 
 
   const cancelAllqueue = (UserName, salonid, endpoint, dispatch, loggedinUsername) => {
-    Alert.alert('Delete', `Are you sure you want to cancel booking of ${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName} ?`, [
+    Alert.alert('Delete', `Are you sure you want to cancel booking of all queues ?`, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
@@ -184,12 +184,12 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={[styles.queue_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, height:200 }]}>
+          <View style={[styles.queue_status_item, { borderTopColor: "rgba(0,0,0,0.4)", borderTopWidth: 2, height: 200 }]}>
             <View style={styles.queue_status_item_icon}>
               <FontAwesome6 name="person-circle-exclamation" size={moderateScale(24)} color="#fff" />
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom:5 }}>Barbers On Duty</Text>
+              <Text style={{ textAlign: "center", fontFamily: "montserrat-bold", fontSize: moderateScale(16), marginBottom: 5 }}>Barbers On Duty</Text>
               <Text style={{ textAlign: "center", fontFamily: "montserrat-semibold", fontSize: moderateScale(16) }}>{response?.BarbersOnDuty}</Text>
             </View>
           </View>
@@ -250,203 +250,6 @@ const Home = () => {
         </View>
       </ScrollView>
 
-
-      {/* {
-        response?.QStatusList?.length == 0  ? (<View style={{
-          position: "absolute",
-          right: 15,
-          bottom: 15
-        }}>
-          <Pressable
-            style={{
-              width: 45,
-              height: 45,
-              backgroundColor: Colors.PRIMARY,
-              borderRadius: 50,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.4,
-              shadowRadius: 12,
-              elevation: 12,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => setJoin((prev) => !prev)}
-          >{
-              join ? <Entypo name="cross" size={24} color="#fff" /> : <MaterialIcons name="person-add-alt-1" size={24} color="#fff" />
-            }
-          </Pressable>
-
-          {
-            join && <View
-              style={{
-                height: "auto",
-                width: 220,
-                position: "absolute",
-                top: -160,
-                right: 3,
-                backgroundColor: "#fff",
-                borderRadius: 10,
-                padding: 10,
-                flexDirection: "column",
-                shadowColor: '#fff',
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.4,
-                shadowRadius: 12,
-                elevation: 5,
-              }}
-            >
-
-              <FlatList
-                data={menulistdata}
-                renderItem={({ item }) => <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  gap: 10,
-                  marginBottom: 5,
-                  animationdelay: 300
-                }}>
-                  <Pressable
-                    onPress={() => {
-                      router.push(item.url)
-                      setJoin(false)
-                    }}
-
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: 10
-                    }}
-                  >
-                    <Text style={{
-                      lineHeight: 30,
-                      backgroundColor: "#efefef",
-                      paddingHorizontal: 15,
-                      borderRadius: 15,
-                      fontFamily: "montserrat-semibold",
-                      fontSize: 14,
-                      borderColor: Colors.PRIMARY,
-                      borderWidth: 1,
-                    }}>{item.name}</Text>
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        backgroundColor: "#efefef",
-                        borderColor: Colors.PRIMARY,
-                        borderWidth: 1,
-                        borderRadius: 50,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >{item.icon}</View>
-                  </Pressable>
-                </View>
-                }
-                keyExtractor={item => item._id}
-              />
-
-            </View>
-          }
-        </View>) : response?.QStatusList?.length > 0 && (<View style={{
-          borderTopWidth: 1,
-          borderTopColor: "rgba(0,0,0,0.4)",
-          backgroundColor: "#efefef"
-        }}>
-          <View style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 20
-          }}>
-            <Text style={{
-              textAlign: "center",
-              fontFamily: "montserrat-bold",
-              marginVertical: 20,
-              fontSize: 16,
-            }}>Queue Status</Text>
-
-            <Pressable onPress={() => cancelAllqueue(currentUserInfo?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}>
-              <Text style={{ color: "red", fontWeight: 500 }}>Cancel All queues</Text>
-            </Pressable>
-          </View>
-          <View style={{
-            marginBottom: 20,
-            height: 150
-          }}>
-            <FlatList
-              data={response?.QStatusList}
-              renderItem={({ item }) => <View style={{
-                width: "90%",
-                height: 60,
-                backgroundColor: Colors.PRIMARY,
-                marginHorizontal: "auto",
-                zIndex: 2,
-                borderRadius: 5,
-                padding: 10,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 10
-              }}>
-                <View style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 20
-                }}>
-                  <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.SlNo}</Text>
-                  <View>
-                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Name: {item?.Name}</Text>
-                    <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>Barber: {item?.Barber}</Text>
-                  </View>
-                </View>
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 20
-                }}>
-                  <View style={{
-                    backgroundColor: "#000",
-                    height: 30,
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    borderColor: "#fff",
-                    borderWidth: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold" }}>{item?.TimeData}</Text></View>
-
-                  <Pressable style={{
-                    width: 30,
-                    height: 30,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#fff",
-                    borderRadius: 50,
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 6 },
-                    shadowOpacity: 0.4,
-                    shadowRadius: 12,
-                    elevation: 5,
-
-                  }}
-                    onPress={() => cancelQueue(item.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}
-                  ><MaterialCommunityIcons name="cancel" size={24} color="red" /></Pressable>
-                </View>
-              </View>}
-              keyExtractor={item => item.UserName}
-            />
-          </View>
-        </View>)
-      } */}
 
       {
         response?.QStatusList?.length == 0 ? (<View style={{
@@ -570,13 +373,16 @@ const Home = () => {
               fontSize: moderateScale(14),
             }}>Queue Status</Text>
 
-            <Pressable onPress={() => cancelAllqueue(currentUserInfo?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}>
-              <Text style={{ color: "red", fontWeight: 500, fontSize: moderateScale(12) }}>Cancel All queues</Text>
-            </Pressable>
+            {
+              response?.QStatusList?.length > 1 && <Pressable onPress={() => cancelAllqueue(currentUserInfo?.[0]?.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}>
+                <Text style={{ color: "red", fontWeight: 500, fontSize: moderateScale(12) }}> Cancel All queues</Text>
+              </Pressable>
+            }
+
           </View>
           <View style={{
             marginBottom: moderateScale(20),
-            height: verticalScale(130)
+            height: response?.QStatusList?.length > 1 ? verticalScale(130) : verticalScale(60)
           }}>
             <FlatList
               data={response?.QStatusList}
@@ -601,8 +407,8 @@ const Home = () => {
                 }}>
                   <Text style={{ color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(12) }}>{item?.SlNo}</Text>
                   <View>
-                    <Text style={{ width: scale(105),color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(12)  }} numberOfLines={1} ellipsizeMode="tail">Name: {item?.Name}</Text>
-                    <Text style={{ width: scale(105), color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(12)  }} numberOfLines={1} ellipsizeMode="tail">Barber: {item?.Barber}</Text>
+                    <Text style={{ width: scale(105), color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(12) }} numberOfLines={1} ellipsizeMode="tail">Name: {item?.Name}</Text>
+                    <Text style={{ width: scale(105), color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(12) }} numberOfLines={1} ellipsizeMode="tail">Barber: {item?.Barber}</Text>
                   </View>
                 </View>
                 <View style={{
@@ -619,7 +425,7 @@ const Home = () => {
                     borderWidth: 1,
                     justifyContent: "center",
                     alignItems: "center"
-                  }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(14) }}>{item?.TimeData}</Text></View>
+                  }}><Text style={{ textAlign: "center", color: Colors.PRIMARYTEXT, fontFamily: "montserrat-semibold", fontSize: moderateScale(14) }}>{item?.SlNo == 1 ? "Next" : item?.TimeData}</Text></View>
 
                   <Pressable style={{
                     width: scale(30),
@@ -635,7 +441,7 @@ const Home = () => {
                     elevation: 5,
 
                   }}
-                    onPress={() => cancelQueue(item.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName)}
+                    onPress={() => cancelQueue(item.UserName, currentUserInfo?.[0]?.SalonId, "iqueuedeletejoinedq.php", dispatch, currentUserInfo?.[0]?.UserName, item?.Name)}
                   ><MaterialCommunityIcons name="cancel" size={moderateScale(24)} color="red" /></Pressable>
                 </View>
               </View>}

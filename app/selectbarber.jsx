@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { iqueuebarberSelectAction } from '../redux/Actions/QueueAction'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const SelectBarber = () => {
 
@@ -96,15 +97,15 @@ const SelectBarber = () => {
                         borderBottomWidth: 1
                       }}
                     >
-                      <View style={{ flex: 2, paddingHorizontal: 10, flexDirection: "row", alignItems: "center", gap: 15, borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1 }}>
+                      <View style={{ flex: 2, paddingHorizontal: scale(10), flexDirection: "row", alignItems: "center", gap: scale(15), borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1 }}>
                         <View style={{
                           justifyContent: "center",
                           alignItems: "center"
                         }}><Image
                             source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
                             style={{
-                              width: 45,
-                              height: 45,
+                              width: scale(45),
+                              height: verticalScale(45),
                               borderRadius: 50,
                               borderColor: `${Colors.PRIMARY}`,
                               borderWidth: 1
@@ -112,18 +113,19 @@ const SelectBarber = () => {
                           /></View>
                         <Text style={{
                           fontFamily: "montserrat-semibold",
-                          fontSize: 16
-                        }}>{item.BarberName}</Text>
+                          fontSize: moderateScale(14),
+                          width: scale(100)
+                        }} numberOfLines={1} ellipsizeMode="tail">{item.BarberName}</Text>
                       </View>
 
-                      <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: "center", alignItems: "center" }}>
+                      <View style={{ flex: 1, paddingHorizontal: moderateScale(10), justifyContent: "center", alignItems: "center" }}>
                         <Text style={{
                           fontFamily: "montserrat-semibold",
-                          fontSize: 16
+                          fontSize: moderateScale(14)
                         }}>Queuing</Text>
                         <Text style={{
                           fontFamily: "montserrat-semibold",
-                          fontSize: 16,
+                          fontSize: moderateScale(14),
                           color: Colors.PRIMARY
                         }}>{item.TotalQueue}</Text>
                       </View>
@@ -136,19 +138,19 @@ const SelectBarber = () => {
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        paddingHorizontal: 10,
+                        paddingHorizontal: moderateScale(10),
                       }}
                     >
                       <View>
-                        <Text style={{ marginBottom: 5, fontFamily: "montserrat-medium", fontSize: 16 }}>Estimated Time: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{item.EWT}</Text></Text>
-                        <Text style={{ fontFamily: "montserrat-medium", fontSize: 16 }}>Next Available Position: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: 16 }}>{Number(item.TotalQueue) + 1}</Text></Text>
+                        <Text style={{ marginBottom: 5, fontFamily: "montserrat-medium", fontSize: moderateScale(14) }}>Estimated Time: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: moderateScale(14) }}>{item.EWT}</Text></Text>
+                        <Text style={{ fontFamily: "montserrat-medium", fontSize: moderateScale(14) }}>Next Available Position: <Text style={{ color: Colors.PRIMARY, fontFamily: "montserrat-semibold", fontSize: moderateScale(14) }}>{Number(item.TotalQueue) + 1}</Text></Text>
                       </View>
 
                       <Pressable
                         style={{
                           backgroundColor: Colors.PRIMARY,
-                          width: 60,
-                          height: 40,
+                          width: scale(60),
+                          height: verticalScale(40),
                           borderRadius: 10,
                           justifyContent: "center",
                           alignItems: "center",
@@ -161,7 +163,7 @@ const SelectBarber = () => {
                         onPress={() => router.push({ pathname: "/selectservices", params: { BarberId: item.BarberId, SalonId: item.SalonId, BarberName: item.BarberName, EWT: item.EWT } })}
                       >
                         <Text style={{
-                          fontFamily: "montserrat-medium", fontSize: 14,
+                          fontFamily: "montserrat-medium", fontSize: moderateScale(14),
                           color: Colors.PRIMARYTEXT,
                         }}>Join</Text>
                       </Pressable>

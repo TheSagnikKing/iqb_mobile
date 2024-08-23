@@ -313,7 +313,9 @@ const Joingroup = () => {
 
                 setJoinqueueloading(false)
 
-                router.push("/home")
+                Alert.alert('Join Queue', 'You have successfully joined the queue ?', [
+                    { text: 'OK', onPress: () => router.push("/home") },
+                ]);
 
             } else if (data.StatusCode == 200) {
                 alert("Alert!, You cannot rejoin the queue today, due to a place cancellation.")
@@ -401,13 +403,13 @@ const Joingroup = () => {
 
                 <FlatList
                     data={customerobjarr}
-                    renderItem={({ item , index}) => <View style={{
+                    renderItem={({ item, index }) => <View style={{
                         height: 150,
                         backgroundColor: "#efefef",
                         borderRadius: 10,
                         borderColor: "rgba(0,0,0,0.4)",
                         borderWidth: 1,
-                        marginBottom: index == customerobjarr.length - 1 ? verticalScale(150): 10,
+                        marginBottom: index == customerobjarr.length - 1 ? verticalScale(150) : 10,
                     }}>
                         <TextInput
                             editable

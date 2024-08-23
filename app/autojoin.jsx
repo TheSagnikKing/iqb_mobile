@@ -26,7 +26,7 @@ const Autojoin = () => {
     getloginsalonuserdata()
   }, [])
 
-  console.log("Current User Info Auto", currentUserInfo)
+  // console.log("Current User Info Auto", currentUserInfo)
 
   const dispatch = useDispatch()
 
@@ -109,6 +109,8 @@ const Autojoin = () => {
     ]);
   }
 
+
+  console.log("Services list ", serviceslist)
   return (
     <>
       <Toast />

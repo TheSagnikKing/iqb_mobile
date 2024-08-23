@@ -195,7 +195,10 @@ const iqueueinsertjoinqAction = (joinqdata, endpoint, router, setJoinqueueloadin
             })
 
             setJoinqueueloading(false)
-            router.push("/home")
+
+            Alert.alert('Join Queue', 'You have successfully joined the queue ?', [
+                { text: 'OK', onPress: () => router.push("/home") },
+            ]);
         }
 
     } catch (error) {

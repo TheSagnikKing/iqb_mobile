@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229422043623",
+    "project_id": "expo-notify-cff51",
+    "storage_bucket": "expo-notify-cff51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229422043623:android:06576b7f11f17fa70e6d42",
+        "android_client_info": {
+          "package_name": "com.sumeath.iqb_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpn1lmlgJv2E62wglWpfHN9ExeQOfDF50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert, Switch, Image } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator, Linking, Alert, Switch, Image, Platform } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,7 +14,21 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { BackHandler, ToastAndroid } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
+
 const Signin = () => {
+
+    const [timejoinedq, setTimejoinedq] = useState("")
+    const [rdatejoinedq, setRdatejoinedq] = useState("")
+
+    useEffect(() => {
+        const options = { hour12: false };
+        const time = new Date().toLocaleTimeString([], options);
+        setTimejoinedq(time)
+
+        const date = new Date();
+        const formattedDate = date.toISOString().split('T')[0]; // This will give you the date in 'YYYY-MM-DD' format
+        setRdatejoinedq(formattedDate);
+    }, []);
 
     const handleBackPress = useCallback(() => {
         BackHandler.exitApp(); // Exit the app on a single back press

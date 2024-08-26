@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, FlatList, ActivityIndicator, Alert, Platform } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors'
@@ -10,7 +10,131 @@ import { getservicesbybarberIdsalonIdAction, iqueuejoinedSelectAction } from '..
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
+
+import { BackHandler, ToastAndroid } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
+
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
+
+
+
+async function sendPushNotification(expoPushToken) {
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Original Title',
+        body: 'And here is the body!',
+        data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    });
+}
+
+
+function handleRegistrationError(errorMessage) {
+    alert(errorMessage);
+    throw new Error(errorMessage);
+}
+
+async function registerForPushNotificationsAsync() {
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            handleRegistrationError('Permission not granted to get push token for push notification!');
+            return;
+        }
+        const projectId =
+            Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+        if (!projectId) {
+            handleRegistrationError('Project ID not found');
+        }
+        try {
+            const pushTokenString = (
+                await Notifications.getExpoPushTokenAsync({
+                    projectId,
+                })
+            ).data;
+            console.log(pushTokenString);
+            return pushTokenString;
+        } catch (e) {
+            handleRegistrationError(`${e}`);
+        }
+    } else {
+        handleRegistrationError('Must use physical device for push notifications');
+    }
+}
+
 const selectservices = () => {
+
+
+    //Notification code =========
+
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [notification, setNotification] = useState(
+        undefined
+    );
+    const notificationListener = useRef();
+    const responseListener = useRef();
+
+
+    console.log("EXPO PUSH TOKEN ", expoPushToken)
+
+    useEffect(() => {
+        registerForPushNotificationsAsync()
+            .then(token => setExpoPushToken(token ?? ''))
+            .catch((error) => setExpoPushToken(`${error}`));
+
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
+
+        return () => {
+            notificationListener.current &&
+                Notifications.removeNotificationSubscription(notificationListener.current);
+            responseListener.current &&
+                Notifications.removeNotificationSubscription(responseListener.current);
+        };
+    }, []);
+
+    //Notification code End =========
 
   const [currentSalonInfo, setCurrentSalonInfo] = useState([])
   const [currentUserInfo, setCurrentUserInfo] = useState([])
@@ -98,7 +222,17 @@ const selectservices = () => {
       is_single_join: "yes",
     }
 
-    console.log("Single joinqueuedata ", joinqueuedata)
+    // console.log("Single joinqueuedata ", joinqueuedata)
+
+
+    const newdevicetokenbody = {
+      token: expoPushToken,
+      type: Platform.OS,
+      DateJoinedQ: `${rdatejoinedq} ${timejoinedq}`,
+      salonid: currentSalonInfo?.[0]?.id,
+      FirstLastName: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
+      UserName: `${currentUserInfo?.[0]?.UserName}`,
+  }
 
     Alert.alert('Join Queue', 'Are you sure ?', [
       {
@@ -106,7 +240,7 @@ const selectservices = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading)) },
+      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading, newdevicetokenbody)) },
     ]);
   }
 

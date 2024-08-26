@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import api from '../Api/Api';
 import { Alert } from 'react-native';
 
-export const signinAction = (email, password, salonid, router, endpoint, rememberdatatrue) => async (dispatch) => {
+export const signinAction = (email, password, salonid, router, endpoint, rememberdatatrue, devicetokenbody) => async (dispatch) => {
     try {
         dispatch({
             type: SIGNIN_REQ
@@ -43,13 +43,17 @@ export const signinAction = (email, password, salonid, router, endpoint, remembe
                 },
             });
 
+            // console.log(data)
+
             if (data?.Response[0]?.Activated == "N") {
                 if (rememberdatatrue) {
                     await AsyncStorage.setItem("rememberdata", JSON.stringify({ email, password }))
                 } else {
                     await AsyncStorage.removeItem("rememberdata")
                 }
+
                 router.push({ pathname: "/activationcode", params: data?.Response[0] })
+
             } else if (data?.Response[0]?.Activated == "Y") {
                 await AsyncStorage.removeItem('user-logininfo');
                 await AsyncStorage.setItem('user-logininfo', JSON.stringify(data.Response));

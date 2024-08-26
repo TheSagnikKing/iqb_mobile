@@ -245,7 +245,7 @@ const iqueuecheckpositionAction = (salonid, joinqueuedata, endpoint, router, set
     }
 };
 
-export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router, setJoinqueueloading) => async (dispatch) => {
+export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoint, router, setJoinqueueloading, newdevicetokenbody) => async (dispatch) => {
     try {
 
         setJoinqueueloading(true)
@@ -276,6 +276,15 @@ export const iqueuejoinedSelectAction = (iqueuecheckdata, joinqueuedata, endpoin
             })
 
             dispatch(iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router, setJoinqueueloading))
+
+            console.log("New Device Token Body ", newdevicetokenbody)
+
+
+            await api.post(`/iqueuedevicetoken.php`, newdevicetokenbody, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
         } else if (data.StatusCode == 200) {
             alert("Alert!, You cannot rejoin the queue today, due to a place cancellation.")
             setJoinqueueloading(false)

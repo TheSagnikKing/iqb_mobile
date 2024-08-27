@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getservicesbybarberIdsalonIdAction, iqueuejoinedSelectAction } from '../redux/Actions/QueueAction';
 import Toast from 'react-native-toast-message';
+import api from '../redux/Api/Api';
 
 
 import { BackHandler, ToastAndroid } from 'react-native';
@@ -18,6 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import { IQUEUE_CHECK_POSITON_FAIL, IQUEUE_CHECK_POSITON_REQ, IQUEUE_CHECK_POSITON_SUCCESS, IQUEUE_INSERTJOINQ_FAIL, IQUEUE_INSERTJOINQ_REQ, IQUEUE_INSERTJOINQ_SUCCESS, IQUEUE_JOINED_SELECT_REQ, IQUEUE_JOINED_SELECT_SUCCESS } from '../redux/Constants/QueueConstant';
 
 
 Notifications.setNotificationHandler({
@@ -202,13 +204,171 @@ const Autojoin = () => {
 
   const [joinqueueloading, setJoinqueueloading] = useState(false)
 
-  const autojoinPressed = () => {
-    const iqueuecheckdata = {
+  const iqueueinsertjoinqAction = async (joinqdata, endpoint, router, setJoinqueueloading, dispatch) => {
+    try {
+      dispatch({
+        type: IQUEUE_INSERTJOINQ_REQ
+      });
+
+      const url = `/${endpoint}`;
+
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      };
+
+      const { data, status } = await api.post(url, joinqdata, { headers });
+
+      if (data.StatusCode == 201) {
+        dispatch({
+          type: IQUEUE_INSERTJOINQ_FAIL,
+          payload: data.Response
+        })
+
+        Toast.show({
+          type: 'error',
+          text1: data.StatusMessage,
+          position: "bottom",
+          bottomOffset: 0,
+        });
+
+        setJoinqueueloading(false)
+
+      } else if (data.StatusCode == 200) {
+        dispatch({
+          type: IQUEUE_INSERTJOINQ_SUCCESS,
+          payload: data.Response
+        })
+
+        console.log("INSERT JOIN QUEUE CALLED")
+
+        Alert.alert('Join Queue', 'You have successfully joined the queue ?', [
+          { text: 'OK', onPress: () => router.push("/home") },
+        ]);
+      }
+
+    } catch (error) {
+      console.error("API Request Error:", error);
+    }
+  };
+
+
+  const iqueuecheckpositionAction = async (salonid, joinqueuedata, endpoint, router, setJoinqueueloading, dispatch) => {
+    try {
+      dispatch({
+        type: IQUEUE_CHECK_POSITON_REQ
+      });
+
+      const body = {
+        salonid
+      };
+
+      const url = `/${endpoint}`;
+
+      const { data, status } = await api.post(url, body, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+
+      if (data.StatusCode == 201) {
+        dispatch({
+          type: IQUEUE_CHECK_POSITON_FAIL,
+          payload: data.Response
+        })
+
+        setJoinqueueloading(false)
+      } else if (data.StatusCode == 200) {
+        dispatch({
+          type: IQUEUE_CHECK_POSITON_SUCCESS,
+          payload: data.Response
+        })
+
+        console.log("IQUEUE CHECK POSITION CALLED")
+
+        await iqueueinsertjoinqAction({ ...joinqueuedata, position: Number(data.Response) }, "iqueueinsertinjoinq_v2.php", router, setJoinqueueloading, dispatch)
+      }
+
+    } catch (error) {
+      console.error("API Request Error:", error);
+    }
+  };
+
+
+  const iqueuejoinedSelectAction = async (iqueuecheckdata, joinqueuedata, endpoint, router, setJoinqueueloading, newdevicetokenbody, dispatch) => {
+    try {
+
+      setJoinqueueloading(true)
+
+      dispatch({
+        type: IQUEUE_JOINED_SELECT_REQ
+      });
+
+      const { checkUsername, salonid } = iqueuecheckdata;
+
+      const body = {
+        checkUsername,
+        salonid
+      };
+
+      const url = `/${endpoint}`;
+
+      const { data, status } = await api.post(url, body, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+
+      if (data.StatusCode == 201) {
+        dispatch({
+          type: IQUEUE_JOINED_SELECT_SUCCESS,
+          payload: data.Response
+        })
+
+        console.log("JOIN QUEUE SELECT CALLED")
+
+        await iqueuecheckpositionAction(salonid, joinqueuedata, "iqueuecheckposition.php", router, setJoinqueueloading, dispatch)
+
+        setJoinqueueloading(false)
+
+
+
+        try {
+
+          const { data } = await api.post(`/iqueuedevicetoken.php`, newdevicetokenbody, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+          console.log("New Device Token Body ", newdevicetokenbody)
+          console.log("SINGLE JOIN DATA", data)
+
+
+
+        } catch (error) {
+          console.log("Device Token", error)
+        }
+
+
+      } else if (data.StatusCode == 200) {
+        alert("Alert!, You cannot rejoin the queue today, due to a place cancellation.")
+        setJoinqueueloading(false)
+      }
+
+    } catch (error) {
+      console.error("API Request Error:", error);
+    }
+  };
+
+
+
+
+  const autojoinPressed = async () => {
+   const iqueuecheckdata = {
       checkUsername: currentUserInfo?.[0]?.UserName,
       salonid: currentUserInfo?.[0]?.SalonId
     }
 
-    const joinqueuedata = {
+   const joinqueuedata = {
       username: currentUserInfo?.[0]?.UserName,
       firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
       barbername: selectedServices?.[0]?.BarberNName,
@@ -220,7 +380,6 @@ const Autojoin = () => {
       is_single_join: "",
     }
 
-    // console.log("Auto join join queue ", joinqueuedata)
 
     const newdevicetokenbody = {
       token: expoPushToken,
@@ -237,9 +396,49 @@ const Autojoin = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading, newdevicetokenbody)) },
+      { text: 'OK', onPress: async () => await iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading, newdevicetokenbody, dispatch) },
     ]);
   }
+
+
+  // const autojoinPressed = () => {
+  //   const iqueuecheckdata = {
+  //     checkUsername: currentUserInfo?.[0]?.UserName,
+  //     salonid: currentUserInfo?.[0]?.SalonId
+  //   }
+
+  //   const joinqueuedata = {
+  //     username: currentUserInfo?.[0]?.UserName,
+  //     firstlastname: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
+  //     barbername: selectedServices?.[0]?.BarberNName,
+  //     BarberId: selectedServices?.[0]?.BarberId,
+  //     salonid: currentUserInfo?.[0]?.SalonId,
+  //     timejoinedq,
+  //     rdatejoinedq,
+  //     ServiceId: selectedServices?.[0]?.serviceid,
+  //     is_single_join: "",
+  //   }
+
+  //   // console.log("Auto join join queue ", joinqueuedata)
+
+  //   const newdevicetokenbody = {
+  //     token: expoPushToken,
+  //     type: Platform.OS,
+  //     DateJoinedQ: `${rdatejoinedq} ${timejoinedq}`,
+  //     salonid: currentSalonInfo?.[0]?.id,
+  //     FirstLastName: `${currentUserInfo?.[0]?.FirstName} ${currentUserInfo?.[0]?.LastName}`,
+  //     UserName: `${currentUserInfo?.[0]?.UserName}`,
+  //   }
+
+  //   Alert.alert('Join Queue', 'Are you sure ?', [
+  //     {
+  //       text: 'Cancel',
+  //       onPress: () => console.log('Cancel Pressed'),
+  //       style: 'cancel',
+  //     },
+  //     { text: 'OK', onPress: () => dispatch(iqueuejoinedSelectAction(iqueuecheckdata, joinqueuedata, "iqueuejoinedqselect.php", router, setJoinqueueloading, newdevicetokenbody)) },
+  //   ]);
+  // }
 
 
   // console.log("Services list ", serviceslist)

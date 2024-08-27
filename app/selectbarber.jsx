@@ -39,7 +39,7 @@ const SelectBarber = () => {
 
   const router = useRouter()
 
-  console.log("currentSalonInfo ", currentSalonInfo)
+  // console.log("currentSalonInfo ", currentSalonInfo)
 
   console.log("error ", error)
   return (

@@ -1,7 +1,7 @@
 import Toast from "react-native-toast-message";
 import api from "../Api/Api";
 import { ADMIN_MERGE_RET2_FAIL, ADMIN_MERGE_RET2_REQ, ADMIN_MERGE_RET2_SUCCESS, GET_SALON_DETAILSBYID_FAIL, GET_SALON_DETAILSBYID_REQ, GET_SALON_DETAILSBYID_SUCCESS, IQUEUE_DELETE_JOINQ_FAIL, IQUEUE_DELETE_JOINQ_REQ, IQUEUE_DELETE_JOINQ_SUCCESS } from "../Constants/HomeConstant";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
     try {
@@ -12,9 +12,9 @@ export const adminRet2Action = (homedata, endpoint) => async (dispatch) => {
         const params = {
             username: homedata.username,
             salonid: homedata.salonid,
-            type: "ioS",
+            type: Platform.OS,
             gcCode: "",
-            token: "",
+            token: homedata.token,
             barberId: "",
             serviceId: ""
         }
@@ -141,7 +141,7 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                         text: 'OK', onPress: async () => dispatch(adminRet2Action({
                             username: loggedinUsername,
                             salonid: salonid,
-                            type: "ioS",
+                            type: Platform.OS,
                         }, "adminMergedRet2.php"))
                     },
                 ]);
@@ -185,7 +185,7 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                         text: 'OK', onPress: () => dispatch(adminRet2Action({
                             username: loggedinUsername,
                             salonid: salonid,
-                            type: "ioS",
+                            type: Platform.OS,
                         }, "adminMergedRet2.php"))
                     },
                 ]);

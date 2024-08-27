@@ -3,9 +3,9 @@ import { ACTIVATED_ACCOUNT_FAIL, ACTIVATED_ACCOUNT_REQ, ACTIVATED_ACCOUNT_SUCCES
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import api from '../Api/Api';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
-export const signinAction = (email, password, salonid, router, endpoint, rememberdatatrue, devicetokenbody) => async (dispatch) => {
+export const signinAction = (email, password, salonid, router, endpoint, rememberdatatrue, devicetoken) => async (dispatch) => {
     try {
         dispatch({
             type: SIGNIN_REQ
@@ -15,8 +15,8 @@ export const signinAction = (email, password, salonid, router, endpoint, remembe
             email,
             password,
             salonid,
-            devicetoken: "",
-            deviceType: "iOs"
+            devicetoken,
+            deviceType: Platform.OS
         }
 
         const { data } = await api.post(`/${endpoint}?${new URLSearchParams(params).toString()}`);

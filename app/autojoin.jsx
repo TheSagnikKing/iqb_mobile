@@ -241,7 +241,7 @@ const Autojoin = () => {
 
         console.log("INSERT JOIN QUEUE CALLED")
 
-        Alert.alert('Join Queue', 'You have successfully joined the queue ?', [
+        Alert.alert('Join Queue', 'You have successfully joined the queue.', [
           { text: 'OK', onPress: () => router.push("/home") },
         ]);
       }

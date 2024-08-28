@@ -136,7 +136,7 @@ export const iqueuedeleteJoinqAction = async (checkUsername, salonid, endpoint, 
                     payload: data,
                 });
 
-                Alert.alert('Success', `Booking cancelled successfully`, [
+                Alert.alert('Success', `Booking cancelled successfully.`, [
                     {
                         text: 'OK', onPress: async () => dispatch(adminRet2Action({
                             username: loggedinUsername,

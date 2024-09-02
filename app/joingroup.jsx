@@ -302,6 +302,19 @@ const Joingroup = () => {
         response: barberlistdata
     } = useSelector(state => state.iqueuebarberSelect)
 
+    const [onlinebarberlist, setOnlinebarberlist] = useState([]);
+
+    useEffect(() => {
+        if (barberlistdata) {
+            const barberonline = barberlistdata.filter((item) => {
+                return item.BarberOnline == 'Y'
+            })
+            setOnlinebarberlist(barberonline)
+        }
+    }, [barberlistdata])
+
+    console.log("OnlineBarbers", onlinebarberlist)
+
     // console.log("The join queue barbers ", barberlistdata)
 
     const [openBarberServicesModal, setOpenBarberServicesModal] = useState(false)
@@ -435,7 +448,7 @@ const Joingroup = () => {
 
                 setJoinqueueloading(false)
 
- 
+
                 console.log("New Device Token Body ", newdevicetokenbody)
 
 
@@ -651,6 +664,27 @@ const Joingroup = () => {
                             <AntDesign name="closecircle" size={30} color="red" />
                         </Pressable>
 
+                        {
+                            onlinebarberlist.length ? <Text
+                                style={{
+                                    lineHeight: 60,
+                                    textAlign: 'center',
+                                    color: Colors.PRIMARY,
+                                    fontFamily: "montserrat-semibold",
+                                    fontSize: 16
+                                }}
+                            >{onlinebarberlist.length} Barber(s) Available</Text> :
+                                <Text
+                                    style={{
+                                        lineHeight: 60,
+                                        textAlign: 'center',
+                                        color: Colors.PRIMARY,
+                                        fontFamily: "montserrat-semibold",
+                                        fontSize: 16
+                                    }}
+                                >No Barbers Available</Text>
+                        }
+
                         <Pressable
                             onPress={() => barberPressed("Any Barber", 777777)}
                             style={{ height: 60, backgroundColor: "#efefef", borderRadius: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, marginBottom: 10, borderColor: "rgba(0,0,0,0.4)", borderWidth: 1 }}>
@@ -659,7 +693,7 @@ const Joingroup = () => {
                                 alignItems: "center",
                                 gap: 20,
                             }}>
-                                <View style={{ width: 45, height: 45, borderColor: `rgba(0,0,0,0.4)`, borderWidth: 3, borderRadius: 50 }}></View>
+                                <View style={{ width: scale(47), height: verticalScale(47), borderColor: `rgba(0,0,0,0.4)`, borderWidth: 3, borderRadius: 50 }}></View>
                                 <Text style={{
                                     fontFamily: "montserrat-semibold",
                                     fontSize: 14
@@ -682,18 +716,24 @@ const Joingroup = () => {
                                             <View style={{
                                                 flexDirection: "row",
                                                 alignItems: "center",
-                                                gap: 20,
+                                                gap: 20
                                             }}>
-                                                <Image
-                                                    source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
-                                                    style={{
-                                                        width: 45,
-                                                        height: 45,
-                                                        borderRadius: 50,
-                                                        borderColor: `${Colors.PRIMARY}`,
-                                                        borderWidth: 1
-                                                    }}
-                                                />
+                                                <View style={{
+                                                    borderColor: item?.BarberOnline == 'Y' ? "limegreen" : "red",
+                                                    borderRadius: 50,
+                                                    borderWidth: 1,
+                                                    width: scale(47),
+                                                    height: verticalScale(47),
+                                                }}>
+                                                    <Image
+                                                        source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
+                                                        style={{
+                                                            width: scale(45),
+                                                            height: verticalScale(45),
+                                                            borderRadius: 50,
+                                                        }}
+                                                    />
+                                                </View>
                                                 <Text style={{
                                                     fontFamily: "montserrat-semibold",
                                                     fontSize: 14

@@ -40,8 +40,19 @@ const SelectBarber = () => {
   const router = useRouter()
 
   // console.log("currentSalonInfo ", currentSalonInfo)
+console.log("BarberList", barberlist)
 
-  console.log("error ", error)
+const [onlinebarberlist, setOnlinebarberlist] = useState([]);
+
+useEffect(() => {
+if(barberlist) {
+  const barberonline = barberlist.filter((item) =>{
+return item.BarberOnline == 'Y'
+  })
+  setOnlinebarberlist(barberonline)
+}
+}, [barberlist])
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={{
@@ -49,7 +60,7 @@ const SelectBarber = () => {
         paddingHorizontal: 15,
       }}>
         {
-          barberlist.length ? <Text
+          onlinebarberlist.length ? <Text
             style={{
               lineHeight: 60,
               textAlign: 'center',
@@ -57,7 +68,7 @@ const SelectBarber = () => {
               fontFamily: "montserrat-semibold",
               fontSize: 16
             }}
-          >{barberlist.length} Barbers Available</Text> :
+          >{onlinebarberlist.length} Barber(s) Available</Text> :
             <Text
               style={{
                 lineHeight: 60,
@@ -100,17 +111,22 @@ const SelectBarber = () => {
                       <View style={{ flex: 2, paddingHorizontal: scale(10), flexDirection: "row", alignItems: "center", gap: scale(15), borderRightColor: "rgba(0,0,0,0.4)", borderRightWidth: 1 }}>
                         <View style={{
                           justifyContent: "center",
-                          alignItems: "center"
-                        }}><Image
+                          alignItems: "center",
+                          borderColor: item?.BarberOnline == 'Y' ? "limegreen" : "red",
+                          borderRadius: 50,
+                          borderWidth: 1,
+                          width: scale(47),
+                          height: verticalScale(47),
+                        }}>
+                          <Image
                             source={{ uri: `https://server.iqueuebarbers.com/~iqueue/barberpics/barbers_profile_pics/${item?.BarberPic}` }}
                             style={{
                               width: scale(45),
                               height: verticalScale(45),
-                              borderRadius: 50,
-                              borderColor: `${Colors.PRIMARY}`,
-                              borderWidth: 1
+                              borderRadius: 50,              
                             }}
-                          /></View>
+                          />
+                          </View>
                         <Text style={{
                           fontFamily: "montserrat-semibold",
                           fontSize: moderateScale(14),
